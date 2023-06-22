@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ko">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<title>김해시수연영맹</title>
+		<link rel="stylesheet" href="/assets/css/normalize.css">
+		<link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+		<link rel="stylesheet" href="/assets/css/bootstrap-theme.css">
+		<link rel="stylesheet" href="/assets/css/slick.css">
+		<link rel="stylesheet" href="/assets/css/slick-theme.css">
+		<link rel="stylesheet" href="/assets/css/kors_style.css">
+		<script src="/assets/js/bootstrap.bundle.min.js"></script>
+		<script src="/assets/js/jquery.min.js"></script>
+		<script src="/assets/js/slick.min.js"></script>
+		<script src="/assets/js/kors_js.js"></script>
+	</head>
+
+	<body class="admin_body">
+	<div id="admin_ui" class="d-flex">
+		<header class="kors_admin_header">
+			<div>
+				<div class="admin_nav_banner">
+					<div>
+						<p class="f_s1">관리자</p>
+						<h1 class="f_s5 fw_pb">김해시수연영맹</h1>
+					</div>
+				</div>
+				<ul class="admin_nav_list">
+					<li><a href="/admin/user/list">경기인 관리</a></li>
+					<li><a href="/admin/user/list/register">경기인 접수</a></li>
+					<li><a href="/admin/competition/list" class="active">대회 관리</a></li>
+					<li><a href="/admin/competition/request">대회 신청관리</a></li>
+					<li><a href="/admin/notice">공지사항</a></li>
+					<li><a href="/admin/photo">포토갤러리</a></li>
+					<li><a href="/admin/history">연혁</a></li>
+					<li><a href="/admin/referee">심판 관리</a></li>
+				</ul>
+			</div>
+		</header>
+
+			<section class="kors_admin_content">
+				<div class="container-fluid mb_80">
+					<div class="row">
+						<div class="col">
+							<h2>순위</h2>
+						</div>
+					</div>
+				</div>
+
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col">
+							<p class="mb_10" th:text="${competitionName}"></p>
+						</div>
+					</div>
+					<div class="row row-cols-auto justify-content-between mb_40">
+						<div class="col sub_tab_area">
+							<div class="row row-cols-auto">
+								<div class="col">
+									<a th:href="@{/admin/competition/set/rank/team(competitionSeq=${competitionSeq})}" th:class="active" th:id="'btn_team'" th:text="'팀 순위'"></a>
+								</div>
+								<div  class="col" th:each="field, index : ${competitionEventList}">
+									<a th:href="@{/admin/competition/set/rank(competitionSeq=${competitionSeq}, competitionEventSeq=${field.competitionEventSeq})}" th:id="'btn_' + ${field.competitionEventSeq}" th:text="${field.sex}+' '+${field.division}+' '+${field.eventName}+' '+${field.meter}+'m'"></a>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="row mb_30">
+						<div class="col">
+							<div class="table_box1">
+								<table class="w-100" id="print_table">
+									<colgroup>
+										<col width="33.3%">
+										<col width="33.3%">
+										<col width="33.3%">
+									</colgroup>
+									<thead>
+										<tr>
+											<th>순위</th>
+											<th>팀 이름</th>
+											<th>획득 점수</th>
+										</tr>
+									</thead>
+									<tbody id="kors_zone_edit" data="0">
+										<tr th:each="field, index : ${teamDtoList}">
+											<td th:text="${index.count}+'위'"></td>
+											<td th:text="${field.teamName}"></td>
+											<td th:text="${field.point}+'점'"></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col">
+							<a href="/admin/competition/list" class="kors_btn2 type2"> 대회목록</a>
+						</div>
+					</div>
+				</div>
+			</section>
+		</div>
+	</body>
+</html>

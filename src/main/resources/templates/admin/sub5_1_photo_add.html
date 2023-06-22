@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title>김해시수연영맹</title>
+	<link rel="stylesheet" href="/assets/css/normalize.css">
+	<link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/assets/css/bootstrap-theme.css">
+	<link rel="stylesheet" href="/assets/css/slick.css">
+	<link rel="stylesheet" href="/assets/css/slick-theme.css">
+	<link rel="stylesheet" href="/assets/css/kors_style.css">
+	<script src="/assets/js/bootstrap.bundle.min.js"></script>
+	<script src="/assets/js/jquery.min.js"></script>
+	<script src="/assets/js/slick.min.js"></script>
+	<script src="/assets/js/kors_js.js"></script>
+</head>
+	
+	<body class="admin_body">	
+		<div id="admin_ui" class="d-flex">
+			<header class="kors_admin_header">
+				<div>
+					<div class="admin_nav_banner">
+						<div>
+							<p class="f_s1">관리자</p>
+							<h1 class="f_s5 fw_pb">김해시수영연맹</h1>
+						</div>
+					</div>
+					<ul class="admin_nav_list">
+						<li><a href="/admin/user/list">경기인 관리</a></li>
+						<li><a href="/admin/user/list/register">경기인 접수</a></li>
+						<li><a href="/admin/competition/list">대회 관리</a></li>
+						<li><a href="/admin/competition/request">대회 신청관리</a></li>
+						<li><a href="/admin/notice">공지사항</a></li>
+						<li><a href="/admin/photo" class="active">포토갤러리</a></li>
+						<li><a href="/admin/history">연혁</a></li>
+						<li><a href="/admin/referee">심판 관리</a></li>
+					</ul>
+				</div>
+			</header>
+
+			<section class="kors_admin_content">
+				<div class="container-fluid mb_80">
+					<div class="row">
+						<div class="col">
+							<h2>포토갤러리</h2>
+						</div>
+					</div>
+				</div>
+
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col">
+							<div class="con_add_form">
+								<form name="frm" th:action="@{/admin/photo/add}" method="post" th:object="${photoDto}" onSubmit="return Checkform()" enctype="multipart/form-data">
+									<ul>
+										<li class="w_size1">
+											<div><label class="f_s5 fw_pb">제목</label></div>
+											<input type="text" class="kors_input1 w-100" th:field="*{photoTitle}">
+										</li>
+
+										<li>
+											<div><label class="f_s5 fw_pb">이미지</label></div>
+											<div class="table_box1 mb_10">
+												<table class="w_size1">
+													<colgroup>
+														<col style="width:100%;">
+													</colgroup>
+													<thead>
+														<tr>
+															<th>이미지 파일</th>
+														</tr>
+													</thead>
+													<tbody id="event_tbody" data="1">
+														<tr data="1">
+															<td>
+																<div class="pt_10 pb_10">
+																	<input type="file" class="w-100" name="photoList[]" id="photoList" multiple/>
+																</div>
+															</td>
+														</tr>
+													</tbody>
+												</table>
+											</div>
+<!--											<div>-->
+<!--												<button class="kors_btn2" type="button" onclick="event_tbody_add()">이미지 추가</button>-->
+<!--											</div>-->
+<!--											<script>-->
+<!--												function event_tbody_add(){-->
+<!--													var event_num = Number($('#event_tbody').attr('data')) + 1;-->
+<!--													$('#event_tbody').attr('data', event_num);-->
+
+<!--													var add_html = `<tr data="${event_num}">-->
+<!--															<td>-->
+<!--																<div class="pt_10 pb_10">-->
+<!--																	<input type="file" class="w-100" />-->
+<!--																</div>-->
+<!--															</td>-->
+<!--															<td>-->
+<!--																<button class="delete_btn" onclick="event_tbody_del(${event_num})"><img src="/assets/img/xclose.svg"></button>-->
+<!--															</td>-->
+<!--														</tr>`-->
+
+<!--													$(`#event_tbody`).append(add_html);-->
+<!--												}-->
+
+<!--												function event_tbody_del(event_num){-->
+<!--													$(`#event_tbody tr[data=${event_num}]`).remove()-->
+<!--												}-->
+<!--											</script>-->
+										</li>
+
+										<li class="w_size1">
+											<div><label class="f_s5 fw_pb">내용</label></div>
+											<textarea class="w-100" th:field="*{photoDetail}"></textarea>
+										</li>
+										<li class="w_size1">
+											<button class="kors_btn1 w-100"> 포토갤러리 등록하기</button>
+										</li>
+									</ul>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+			<script type="text/javascript">
+				function Checkform() {
+					var fileCheck = $('#photoList').val();
+					if (frm.photoTitle.value == "") {
+						frm.photoTitle.focus();
+						alert("제목을 입력해 주십시오.");
+						return false;
+
+					}else if (frm.photoDetail.value == "") {
+						frm.photoDetail.focus();
+						alert("내용을 입력해 주십시오.");
+						return false;
+
+					}else if(!fileCheck){
+						alert("이미지를 등록해 주십시오.");
+						return false;
+					}
+					alert("포토갤러리 등록이 완료되었습니다.");
+				}
+			</script>
+		</div>
+	</body>
+</html>

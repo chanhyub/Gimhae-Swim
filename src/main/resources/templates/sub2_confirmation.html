@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="ko">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<title>김해시수영연맹</title>
+		<link rel="stylesheet" href="/assets/css/normalize.css">
+		<link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+		<link rel="stylesheet" href="/assets/css/bootstrap-theme.css">
+		<link rel="stylesheet" href="/assets/css/slick.css">
+		<link rel="stylesheet" href="/assets/css/slick-theme.css">
+		<link rel="stylesheet" href="/assets/css/kors_style.css">
+		<script src="/assets/js/bootstrap.bundle.min.js"></script>
+		<script src="/assets/js/jquery.min.js"></script>
+		<script src="/assets/js/slick.min.js"></script>
+		<script src="/assets/js/kors_js.js"></script>
+		<script type="text/javascript">
+			function Checkform() {
+
+				if (frm.userName.value == "") {
+					frm.userName.focus();
+					alert("이름을 확인해 주십시오.");
+					return false;
+
+				}else if (frm.password.value == "") {
+					frm.password.focus();
+					alert("패스워드를 확인해 주십시오.");
+					return false;
+
+				}
+
+				var name = frm.userName.value;
+				var pwd = frm.password.value;
+
+				$.ajax({
+					type: "GET",
+					url: "/admin/user/find",
+					// async: false,
+					data: {userName : name, password : pwd},
+					error : function(request,status,error) {
+						alert("존재하지 않는 사용자 입니다.")
+						location.href="/competition/confirm";
+						console.log("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+					},
+					success: function (data) {
+
+					}
+				});
+			}
+		</script>
+	</head>
+
+	<body>
+	<header id="kors_header">
+		<div id="kors_top_box" class="row row-cols-auto justify-content-between">
+			<div class="col header_logo">
+				<div class="d-flex align-items-center">
+					<a href="/"><h1 class="ft_s2">김해시수영연맹</h1></a>
+
+					<ul class="kors_top_menu d-flex align-items-center">
+						<li>
+							<a href="/history" class="f_s3">연혁</a>
+						</li>
+						<li>
+							<a href="/group" class="f_s3">조직도</a>
+						</li>
+						<li>
+							<a href="/competition" class="f_s3">대회정보</a>
+						</li>
+						<li>
+							<a href="/competition/confirm" class="f_s3">대회신청확인</a>
+						</li>
+						<li>
+							<a href="/register" class="f_s3">경기인등록</a>
+						</li>
+						<li>
+							<a href="/notice" class="f_s3">공지사항</a>
+						</li>
+						<li>
+							<a href="/photo" class="f_s3">포토갤러리</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+
+			<div class="col f_s2">
+				<div class="d-flex align-items-center">
+					<div class="mo_nav" role="navigation" onclick="me_menu_on()">
+						<button type="button" class="navbar-toggle collapsed menu-btn " data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+							<span class="icon-bar top-bar"></span>
+							<span class="icon-bar middle-bar"></span>
+							<span class="icon-bar bottom-bar"></span>
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="md_menu_box">
+			<div class="md_menu_con">
+				<div class="md_menu_top">
+					<button class="md_menu_close" onclick="me_menu_off()"><img src="/assets/img/xclose_w.png"></button>
+				</div>
+				<div class="md_menu_bottom">
+					<ul>
+						<li>
+							<p><a href="/history">연혁</a></p>
+						</li>
+						<li>
+							<p><a href="/group">조직도</a></p>
+						</li>
+						<li>
+							<p><a href="/competition">대회정보</a></p>
+						</li>
+						<li>
+							<p><a href="/competition/confirm">대회신청확인</a></p>
+						</li>
+						<li>
+							<p><a href="/register">경기인등록</a></p>
+						</li>
+						<li>
+							<p><a href="/notice">공지사항</a></p>
+						</li>
+						<li>
+							<p><a href="/photo">포토갤러리</a></p>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</header>
+		
+		<section class="sub_content">
+
+			<div class="sub_top_box">
+				<div class="container">
+					<div class="row">
+						<div class="col">
+							<h3 class="fw_pb ft_s4">대회신청확인</h3>
+							<p class="f_s1 fw_pl f_s3">국민의 사랑을 받는 스포츠로 발전할 수 있도록 노력하고 앞장서겠습니다.</p>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="sub_top_text">
+				<div class="container">
+					<div class="row">
+						<div class="col">
+							<p class="f_s1"><span><img src="/assets/img/home.png"></span> 대회신청확인</p>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="sub_content_box">
+				<div class="container">
+					<div class="row">
+						<div class="kors_user_form1">
+							<div class="col">
+								<p class="text-center mb_30 ft_s1 fw_pb">경기인 정보를 입력해주세요.</p>
+								<form name="frm" onsubmit="return Checkform()" th:action="@{/competition/confirm/check}" method="post" th:object="${userDto}">
+									<div>
+										<ul>
+											<li>
+												<label class="d-none">이름</label>
+												<input type="text" th:field="*{userName}" class="kors_input2 w-100" placeholder="이름">
+											</li>
+											<li>
+												<label class="d-none">비밀번호</label>
+												<input type="password" th:field="*{password}" class="kors_input2 w-100" placeholder="비밀번호">
+											</li>
+											<li>
+												<a href="sub2_1_confirmation_more.html">
+													<button class="kors_btn3 w-100" type="submit">조회하기</button>
+												</a>
+											</li>
+										</ul>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>				
+			</div>
+		</section>
+
+
+	<footer id="kors_footer">
+		<div class="container-fluid f_s1 fw_pl">
+			<div class="row footer_top justify-content-between row-cols-auto">
+				<div class="col d-flex">
+					<div class="logo_box">
+						<h2>김해시수영연맹</h2>
+					</div>
+					<div class="text_box">
+						<p><span class="f_c_w">사단법인 김해시수영연맹</span></p>
+						<p>
+							<span>경남 김해시 생림면 나전로 249번길 13-67</span>
+						</p>
+						<p>
+							<span>회장 최성일 : 010-3865-6621</span>
+							<span>부회장 : 김용태 010-9313-3644</span>
+							<span>전무 : 조광제 010-8468-2213</span>
+							<span>사무국장 : 김경태 010-3180-2367</span>
+						</p>
+						<p>
+							<span>FAX : 055-323-9260</span>
+							<span>email : khsw2019@naver.com</span>
+						</p>
+					</div>
+				</div>
+			</div>
+
+			<div class="row footer_bottom">
+				<div class="col d-flex justify-content-between">
+					<p class="cop_text">Copyright © 2023 사단법인 김해시수영연맹(Gimhae Swimming Federation). All Rights Reserved. </p>
+					<ul class="d-flex f-list">
+						<li><a href="https://www.korswim.co.kr/page/privacy" style="color: #fff;">개인정보처리방침</a></li>
+						<li><a href="https://www.korswim.co.kr/page/terms">이용약관</a></li>
+						<li><a href="#null">이메일무단수집거부</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</footer>
+	</body>
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>김해시수연영맹</title>
+  <link rel="stylesheet" href="/assets/css/normalize.css">
+  <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/assets/css/bootstrap-theme.css">
+  <link rel="stylesheet" href="/assets/css/slick.css">
+  <link rel="stylesheet" href="/assets/css/slick-theme.css">
+  <link rel="stylesheet" href="/assets/css/kors_style.css">
+  <script src="/assets/js/bootstrap.bundle.min.js"></script>
+  <script src="/assets/js/jquery.min.js"></script>
+  <script src="/assets/js/slick.min.js"></script>
+  <script src="/assets/js/kors_js.js"></script>
+</head>
+
+<body class="admin_body">
+<div id="admin_ui" class="d-flex">
+  <header class="kors_admin_header">
+    <div>
+      <div class="admin_nav_banner">
+        <div>
+          <p class="f_s1">관리자</p>
+          <h1 class="f_s5 fw_pb">김해시수영연맹</h1>
+        </div>
+      </div>
+      <ul class="admin_nav_list">
+        <li><a href="/admin/user/list">경기인 관리</a></li>
+        <li><a href="/admin/user/list/register">경기인 접수</a></li>
+        <li><a href="/admin/competition/list">대회 관리</a></li>
+        <li><a href="/admin/competition/request">대회 신청관리</a></li>
+        <li><a href="/admin/notice">공지사항</a></li>
+        <li><a href="/admin/photo">포토갤러리</a></li>
+        <li><a href="/admin/history">연혁</a></li>
+        <li><a href="/admin/referee" class="active">심판 관리</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <section class="kors_admin_content">
+    <div class="container-fluid mb_80">
+      <div class="row">
+        <div class="col">
+          <h2>심판 수정</h2>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col">
+          <div class="con_add_form">
+            <form name="frm" th:action="@{/admin/referee/update(refereeSeq=${refereeSeq})}" method="post" th:object="${refereeDto}" onSubmit="return Checkform()">
+              <ul>
+                <li class="w_size1">
+                  <div><label class="f_s5 fw_pb">이름</label></div>
+                  <input id="name" type="text" class="kors_input1 w-100" th:field="*{name}">
+                </li>
+
+                <li class="w_size1">
+                  <div><label class="f_s5 fw_pb">패스워드</label></div>
+                  <input id="password" type="text" class="kors_input1 w-100" th:field="*{password}">
+                </li>
+                <li class="w_size1">
+                  <button type="submit" class="kors_btn1 w-100"> 심판 수정하기</button>
+                </li>
+              </ul>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <script>
+    function Checkform() {
+
+      if (frm.name.value == "") {
+        frm.name.focus();
+        alert("이름을 입력해 주십시오.");
+        return false;
+
+      }else if (frm.password.value == "") {
+        frm.password.focus();
+        alert("패스워드 입력해 주십시오.");
+        return false;
+
+      }
+      alert("심판 수정이 완료되었습니다.");
+    }
+
+  </script>
+  <script th:inline="javascript">
+
+    $(function(){
+      $('#name').val([[${name}]]);
+      $('#password').val([[${password}]]);
+    });
+  </script>
+</div>
+</body>
+</html>

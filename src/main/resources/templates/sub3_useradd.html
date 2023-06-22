@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title>김해시수영연맹</title>
+	<link rel="stylesheet" href="/assets/css/normalize.css">
+	<link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/assets/css/bootstrap-theme.css">
+	<link rel="stylesheet" href="/assets/css/slick.css">
+	<link rel="stylesheet" href="/assets/css/slick-theme.css">
+	<link rel="stylesheet" href="/assets/css/kors_style.css">
+	<script src="/assets/js/bootstrap.bundle.min.js"></script>
+	<script src="/assets/js/jquery.min.js"></script>
+	<script src="/assets/js/slick.min.js"></script>
+	<script src="/assets/js/kors_js.js"></script>
+</head>
+
+<body>
+	<header id="kors_header">
+		<div id="kors_top_box" class="row row-cols-auto justify-content-between">
+			<div class="col header_logo">
+				<div class="d-flex align-items-center">
+					<a href="/"><h1 class="ft_s2">김해시수영연맹</h1></a>
+
+					<ul class="kors_top_menu d-flex align-items-center">
+						<li>
+							<a href="/history" class="f_s3">연혁</a>
+						</li>
+						<li>
+							<a href="/group" class="f_s3">조직도</a>
+						</li>
+						<li>
+							<a href="/competition" class="f_s3">대회정보</a>
+						</li>
+						<li>
+							<a href="/competition/confirm" class="f_s3">대회신청확인</a>
+						</li>
+						<li>
+							<a href="/register" class="f_s3">경기인등록</a>
+						</li>
+						<li>
+							<a href="/notice" class="f_s3">공지사항</a>
+						</li>
+						<li>
+							<a href="/photo" class="f_s3">포토갤러리</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+
+			<div class="col f_s2">
+				<div class="d-flex align-items-center">
+					<div class="mo_nav" role="navigation" onclick="me_menu_on()">
+						<button type="button" class="navbar-toggle collapsed menu-btn " data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+							<span class="icon-bar top-bar"></span>
+							<span class="icon-bar middle-bar"></span>
+							<span class="icon-bar bottom-bar"></span>
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="md_menu_box">
+			<div class="md_menu_con">
+				<div class="md_menu_top">
+					<button class="md_menu_close" onclick="me_menu_off()"><img src="/assets/img/xclose_w.png"></button>
+				</div>
+				<div class="md_menu_bottom">
+					<ul>
+						<li>
+							<p><a href="/history">연혁</a></p>
+						</li>
+						<li>
+							<p><a href="/group">조직도</a></p>
+						</li>
+						<li>
+							<p><a href="/competition">대회정보</a></p>
+						</li>
+						<li>
+							<p><a href="/competition/confirm">대회신청확인</a></p>
+						</li>
+						<li>
+							<p><a href="/register">경기인등록</a></p>
+						</li>
+						<li>
+							<p><a href="/notice">공지사항</a></p>
+						</li>
+						<li>
+							<p><a href="/photo">포토갤러리</a></p>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</header>
+		
+		<section class="sub_content">
+
+			<div class="sub_top_box">
+				<div class="container">
+					<div class="row">
+						<div class="col">
+							<h3 class="fw_pb ft_s4">경기인등록</h3>
+							<p class="f_s1 fw_pl f_s3">국민의 사랑을 받는 스포츠로 발전할 수 있도록 노력하고 앞장서겠습니다.</p>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="sub_top_text">
+				<div class="container">
+					<div class="row">
+						<div class="col">
+							<p class="f_s1"><span><img src="/assets/img/home.png"></span> 경기인등록</p>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="sub_content_box">
+				<div class="container">
+					<div class="row">
+						<div class="kors_user_form1">
+							<div class="col">
+								<p class="text-center mb_30 ft_s1 fw_pb">다음 내용에 입력해주세요.</p>
+								<form name="frm" action="/admin/user/register" onSubmit="return Checkform()" method="post">
+									<div>
+										<ul>
+											<li class="d-flex">
+												<div class="mr_10">
+													<label class="d-none">성별</label>
+													<input checked type="radio" name="sex" value="male" id="kors_man" class="d-none">
+													<label class="radio_style1" for="kors_man">남자</label>
+												</div>
+												<div>
+													<input type="radio" name="sex" value="female"  id="kors_woman" class="d-none">
+													<label class="radio_style1" for="kors_woman">여자</label>
+												</div>
+											</li>
+											<li>
+												<label class="d-none">이름</label>
+												<input type="text" name="name" id="name" class="kors_input2 w-100" placeholder="이름">
+											</li>
+											<li>
+												<label class="d-none">비밀번호</label>
+												<input type="password" name="pwd" id="pwd" class="kors_input2 w-100" placeholder="비밀번호">
+											</li>
+											<li>
+												<label class="d-none">비밀번호</label>
+												<input type="password" name="pwdCheck" id="pwdCheck" class="kors_input2 w-100" placeholder="비밀번호 확인">
+											</li>
+											<li>
+												<label class="d-none">주민등록번호 앞자리</label>
+												<input type="text" name="birthday" id="birthday" class="kors_input2 w-100" placeholder="주민등록번호 앞자리">
+											</li>
+											<li>
+												<label class="d-none">전화번호</label>
+												<input type="text" name="phoneNum" id="phoneNum" class="kors_input2 w-100" placeholder="전화번호">
+											</li>
+											<li>
+												<label class="d-none">이메일</label>
+												<input type="text" name="email" id="email" class="kors_input2 w-100" placeholder="이메일">
+											</li>
+											<li>
+												<label class="d-none">소속팀(소속팀이 있는 경우 정확하게 입력해주세요. ex) 띄어쓰기, 맞춤법 등등..)</label>
+												<input type="text" name="organization" id="organization" class="kors_input2 w-100" placeholder="(소속팀이 있는 경우 정확하게 입력해주세요. ex) 띄어쓰기, 맞춤법 등등..)">
+												<input type="hidden" name="team_seq" id="team_seq" class="d-none"/>
+											</li>
+											<li><button type="button" onclick="teamCheck();" id="check_user" class="kors_btn1">소속팀 확인</button></li>
+											<li>
+												<script>
+													function teamCheck(){
+														var teamName = document.getElementById("organization").value;
+														$.ajax({
+															type: "GET",
+															url: "/admin/team/find",
+															// async: false,
+															data: {teamName : teamName},
+															error : function(request,status,error) {
+																alert("존재하지 않는 팀 입니다.")
+																if (confirm("팀을 생성 하시겠습니까?"))
+																	$.ajax({
+																		type: "POST",
+																		url: "/admin/create/team",
+																		// async: false,
+																		data: {teamName : teamName},
+																		error : function(request,status,error) {
+																			alert("팀이 생성을 실패하였습니다.");
+																			console.log("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+																		},
+																		success: function (data) {
+																			alert("팀이 생성되었습니다.");
+																			document.getElementById("team_seq").value = data;
+																		}
+																	});
+															},
+															success: function (data) {
+																alert("성공적으로 확인되었습니다.")
+																document.getElementById("team_seq").value = data;
+															}
+														});
+													}
+													$(function(){
+														$(document).on("change", "input[name='kors_checkbox_1']", function () {
+															if($(this).is(':checked')){
+																if($(this).attr('id') == 'kors_consent_all'){
+																	$(`input[name='kors_checkbox_1']`).prop('checked',true);
+																}
+															}else{
+																if($(this).attr('id') == 'kors_consent_all'){
+																	$(`input[name='kors_checkbox_1']`).prop('checked',false);
+																}else{
+																	$(`#kors_consent_all`).prop('checked',false);
+																}
+															}
+														});
+													})
+												</script>
+												<div class="mb_10">
+													<div>
+														<label class="d-none">전체 동의하기</label>
+														<input type="checkbox" name="kors_checkbox_1" id="kors_consent_all" class="d-none">
+														<label class="checkbox_style1" for="kors_consent_all">전체 동의하기</label>
+													</div>
+												</div>
+
+												<div class="mb_10">
+													<div>
+														<label class="d-none">1.개인정보의 수집·이용에 관한 사항 동의</label>
+														<input type="checkbox" name="kors_checkbox_1" id="kors_consent1" class="d-none">
+														<label class="checkbox_style1" for="kors_consent1">1.개인정보의 수집·이용에 관한 사항 동의</label>
+													</div>
+												</div>
+												<div>
+													<div class="consent_box1 f_s1 mb_20">
+														1.개인정보의 수집·이용에 관한 사항 <br />
+														<br />
+														<p class="consent_box2">
+															「개인정보보호법」 제 15조 및 제 22조에 따라 귀 재단이 아래와 같은 내용으로 본인의 개인 정보를 수집ㆍ이용하는 것에 동의합니다.
+														</p>
+														<br />
+														■ 개인정보의 이용 목적<br />
+														- 스포츠안전공제서비스 가입 상담 및 계약 체결 시 사용<br />
+														<br />
+														■ 수집ㆍ이용할 개인정보의 내용<br />
+														- 개인식별 정보(성명, 주민등록번호, 주소, 전화번호, 휴대전화번호, 전자우편 주소 등)<br />
+														- 보험계약정보(보험사명, 증권번호, 보험기간, 계약일자, 상품명, 담보내용, 가입금액 등)<br />
+														<br />
+														■ 개인정보 보유ㆍ이용 기간<br />
+														- 수집ㆍ이용 동의일로부터 개인정보의 수집ㆍ이용 목적을 달성할 때까지<br />
+														<br />
+														※ 귀 재단이 본 계약과관련하여 본인의 고유식별정보(주민등록번호 등)를 상기의 목적으로 상기의 보유ㆍ이용기간 동안 수집ㆍ이용하는 것에 동의합니다.<br />
+														※ 귀하는 상기 동의를 거부할 수 있습니다. 다만, 이에 대한 동의를 하시지 않을 경우에는 관련 법령상 스포츠안전공제서비스 계약체결이 부득이하게 거절되거나 정상적인 서비스 제공이 불가능할 수 있음을 알려드립니다.<br />
+													</div>
+												</div>
+
+												<div class="mb_10">
+													<div>
+														<label class="d-none">2.개인정보의 제공에 관한 사항 동의</label>
+														<input type="checkbox" name="kors_checkbox_1" id="kors_consent2" class="d-none">
+														<label class="checkbox_style1" for="kors_consent2">2.개인정보의 제공에 관한 사항 동의</label>
+													</div>
+												</div>
+
+												<div>
+													<div class="consent_box1 f_s1 mb_20">
+														2.개인정보의 제공에 관한 사항 <br />
+														<br />
+														<p class="consent_box2">
+															본 계약과 관련하여 귀 재단이 본인으로부터 취득한 개인정보는 「개인정보보호법」 제 17조 및 제 22조에 따라 제 3자에게 제공할 경우에는 본인의 사전 동의를 얻어야 하는 정보입니다. <br />
+															이에 본인은 귀 재단이 본인의 개인정보를 아래와 같이 제3자에게 제공하는 것에 대해 동의합니다.
+														</p>
+														<br />
+														■ 법률상 업무수행 및 계약목적 달성을 위한 개인정보 제공<br />
+														- 개인정보를 제공받는 자<br />
+														<p class="ml_15">ㆍ 법원, 검찰, 경찰, 손해보험사(재보험사 포함), 공제사업자, 체신관서(우체국 보험), 귀사와 모집위탁 계약을 체결한 자(대리점 등), 계약체결 및 이행 등에 필요한 업무를 위탁받은 자(보험사고조사업체, 손해사정업체, 병ㆍ의원 등 의료기관, 위탁 콜센터 등)</p>
+														<br />
+														- 개인정보를 제공받는 자의 이용 목적<br />
+														<p class="ml_15">ㆍ 재보험, 보험 공동인수 등</p>
+														<p class="ml_15">ㆍ 보험모집 및 사후관리</p>
+														<p class="ml_15">ㆍ 보험사고 조사, 손행사정 서비스 등 계약이행에 필요한 업무</p>
+														<p class="ml_15">ㆍ 순보험요율 산출 및 통계작성에 필요한 자료제공 등 보험업법 정한 목적</p>
+														<p class="ml_15">ㆍ 사고보상처리 및 민원접수</p>
+														<p class="ml_15">ㆍ 금융위원회의 설치 등에 관한 법률 등 다른 법률상 업무수행</p>
+														<br />
+														- 제공할 개인정보의 내용<br />
+														<p class="ml_15">ㆍ 개인식별정보 : 성명, 주민등록번호, 주소, 성별, 직업, 전화번호, 휴대전화번호, 전자우편주소 등</p>
+														<p class="ml_15">ㆍ 스포츠안전공제서비스 계약정보 : 제휴보험사명, 증권보험, 보험기간, 보험계약일자, 상품명, 담보내용, 스포츠안전공제서비스  회원 가입금액(회비), 계약유지여부</p>
+														<p class="ml_15">ㆍ 보험금 지급정보 : 보험사고일자 등</p>
+														<p class="ml_15">ㆍ 보험대상자(피보험자)의 상해 관한 정보</p>
+														<br />
+														※ 귀 재단은 '제공할 개인정보의 내용' 중 법령상 업무수행과 계약목적 달성에 부합하는 최소한의 정보만 제공할 수 있습니다.<br />
+														- 제공받는 자의 개인정보 보유 이용기간<br />
+														<p class="ml_15">ㆍ 제공 동의일로부터 개인정보의 제공 목적을 달성할 때까지</p>
+														<br />
+														※ 귀하는 상기 동의를 거부할 수 있습니다. 다만, 이에 대한 동의를 하시지 않을 경우에는 관련 법령상 스포츠안전공제서비스 계약체결이 부득이하게 거절되거나 정상적인 서비스 제공이 불가능할 수 있음을 알려드립니다.<br />
+													</div>
+												</div>
+
+												<div class="mb_10">
+													<div>
+														<label class="d-none">3. 민감정보 및 고유식별정보의 처리에 관한 사항 동의</label>
+														<input type="checkbox" name="kors_checkbox_1" id="kors_consent3" class="d-none">
+														<label class="checkbox_style1" for="kors_consent3">3. 민감정보 및 고유식별정보의 처리에 관한 사항 동의</label>
+													</div>
+												</div>
+
+												<div>
+													<div class="consent_box1 f_s1 mb_20">
+														3.민감정보 및 고유식별정보의 처리에 관한 사항 <br />
+														<br />
+														<p class="consent_box2">
+															본 계약과 관련하여 귀 재단이 본인의 민감정보 및 고유식별정보를 처리(수집ㆍ이용, 제공 등) 하기 위해서는  「개인정보보호법」 제23조 및 제24조에 의하여 위 개인정보에 대한 각 동의와 별도의 동의를 얻어야 합니다. 이에 본인은 귀 재단이 본인의 민감정보 및 고유식별정보를 상기의 목적으로 위와 같이 처리하는 것에 대해 동의합니다.
+														</p>
+														<br />
+														※ 귀하는 상기 동의를 거부할 수 있습니다. 다만, 이에 대한 동의를 하시지 않을 경우에는 관련 법령상 스포츠안전공제서비스 계약체결이 부득이하게 거절되거나 정상적인 서비스 제공이 불가능할 수 있음을 알려드립니다.<br />
+													</div>
+												</div>
+											</li>
+											<li>
+												<button id="submit" type="submit" class="kors_btn3 w-100">신청하기</button>
+											</li>
+										</ul>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+
+				</div>
+
+				
+			</div>
+		</section>
+	<script>
+		function Checkform() {
+
+			if (frm.name.value == "") {
+				frm.name.focus();
+				alert("성명을 입력해 주십시오.");
+				return false;
+
+			}else if (frm.pwd.value == "") {
+				frm.pwd.focus();
+				alert("패스워드를 입력해 주십시오.");
+				return false;
+
+			}else if (frm.pwdCheck.value == "") {
+				frm.pwdCheck.focus();
+				alert("패스워드를 입력해 주십시오.");
+				return false;
+
+			}else if (frm.birthday.value == "") {
+				frm.birthday.focus();
+				alert("주민번호 앞자리를 입력해 주십시오.");
+				return false;
+
+			}else if (frm.phoneNum.value == "") {
+				frm.phoneNum.focus();
+				alert("휴대폰 번호를 입력해 주십시오.");
+				return false;
+
+			}else if (frm.email.value == "") {
+				frm.email.focus();
+				alert("이메일을 입력해 주십시오.");
+				return false;
+
+			}else if (frm.pwd.value != frm.pwdCheck.value) {
+				frm.pwdCheck.focus();
+				alert("동일한 비밀번호를 입력해 주십시오.");
+				return false;
+
+			} else if($('#kors_consent1').is(":checked") == false){
+				alert("개인정보의 수집·이용에 관한 사항 동의를 해주십시오.");
+				return false;
+			} else if($('#kors_consent2').is(":checked") == false){
+				alert("개인정보의 수집·이용에 관한 사항 동의를 해주십시오.");
+				return false;
+			} else if($('#kors_consent3').is(":checked") == false){
+				alert("민감정보 및 고유식별정보의 처리에 관한 사항 동의를 해주십시오.");
+				return false;
+			}
+			alert("경기인 등록 신청이 완료되었습니다.");
+		}
+
+	</script>
+	<footer id="kors_footer">
+		<div class="container-fluid f_s1 fw_pl">
+			<div class="row footer_top justify-content-between row-cols-auto">
+				<div class="col d-flex">
+					<div class="logo_box">
+						<h2>김해시수영연맹</h2>
+					</div>
+					<div class="text_box">
+						<p><span class="f_c_w">사단법인 김해시수영연맹</span></p>
+						<p>
+							<span>경남 김해시 생림면 나전로 249번길 13-67</span>
+						</p>
+						<p>
+							<span>회장 최성일 : 010-3865-6621</span>
+							<span>부회장 : 김용태 010-9313-3644</span>
+							<span>전무 : 조광제 010-8468-2213</span>
+							<span>사무국장 : 김경태 010-3180-2367</span>
+						</p>
+						<p>
+							<span>FAX : 055-323-9260</span>
+							<span>email : khsw2019@naver.com</span>
+						</p>
+					</div>
+				</div>
+			</div>
+
+			<div class="row footer_bottom">
+				<div class="col d-flex justify-content-between">
+					<p class="cop_text">Copyright © 2023 사단법인 김해시수영연맹(Gimhae Swimming Federation). All Rights Reserved. </p>
+					<ul class="d-flex f-list">
+						<li><a href="https://www.korswim.co.kr/page/privacy" style="color: #fff;">개인정보처리방침</a></li>
+						<li><a href="https://www.korswim.co.kr/page/terms">이용약관</a></li>
+						<li><a href="#null">이메일무단수집거부</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</footer>
+	</body>
+</html>

@@ -1,0 +1,41 @@
+#spring.mail.host=smtp.gmail.com
+#spring.mail.port=587
+#spring.mail.username=parkch1028@gmail.com
+#spring.mail.password=hlkavzovwgbkoxey
+#spring.mail.properties.mail.smtp.auth=true
+#spring.mail.properties.mail.smtp.starttls.enable=true
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://ls-f958bf6b082618cafda9cacbdb7db33c6bc80b16.czp5do9b7kbe.ap-northeast-2.rds.amazonaws.com:3306/Gimhae?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul&zeroDateTimeBehavior=convertToNull&characterEncoding=UTF-8&useUnicode=true&mysqlEncoding=UTF-8
+    username: dbmasteruser
+    password: q0;2FqRz-NbdEhRB#[`xl{,$Umw*JcMW
+    hikari:
+      minimum-idle: 20
+      maximum-pool-size: 50
+      idle-timeout: 250000
+      max-lifetime: 250000
+      connection-timeout: 99999
+      validation-timeout: 10000
+  jpa:
+    database: mysql
+    hibernate:
+      format_sql: true
+      ddl-auto: update #create update none
+    show-sql: true
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    generate-ddl: true
+
+cloud:
+  aws:
+    credentials:
+      accessKey: AKIA2PAE5W4ULQOMWUSQ
+      secretKey: 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
+    s3:
+      bucket: vvuti
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false

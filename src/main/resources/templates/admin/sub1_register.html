@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ko">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<title>김해시수연영맹</title>
+		<link rel="stylesheet" href="/assets/css/normalize.css">
+		<link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+		<link rel="stylesheet" href="/assets/css/bootstrap-theme.css">
+		<link rel="stylesheet" href="/assets/css/slick.css">
+		<link rel="stylesheet" href="/assets/css/slick-theme.css">
+		<link rel="stylesheet" href="/assets/css/kors_style.css">
+		<script src="/assets/js/bootstrap.bundle.min.js"></script>
+		<script src="/assets/js/jquery.min.js"></script>
+		<script src="/assets/js/slick.min.js"></script>
+		<script src="/assets/js/kors_js.js"></script>
+	</head>	
+	
+	<body class="admin_body">	
+		<div id="admin_ui" class="d-flex">
+			<header class="kors_admin_header">
+				<div>
+					<div class="admin_nav_banner">
+						<div>
+							<p class="f_s1">관리자</p>
+							<h1 class="f_s5 fw_pb">김해시수연영맹</h1>
+						</div>
+					</div>
+					<ul class="admin_nav_list">
+						<li><a href="/admin/user/list">경기인 관리</a></li>
+						<li><a href="/admin/user/list/register" class="active">경기인 접수</a></li>
+						<li><a href="/admin/competition/list">대회 관리</a></li>
+						<li><a href="/admin/competition/request">대회 신청관리</a></li>
+						<li><a href="/admin/notice">공지사항</a></li>
+						<li><a href="/admin/photo">포토갤러리</a></li>
+						<li><a href="/admin/history">연혁</a></li>
+						<li><a href="/admin/referee">심판 관리</a></li>
+					</ul>
+				</div>
+			</header>
+
+			<section class="kors_admin_content">
+				<div class="container-fluid mb_80">
+					<div class="row">
+						<div class="col">
+							<h2>경기인 접수</h2>
+						</div>
+					</div>
+				</div>
+
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col">
+							<div class="table_box1">
+								<table class="w-100">
+									<thead>
+									<tr>
+										<th>No</th>
+										<th>이름</th>
+										<th>생년월일</th>
+										<th>전화번호</th>
+										<th>이메일</th>
+										<th>소속팀</th>
+										<th>성별</th>
+										<th>비고</th>
+									</tr>
+									</thead>
+									<tbody>
+										<tr th:each="field : ${userList}">
+											<td>3</td>
+											<td th:text="${field.userName}"></td>
+											<td th:text="${field.birthday}"></td>
+											<td th:text="${field.phoneNumber}"></td>
+											<td th:text="${field.email}"></td>
+											<td th:text="${field.organization}"></td>
+											<td th:text="${field.sex}"></td>
+											<td><div><a href="#" th:onclick="|javascript:accept('${field.userSeq}')|" class="kors_btn2 mr_10">승인</a> <a href="#" th:onclick="|javascript:deleteUser('${field.userSeq}')|" class="kors_btn2 type2">미승인</a></div></td>
+										</tr>
+									</tbody>
+									<tfoot class="f_s1">
+										<tr>
+											<th colspan="8">
+												<span class="prev"></span>
+												<span>1</span>
+												<span class="next"></span>
+											</th>
+										</tr>
+									</tfoot>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+			<script type="text/javascript">
+				function accept(userSeq) {
+					if (confirm("승인하시겠습니까?"))
+						$.ajax({
+							type: "POST",
+							url: "/admin/user/accept/" + userSeq,
+							// async: false,
+							data: userSeq,
+							error : function(request,status,error) {
+								console.log("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+							},
+							success: function (data) {
+								alert("승인되었습니다.");
+								location.reload();
+							}
+						});
+				}
+
+				function deleteUser(userSeq) {
+					if (confirm("미승인 처리 하시겠습니까?"))
+						$.ajax({
+							type: "POST",
+							url: "/admin/user/delete/" + userSeq,
+							// async: false,
+							data: userSeq,
+							error : function(request,status,error) {
+								console.log("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+							},
+							success: function (data) {
+								alert("미승인 처리 되었습니다.");
+								location.reload();
+							}
+						});
+				}
+
+			</script>
+		</div>
+	</body>
+</html>
