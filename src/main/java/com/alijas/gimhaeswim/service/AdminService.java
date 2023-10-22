@@ -77,7 +77,20 @@ public class AdminService {
 
     public String findUser(String userName, String pwd, String competitionSeq){
         User user = userRepository.getUser(userName, pwd);
+        if(competitionSeq != null){
+            List<ApplicationDetail> applicationDetailList = applicationDetailRepository.getApplicationDetailFromUserAndCompetition(user.getUserSeq(), Integer.valueOf(competitionSeq));
+
+            if(applicationDetailList.isEmpty() || applicationDetailList == null){
+                return "empty";
+            }
+        }
+        return String.valueOf(user.getUserSeq());
+    }
+
+    public String findUserOnCompetition(String userName, String pwd, String competitionSeq){
+        User user = userRepository.getUser(userName, pwd);
         List<ApplicationDetail> applicationDetailList = applicationDetailRepository.getApplicationDetailFromUserAndCompetition(user.getUserSeq(), Integer.valueOf(competitionSeq));
+
         if(!applicationDetailList.isEmpty()){
             return "isExist";
         }
@@ -142,6 +155,15 @@ public class AdminService {
         List<ApplicationDetail> applicationDetailList = applicationDetailRepository.getApplicationDetailFromTeamAndCompetition(team.getTeamSeq(), Integer.valueOf(competitionSeq));
         if(!applicationDetailList.isEmpty()){
             return "isExist";
+        }
+        return String.valueOf(team.getTeamSeq());
+    }
+
+    public String findTeamApplicationDetailUpdate(String teamName, String competitionSeq){
+        Team team = teamRepository.getTeam(teamName);
+        List<ApplicationDetail> applicationDetailList = applicationDetailRepository.getApplicationDetailFromTeamAndCompetition(team.getTeamSeq(), Integer.valueOf(competitionSeq));
+        if(applicationDetailList.isEmpty()){
+            return "empty";
         }
         return String.valueOf(team.getTeamSeq());
     }

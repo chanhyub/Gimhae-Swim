@@ -21,7 +21,7 @@
 			let isDone = param.get('isDone');
 
 			if(isDone === "fail"){
-				alert("대회 신청을 실패했습니다.");
+				alert("대회 신청 변경을 실패했습니다.");
 			} else if(isDone === "error"){
 				alert("성별에 맞는 대회를 선택해 주십시오.");
 			}
@@ -122,7 +122,7 @@
 				<div class="container">
 					<div class="row">
 						<div class="col">
-							<h3 class="fw_pb ft_s4">대회신청 및 안내</h3>
+							<h3 class="fw_pb ft_s4">대회신청 변경</h3>
 							<p class="f_s1 fw_pl f_s3">국민의 사랑을 받는 스포츠로 발전할 수 있도록 노력하고 앞장서겠습니다.</p>
 						</div>
 					</div>
@@ -133,14 +133,14 @@
 				<div class="container">
 					<div class="row">
 						<div class="col">
-							<p class="f_s1"><span><img src="/assets/img/home.png"></span> 대회신청</p>
+							<p class="f_s1"><span><img src="/assets/img/home.png"></span> 대회신청 변경</p>
 						</div>
 					</div>
 				</div>
 			</div>
 
 			<div class="sub_content_box">
-				<form name="frm" onsubmit="return Checkform()" th:action="@{/competition/application/register}" method="post" th:object="${applicationDetailDto}">
+				<form name="frm" onsubmit="return Checkform()" th:action="@{/competition/application/register/update}" method="post" th:object="${applicationDetailDto}">
 					<div class="container mb_20">
 						<div class="row kors_list_ui_box">
 							<div class="col">
@@ -170,7 +170,7 @@
 													<label class="checkbox_style1" th:for="'competitionEvent_' + ${index.count}" th:text="${field.sex}+' ' + ${field.division}+' ' + ${field.eventName}+' ' + ${field.meter} + 'm'"></label>
 												</li>
 												<input type="hidden" name="competitionSeq" th:value="${competition.getCompetitionSeq()}" id="competition_seq" class="d-none"/>
-												<input type="hidden" th:field="*{userSeq}" id="user_seq" class="d-none"/>
+												<input type="hidden" name="userSeq" itemid="user_seq" th:value="${userSeq}" id="user_seq" class="d-none"/>
 											</ul>
 										</div>
 
@@ -181,18 +181,18 @@
 													<input type="checkbox" th:id="'competitionEvent_team_' + ${index.count}" name="teamCompetitionEventList" th:value="${field.competitionEventSeq}" class="d-none"/>
 													<label class="checkbox_style1" th:for="'competitionEvent_team_' + ${index.count}" th:text="${field.sex}+' ' + ${field.division}+' ' + ${field.eventName}+' ' + ${field.meter} + 'm'"></label>
 												</li>
-												<input type="hidden" th:field="*{teamSeq}" id="team_seq" class="d-none"/>
+												<input type="hidden" name="teamSeq" id="team_seq" class="d-none"/>
 											</ul>
 										</div>
 
-										<div class="mb_40">
-											<p class="ft_s0 mb_20">경기인 정보 입력 <span class="f_s2 f_c_active">(필수)</span></p>
-											<ul>
-												<li class="mb_10"><input type="text" id="name" placeholder="이름" class="kors_input1"></li>
-												<li class="mb_10"><input type="password" id="pwd" placeholder="비밀번호" class="kors_input1"></li>
-												<li><button type="button" onclick="userCheck();" id="check_user" class="kors_btn1">경기인 확인</button></li>
-											</ul>
-										</div>
+<!--										<div class="mb_40">-->
+<!--											<p class="ft_s0 mb_20">경기인 정보 입력 <span class="f_s2 f_c_active">(필수)</span></p>-->
+<!--											<ul>-->
+<!--												<li class="mb_10"><input type="text" id="name" placeholder="이름" class="kors_input1"></li>-->
+<!--												<li class="mb_10"><input type="password" id="pwd" placeholder="비밀번호" class="kors_input1"></li>-->
+<!--												<li><button type="button" onclick="userCheck();" id="check_user" class="kors_btn1">경기인 확인</button></li>-->
+<!--											</ul>-->
+<!--										</div>-->
 
 										<div class="mb_40">
 											<p class="ft_s0 mb_20">소속팀 정보 입력 <span class="f_s2 f_c_active">(단체 경기 참가시 입력)</span></p>
@@ -205,11 +205,8 @@
 										<div>
 											<p class="f_s4 mb_5">대회 참가비</p>
 											<ul>
-												<li>성인 30000원</li>
-												<li>학생(만18세) 20000원</li>
-												<br>
-<!--												<li th:text="${competition.getPrice()}"></li>-->
-												<li>농협은행 : 355-0051-6815-03</li>
+												<li th:text="${competition.getPrice()}"></li>
+												<li>농협은행 : 355-0001-2376-63</li>
 											</ul>
 										</div>
 									</div>
@@ -260,7 +257,7 @@
 				var competitionSeq = [[${competitionSeq}]]
 				$.ajax({
 					type: "GET",
-					url: "/admin/team/find/application",
+					url: "/admin/team/find/application/update",
 					// async: false,
 					data: {teamName : teamName, competitionSeq : competitionSeq},
 					error : function(request,status,error) {
@@ -268,13 +265,12 @@
 						location.reload();
 					},
 					success: function (data) {
-						if(data === "isExist"){
-							alert("이미 대회에 신청한 소속팀입니다.")
+						if(data === "empty"){
+							alert("대회를 신청하지 않은 팀 입니다.")
 							location.reload();
-						}else{
-							alert("성공적으로 확인되었습니다.")
-							document.getElementById("team_seq").value = data;
 						}
+						alert("성공적으로 확인되었습니다.")
+						document.getElementById("team_seq").value = data;
 					}
 				});
 			}

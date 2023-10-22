@@ -288,12 +288,13 @@ body {font-size:13px;}
 .main_side1-date p {position: relative; padding-left: 11px; margin-bottom: 5px;}
 .main_side1-date p::before {content: ''; display: block; width: 5px; height: 5px; background: #034EA2; border-radius: 50%; position: absolute; top: 7px; left: 0;}
 .main_side1-btn {width: 100%; display: flex; align-items: center; justify-content: space-between;}
-.main_side1-btn a {display: block; width: 48%; background: #F1F1F1; text-align: center; padding: 13px 0; font-weight: 500; color: #222; border-radius: 5px;}
+.main_side1-btn a {display: block; width: 30%; background: #F1F1F1; text-align: center; padding: 13px 0; font-weight: 500; color: #222; border-radius: 5px;}
+.main_side1-btn a:nth-child(2) {background: #034EA2; color: #fff; font-weight: 600;}
 .main_side1-btn a:last-child {background: #1F2C5C; color: #fff; font-weight: 600;}
 
 .main_slide_box1 .slide_box:hover {box-shadow: 5px 6px 15px rgba(3, 78, 162, 0.3); margin-top: -15px;}
 .main_slide_box1 .slide_box:hover .main_side1-top {background: #034EA2;}
-.main_slide_box1 .slide_box:hover .main_side1-btn a:last-child {background: #034EA2;}
+.main_slide_box1 .slide_box:hover .main_side1-btn a:nth-child(2) {background: #034EA2;}
 
 .main_list1 {background:#F7F9FB;}
 

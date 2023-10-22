@@ -5,6 +5,7 @@ import com.alijas.gimhaeswim.dto.*;
 import com.alijas.gimhaeswim.service.*;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.parser.ParseException;
+import org.springframework.data.relational.core.sql.In;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -98,6 +99,12 @@ public class AdminController {
     @GetMapping("/user/find")
     public String findUser(String userName, String password, String competitionSeq){
         String userSeq = adminService.findUser(userName, password, competitionSeq);
+        return userSeq;
+    }
+
+    @GetMapping("/user/find/competition")
+    public String findUserCompetition(String userName, String password, String competitionSeq){
+        String userSeq = adminService.findUserOnCompetition(userName, password, competitionSeq);
         return userSeq;
     }
 
@@ -223,10 +230,14 @@ public class AdminController {
     public ModelAndView competitionUpdate(String competitionSeq){
         ModelAndView modelAndView = new ModelAndView("admin/sub2_3_contestupdate");
         Competition competition = competitionService.getCompetition(competitionSeq);
+        List<CompetitionEvent> competitionEventList = competition.getCompetitionEventList();
+        Integer count = competitionEventList.size();
         CompetitionDto competitionDto = new CompetitionDto();
         modelAndView.addObject("competition", competition);
         modelAndView.addObject("competitionSeq", competitionSeq);
         modelAndView.addObject("competitionDto", competitionDto);
+        modelAndView.addObject("competitionEventList", competitionEventList);
+        modelAndView.addObject("count", count);
         return modelAndView;
     }
 
@@ -431,6 +442,12 @@ public class AdminController {
     @GetMapping("/team/find/application")
     public String findTeamApplication(String teamName, String competitionSeq){
         String teamSeq = adminService.findTeamApplicationDetail(teamName, competitionSeq);
+        return teamSeq;
+    }
+
+    @GetMapping("/team/find/application/update")
+    public String findTeamApplicationUpdate(String teamName, String competitionSeq){
+        String teamSeq = adminService.findTeamApplicationDetailUpdate(teamName, competitionSeq);
         return teamSeq;
     }
 

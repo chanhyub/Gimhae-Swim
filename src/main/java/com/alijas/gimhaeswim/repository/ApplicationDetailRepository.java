@@ -15,6 +15,12 @@ public interface ApplicationDetailRepository extends JpaRepository<ApplicationDe
     List<ApplicationDetail> getApplicationDetailFromCompetition(Integer competitionSeq);
 
     @Query(value="select * from application_detail where user_seq = ?1 and competition_seq = ?2" ,nativeQuery=true)
+    ApplicationDetail getApplicationDetailFromCompetitionAndUser(Integer userSeq, Integer competitionSeq);
+
+    @Query(value="select * from application_detail where team_seq = ?1 and competition_seq = ?2" ,nativeQuery=true)
+    ApplicationDetail getApplicationDetailFromCompetitionAndTeam(Integer teamSeq, Integer competitionSeq);
+
+    @Query(value="select * from application_detail where user_seq = ?1 and competition_seq = ?2" ,nativeQuery=true)
     List<ApplicationDetail> getApplicationDetailFromUserAndCompetition(Integer userSeq, Integer competitionSeq);
 
     @Query(value="select * from application_detail where team_seq = ?1 and competition_seq = ?2" ,nativeQuery=true)

@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.io.Console;
 import java.util.List;
 
 @Service
@@ -31,6 +32,7 @@ public class CompetitionService {
         competition.setCompetitionPeriod(competitionDto.getCompetitionPeriodStart() + " ~ " + competitionDto.getCompetitionPeriodEnd());
         competition.setDetail(competitionDto.getDetail());
         competition.setPlace(competitionDto.getPlace());
+        competition.setPrice(competitionDto.getPrice());
         competitionRepository.save(competition);
 
         for(CompetitionEvent competitionEvent : competitionDto.getCompetitionEventList()){
@@ -52,6 +54,10 @@ public class CompetitionService {
 
     public void updateCompetition(CompetitionDto competitionDto, String competitionSeq){
         Competition competition = competitionRepository.findById(Integer.valueOf(competitionSeq)).get();
+        List<CompetitionEvent> originCompetitionEventList = competition.getCompetitionEventList();
+
+        competitionEventRepository.deleteAll(originCompetitionEventList);
+
         competition.setYear(competitionDto.getYear());
         competition.setCompetitionName(competitionDto.getCompetitionName());
         competition.setCompetitionPeriod(competitionDto.getCompetitionPeriodStart() + " ~ " + competitionDto.getCompetitionPeriodEnd());
@@ -59,6 +65,10 @@ public class CompetitionService {
         competition.setPlace(competitionDto.getPlace());
         competitionRepository.save(competition);
 
+        for(CompetitionEvent competitionEvent : competitionDto.getCompetitionEventList()){
+            competitionEvent.setCompetition(competition);
+            competitionEventRepository.save(competitionEvent);
+        }
 
     }
 
@@ -68,9 +78,10 @@ public class CompetitionService {
     }
 
     public String applicationRegister(ApplicationDetailDto applicationDetailDto, List<String> competitionSeqList, List<String> teamCompetitionSeqList){
-        String result = "fail";
+        String result;
         try {
-            if(applicationDetailDto.getTeamSeq() == null) {
+            if(applicationDetailDto.getTeamSeq() == null || applicationDetailDto.getTeamSeq().trim().isEmpty()) {
+                System.out.println(applicationDetailDto.getUserSeq());
                 User user = userRepository.findById(Integer.valueOf(applicationDetailDto.getUserSeq())).get();
                 Competition competition = competitionRepository.findById(Integer.valueOf(applicationDetailDto.getCompetitionSeq())).get();
 
@@ -130,33 +141,131 @@ public class CompetitionService {
                     competitionEventApplicationDetail.setCompetitionEvent(competitionEvent);
                     competitionEventApplicationDetail.setApplicationDetail(applicationDetail);
                     competitionEventApplicationDetailRepository.save(competitionEventApplicationDetail);
-
-                    Team team = teamRepository.findById(Integer.valueOf(applicationDetailDto.getTeamSeq())).get();
-
-                    ApplicationDetail teamApplicationDetail = new ApplicationDetail();
-                    teamApplicationDetail.setTeam(team);
-                    teamApplicationDetail.setCompetition(competition);
-                    teamApplicationDetail.setDeposit(false);
-
-                    applicationDetailRepository.save(teamApplicationDetail);
-
-                    for (String teamSeq : teamCompetitionSeqList) {
-                        CompetitionEventApplicationDetail teamCompetitionEventApplicationDetail = new CompetitionEventApplicationDetail();
-                        CompetitionEvent teamCompetitionEvent = competitionEventRepository.findById(Integer.valueOf(seq)).get();
-                        competitionEventApplicationDetail.setCompetitionEvent(teamCompetitionEvent);
-                        competitionEventApplicationDetail.setApplicationDetail(teamApplicationDetail);
-                        competitionEventApplicationDetailRepository.save(teamCompetitionEventApplicationDetail);
-                    }
-                    result = "success";
-                    return result;
                 }
+                Team team = teamRepository.findById(Integer.valueOf(applicationDetailDto.getTeamSeq())).get();
+
+                ApplicationDetail teamApplicationDetail = new ApplicationDetail();
+                teamApplicationDetail.setTeam(team);
+                teamApplicationDetail.setCompetition(competition);
+                teamApplicationDetail.setDeposit(false);
+
+                applicationDetailRepository.save(teamApplicationDetail);
+
+                for (String teamSeq : teamCompetitionSeqList) {
+                    CompetitionEventApplicationDetail teamCompetitionEventApplicationDetail = new CompetitionEventApplicationDetail();
+                    CompetitionEvent teamCompetitionEvent = competitionEventRepository.findById(Integer.valueOf(teamSeq)).get();
+                    teamCompetitionEventApplicationDetail.setCompetitionEvent(teamCompetitionEvent);
+                    teamCompetitionEventApplicationDetail.setApplicationDetail(teamApplicationDetail);
+                    competitionEventApplicationDetailRepository.save(teamCompetitionEventApplicationDetail);
+                }
+
+                result = "success";
+                return result;
             }
         } catch (Exception e){
             result = "fail";
             return result;
         }
+    }
 
-        return result;
+    public String applicationRegisterUpdate(ApplicationDetailDto applicationDetailDto, List<String> competitionSeqList, List<String> teamCompetitionSeqList){
+        String result;
+        try {
+            if(applicationDetailDto.getTeamSeq() == null || applicationDetailDto.getTeamSeq().trim().isEmpty()) {
+                ApplicationDetail originApplicationDetail = applicationDetailRepository.getApplicationDetailFromCompetitionAndUser(Integer.valueOf(applicationDetailDto.getUserSeq()), Integer.valueOf(applicationDetailDto.getCompetitionSeq()));
+                applicationDetailRepository.deleteById(originApplicationDetail.getApplicationDetailSeq());
+
+                System.out.println(applicationDetailDto.getUserSeq());
+                User user = userRepository.findById(Integer.valueOf(applicationDetailDto.getUserSeq())).get();
+                Competition competition = competitionRepository.findById(Integer.valueOf(applicationDetailDto.getCompetitionSeq())).get();
+
+                ApplicationDetail applicationDetail = new ApplicationDetail();
+                applicationDetail.setUser(user);
+                applicationDetail.setCompetition(competition);
+                applicationDetail.setDeposit(false);
+
+                applicationDetailRepository.save(applicationDetail);
+
+                for (String seq : competitionSeqList) {
+                    CompetitionEventApplicationDetail competitionEventApplicationDetail = new CompetitionEventApplicationDetail();
+                    CompetitionEvent competitionEvent = competitionEventRepository.findById(Integer.valueOf(seq)).get();
+                    String sex = null;
+                    if (user.getSex().equals(Sex.MALE)) {
+                        sex = "남자";
+                    } else if (user.getSex().equals(Sex.FEMALE)) {
+                        sex = "여자";
+                    }
+                    if (!competitionEvent.getSex().equals(sex) && !competitionEvent.getSex().equals("단체")) {
+                        System.out.println(sex);
+                        result = "error";
+                        return result;
+                    }
+                    competitionEventApplicationDetail.setCompetitionEvent(competitionEvent);
+                    competitionEventApplicationDetail.setApplicationDetail(applicationDetail);
+                    competitionEventApplicationDetailRepository.save(competitionEventApplicationDetail);
+                }
+
+                result = "success";
+                return result;
+            }else {
+                ApplicationDetail originApplicationDetail = applicationDetailRepository.getApplicationDetailFromCompetitionAndUser(Integer.valueOf(applicationDetailDto.getUserSeq()), Integer.valueOf(applicationDetailDto.getCompetitionSeq()));
+                applicationDetailRepository.deleteById(originApplicationDetail.getApplicationDetailSeq());
+
+                ApplicationDetail teamOriginApplicationDetail = applicationDetailRepository.getApplicationDetailFromCompetitionAndTeam(Integer.valueOf(applicationDetailDto.getTeamSeq()), Integer.valueOf(applicationDetailDto.getCompetitionSeq()));
+                applicationDetailRepository.deleteById(teamOriginApplicationDetail.getApplicationDetailSeq());
+
+                User user = userRepository.findById(Integer.valueOf(applicationDetailDto.getUserSeq())).get();
+                Competition competition = competitionRepository.findById(Integer.valueOf(applicationDetailDto.getCompetitionSeq())).get();
+
+                ApplicationDetail applicationDetail = new ApplicationDetail();
+                applicationDetail.setUser(user);
+                applicationDetail.setCompetition(competition);
+                applicationDetail.setDeposit(false);
+
+                applicationDetailRepository.save(applicationDetail);
+
+                for (String seq : competitionSeqList) {
+                    CompetitionEventApplicationDetail competitionEventApplicationDetail = new CompetitionEventApplicationDetail();
+                    CompetitionEvent competitionEvent = competitionEventRepository.findById(Integer.valueOf(seq)).get();
+                    String sex = null;
+                    if (user.getSex().equals(Sex.MALE)) {
+                        sex = "남자";
+                    } else if (user.getSex().equals(Sex.FEMALE)) {
+                        sex = "여자";
+                    }
+                    if (!competitionEvent.getSex().equals(sex) && !competitionEvent.getSex().equals("단체")) {
+                        System.out.println(sex);
+                        result = "error";
+                        return result;
+                    }
+                    competitionEventApplicationDetail.setCompetitionEvent(competitionEvent);
+                    competitionEventApplicationDetail.setApplicationDetail(applicationDetail);
+                    competitionEventApplicationDetailRepository.save(competitionEventApplicationDetail);
+                }
+                Team team = teamRepository.findById(Integer.valueOf(applicationDetailDto.getTeamSeq())).get();
+
+                ApplicationDetail teamApplicationDetail = new ApplicationDetail();
+                teamApplicationDetail.setTeam(team);
+                teamApplicationDetail.setCompetition(competition);
+                teamApplicationDetail.setDeposit(false);
+
+                applicationDetailRepository.save(teamApplicationDetail);
+
+                for (String teamSeq : teamCompetitionSeqList) {
+                    CompetitionEventApplicationDetail teamCompetitionEventApplicationDetail = new CompetitionEventApplicationDetail();
+                    CompetitionEvent teamCompetitionEvent = competitionEventRepository.findById(Integer.valueOf(teamSeq)).get();
+                    teamCompetitionEventApplicationDetail.setCompetitionEvent(teamCompetitionEvent);
+                    teamCompetitionEventApplicationDetail.setApplicationDetail(teamApplicationDetail);
+                    competitionEventApplicationDetailRepository.save(teamCompetitionEventApplicationDetail);
+                }
+
+                result = "success";
+                return result;
+            }
+        } catch (Exception e){
+            result = "fail";
+            return result;
+        }
     }
 
     public void applicationDetailDelete(String applicationDetailSeq){
