@@ -35,12 +35,6 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
-//            .exceptionHandling((exceptions) -> exceptions
-//                .authenticationEntryPoint(new JwtAuthenticationEntryPoint())
-//                .accessDeniedHandler(new JwtAccessDeniedHandler())
-//            )
-//            .csrf(csrf -> csrf
-//                    .ignoringRequestMatchers(PathRequest.toH2Console()))
                 .csrf(AbstractHttpConfigurer::disable)
                 .headers(header -> header.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
 
@@ -50,7 +44,6 @@ public class SecurityConfig {
 //                            .maxSessionsPreventsLogin(true) // 두번째 로그인 거부
 //                            .invalidSessionUrl("/invalidSession.htm") // 세션이 만료되었을 때 이동하는 페이지
 //            )
-
 
                 .cors(withDefaults()) // Bean 기본 이름이 corsConfigurationSource
                 .authorizeHttpRequests((authorize) ->
