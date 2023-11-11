@@ -92,7 +92,7 @@ public class UserRepositoryTest {
     public void insertAndDelete() {
         //given
         var user = setUp(
-                "Jorge",
+                "Derek",
                 "1234",
                 "1999-10-28",
                 "010-8338-4583",
@@ -107,7 +107,7 @@ public class UserRepositoryTest {
         Optional<User> optionalUser = userRepository.findById(user.getId());
         if (optionalUser.isPresent()) {
             User result = optionalUser.get();
-            assertEquals(result.getUsername(), "Jorge");
+            assertEquals(result.getUsername(), "Derek");
             assertEquals(result.getPassword(), "1234");
             assertEquals(result.getBirthday(), "1999-10-28");
             assertEquals(result.getPhoneNumber(), "010-8338-4583");
