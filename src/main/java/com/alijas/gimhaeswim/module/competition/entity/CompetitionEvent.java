@@ -45,7 +45,6 @@ public class CompetitionEvent extends BaseTime {
     @Comment("종목 정원")
     private Integer eventCapacity;
 
-    // Score 엔티티로 빼기
     @Comment("1등 스코어")
     private Integer firstScore;
 

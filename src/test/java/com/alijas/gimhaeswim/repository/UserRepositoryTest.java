@@ -8,6 +8,7 @@ import com.alijas.gimhaeswim.module.user.enums.UserStatus;
 import com.alijas.gimhaeswim.module.user.repository.UserRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -18,6 +19,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
+@DisplayName("UserRepository 테스트")
 public class UserRepositoryTest {
 
     @Autowired
@@ -29,7 +31,7 @@ public class UserRepositoryTest {
     @BeforeEach
     public void init() {
         setUp(
-                "Jorge",
+                "kkr",
                 "1234",
                 "1999-10-28",
                 "010-8338-4583",
@@ -50,13 +52,13 @@ public class UserRepositoryTest {
         assertEquals(users.get(0).getUsername(), "Jorge");
         assertEquals(users.get(0).getPassword(), "1234");
         assertEquals(users.get(0).getBirthday(), "1999-10-28");
-        assertEquals(users.get(0).getPhoneNumber(), "010-8338-4583");
+        assertEquals(users.get(0).getPhoneNumber(), "01083384583");
         assertEquals(users.get(0).getEmail(), "test1234@test.com");
         assertEquals(users.get(0).getGender(), Gender.M);
         assertTrue(users.get(0).isAgree());
         assertEquals(users.get(0).getStatus(), UserStatus.ACTIVE);
         assertEquals(users.get(0).getApplyStatus(), ApplyStatus.APPROVED);
-        assertEquals(users.get(0).getRole(), RoleType.USER);
+        assertEquals(users.get(0).getRole(), RoleType.ADMIN);
     }
 
     @Test
@@ -70,13 +72,13 @@ public class UserRepositoryTest {
             assertEquals(result.getUsername(), "Jorge");
             assertEquals(result.getPassword(), "1234");
             assertEquals(result.getBirthday(), "1999-10-28");
-            assertEquals(result.getPhoneNumber(), "010-8338-4583");
+            assertEquals(result.getPhoneNumber(), "01083384583");
             assertEquals(result.getEmail(), "test1234@test.com");
             assertEquals(result.getGender(), Gender.M);
             assertTrue(result.isAgree());
             assertEquals(result.getStatus(), UserStatus.ACTIVE);
             assertEquals(result.getApplyStatus(), ApplyStatus.APPROVED);
-            assertEquals(result.getRole(), RoleType.USER);
+            assertEquals(result.getRole(), RoleType.ADMIN);
 
             //when
             String password = "4312";
@@ -85,6 +87,8 @@ public class UserRepositoryTest {
 
             //then
             assertEquals(merge.getPassword(), "4312");
+        } else {
+            assertNotNull(optionalUser.get());
         }
     }
 

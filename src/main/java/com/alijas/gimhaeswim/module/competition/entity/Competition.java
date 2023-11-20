@@ -25,7 +25,6 @@ public class Competition extends BaseTime {
     private Long id;
 
     @Comment("대회 이름")
-    @Column(unique = true)
     private String competitionName;
 
     @Comment("대회 일시")

@@ -12,10 +12,10 @@ spring:
     driver-class-name: org.h2.Driver
     username: test
     password:
-  #  sql:
-  #    init:
-  #      data-locations:
-  #        - classpath:static/data.sql
+  sql:
+    init:
+      data-locations:
+        - classpath:static/data.sql
   h2:
     console:
       enabled: true
