@@ -19,7 +19,7 @@ public class File extends BaseTime {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Comment("고유번호")
-    private Integer id;
+    private Long id;
 
     @Comment("파일 출처")
     @ManyToOne
