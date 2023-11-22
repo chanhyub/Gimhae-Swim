@@ -44,6 +44,4 @@ public class Lane extends BaseTime {
     @ManyToOne
     private Section section;
 
-    @Comment("레인 기록")
-    private String record;
 }

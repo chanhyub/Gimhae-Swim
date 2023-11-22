@@ -1,7 +1,7 @@
 package com.alijas.gimhaeswim.module.organization.entity;
 
 import com.alijas.gimhaeswim.module.common.jpa.BaseTime;
-import com.alijas.gimhaeswim.module.notice.enums.NoticeStatus;
+import com.alijas.gimhaeswim.module.organization.enums.OrganizationStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -38,5 +38,5 @@ public class Organization extends BaseTime {
 
     @Comment("조직도 상태")
     @Enumerated(EnumType.STRING)
-    private NoticeStatus status;
+    private OrganizationStatus status;
 }

@@ -34,5 +34,5 @@ public class Record extends BaseTime {
     private User user;
 
     @Comment("기록")
-    private LocalDateTime record;
+    private String record;
 }
