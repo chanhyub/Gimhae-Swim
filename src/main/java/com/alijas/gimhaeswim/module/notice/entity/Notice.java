@@ -1,6 +1,7 @@
 package com.alijas.gimhaeswim.module.notice.entity;
 
 import com.alijas.gimhaeswim.module.common.jpa.BaseTime;
+import com.alijas.gimhaeswim.module.file.entity.FileInfo;
 import com.alijas.gimhaeswim.module.notice.enums.NoticeStatus;
 import com.alijas.gimhaeswim.module.user.entity.User;
 import jakarta.persistence.*;
@@ -37,4 +38,8 @@ public class Notice extends BaseTime {
     @Comment("공지사항 상태")
     @Enumerated(EnumType.STRING)
     private NoticeStatus status;
+
+    @Comment("공지사항 첨부파일")
+    @ManyToOne
+    private FileInfo fileInfo;
 }
