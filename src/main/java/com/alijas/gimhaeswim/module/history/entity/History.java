@@ -22,10 +22,10 @@ public class History extends BaseTime {
     private Long id;
 
     @Comment("연혁 년도")
-    private String year;
+    private String historyYear;
 
     @Comment("연혁 월")
-    private String month;
+    private String historyMonth;
 
     @Comment("연혁 내용")
     private String content;
