@@ -1,7 +1,10 @@
 package com.alijas.gimhaeswim.module.competition.controller;
 
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
 
-@RestController
+@Controller
 public class CompetitionController {
+
+
+//    @GetMapping("/competition")
 }

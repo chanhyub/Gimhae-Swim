@@ -1,12 +1,10 @@
-package com.alijas.gimhaeswim.module.competition.request;
+package com.alijas.gimhaeswim.module.competition.dto;
 
-public record CompetitionSaveRequest(
+public record CompetitionApplyDTO(
+        Long id,
         String competitionName,
-        String competitionDate,
-        String competitionPlace,
         String competitionApplyStartDate,
         String competitionApplyEndDate,
-        String competitionContent,
         Integer competitionFee,
         Integer competitionStudentFee,
         String competitionAccount

@@ -43,4 +43,8 @@ public class Department extends BaseTime {
 
     @Comment("부 추가 정보")
     private String departmentInfo; /* (여자학생부), (남자학생부) */
+
+    public String getDepartmentName() {
+        return this.departmentAge + "세 " + (this.moreOrLess.name().equals("MORE") ? "이상" : "이하") + "(" +this.departmentInfo + ")";
+    }
 }

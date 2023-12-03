@@ -1,7 +1,11 @@
 package com.alijas.gimhaeswim.module.competition.entity;
 
 import com.alijas.gimhaeswim.module.common.jpa.BaseTime;
+import com.alijas.gimhaeswim.module.competition.dto.CompetitionApplyDTO;
+import com.alijas.gimhaeswim.module.competition.dto.CompetitionDetailDTO;
+import com.alijas.gimhaeswim.module.competition.dto.CompetitionListDTO;
 import com.alijas.gimhaeswim.module.competition.enums.status.CompetitionStatus;
+import com.alijas.gimhaeswim.util.DateTimeConverter;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -55,4 +59,37 @@ public class Competition extends BaseTime {
     @Comment("대회 상태")
     @Enumerated(EnumType.STRING)
     private CompetitionStatus status;
+
+    public CompetitionListDTO toCompetitionListDTO() {
+        return new CompetitionListDTO(
+                this.id,
+                this.competitionName,
+                DateTimeConverter.LocalDateTimeToStringYYYYMMDD(this.competitionDate),
+                this.competitionPlace,
+                DateTimeConverter.LocalDateTimeToStringYYYYMMDD(this.competitionApplyStartDate),
+                DateTimeConverter.LocalDateTimeToStringYYYYMMDD(this.competitionApplyEndDate)
+        );
+    }
+
+    public CompetitionDetailDTO toCompetitionDetailDTO() {
+        return new CompetitionDetailDTO(
+                this.id,
+                this.competitionName,
+                DateTimeConverter.LocalDateTimeToStringYYYYMMDD(this.competitionApplyStartDate),
+                DateTimeConverter.LocalDateTimeToStringYYYYMMDD(this.competitionApplyEndDate),
+                this.competitionContent
+        );
+    }
+
+    public CompetitionApplyDTO toCompetitionApplyDTO() {
+        return new CompetitionApplyDTO(
+                this.id,
+                this.competitionName,
+                DateTimeConverter.LocalDateTimeToStringYYYYMMDD(this.competitionApplyStartDate),
+                DateTimeConverter.LocalDateTimeToStringYYYYMMDD(this.competitionApplyEndDate),
+                this.competitionFee,
+                this.competitionStudentFee,
+                this.competitionAccount
+        );
+    }
 }

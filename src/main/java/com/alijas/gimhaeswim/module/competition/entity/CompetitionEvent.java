@@ -1,6 +1,7 @@
 package com.alijas.gimhaeswim.module.competition.entity;
 
 import com.alijas.gimhaeswim.module.common.jpa.BaseTime;
+import com.alijas.gimhaeswim.module.competition.dto.CompetitionEventListApplyDTO;
 import com.alijas.gimhaeswim.module.competition.enums.EventType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -72,4 +73,15 @@ public class CompetitionEvent extends BaseTime {
     @Comment("대회")
     @ManyToOne
     private Competition competition;
+
+    // toCompetitionEventListApplyDTO 추가
+    public CompetitionEventListApplyDTO toCompetitionEventListApplyDTO() {
+        return new CompetitionEventListApplyDTO(
+                this.id,
+                this.eventType.name(),
+                this.department.getDepartmentName(),
+                this.event.getEventName(),
+                this.meter.getMeter()
+        );
+    }
 }
