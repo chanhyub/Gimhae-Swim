@@ -7,6 +7,7 @@ import com.alijas.gimhaeswim.module.competition.enums.status.CompetitionStatus;
 import com.alijas.gimhaeswim.module.competition.enums.status.DepartmentStatus;
 import com.alijas.gimhaeswim.module.competition.enums.status.EventStatus;
 import com.alijas.gimhaeswim.module.competition.repository.CompetitionEventRepository;
+import com.alijas.gimhaeswim.module.common.enums.Gender;
 import com.alijas.gimhaeswim.util.DateTimeConverter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -216,6 +217,7 @@ public class CompetitionEventRepositoryTest {
         return entityManager.persist(new Department(
             null,
             departmentAge,
+            Gender.M,
             MoreOrLess.LESS,
             DepartmentStatus.ACTIVE,
             departmentInfo

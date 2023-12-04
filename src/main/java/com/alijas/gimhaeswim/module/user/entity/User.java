@@ -3,7 +3,7 @@ package com.alijas.gimhaeswim.module.user.entity;
 import com.alijas.gimhaeswim.module.common.enums.ApplyStatus;
 import com.alijas.gimhaeswim.module.common.enums.RoleType;
 import com.alijas.gimhaeswim.module.common.jpa.BaseTime;
-import com.alijas.gimhaeswim.module.user.enums.Gender;
+import com.alijas.gimhaeswim.module.common.enums.Gender;
 import com.alijas.gimhaeswim.module.user.enums.UserStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

@@ -3,6 +3,7 @@ package com.alijas.gimhaeswim.module.competition.entity;
 import com.alijas.gimhaeswim.module.common.jpa.BaseTime;
 import com.alijas.gimhaeswim.module.competition.enums.status.DepartmentStatus;
 import com.alijas.gimhaeswim.module.competition.enums.MoreOrLess;
+import com.alijas.gimhaeswim.module.common.enums.Gender;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -33,6 +34,10 @@ public class Department extends BaseTime {
     @Comment("부 나이")
     private Integer departmentAge;
 
+    @Comment("부 성별")
+    @Enumerated(EnumType.STRING)
+    private Gender departmentGender;
+
     @Comment("부 이상 또는 이하 값")
     @Enumerated(EnumType.STRING)
     private MoreOrLess moreOrLess;
@@ -45,6 +50,9 @@ public class Department extends BaseTime {
     private String departmentInfo; /* (여자학생부), (남자학생부) */
 
     public String getDepartmentName() {
-        return this.departmentAge + "세 " + (this.moreOrLess.name().equals("MORE") ? "이상" : "이하") + "(" +this.departmentInfo + ")";
+        return this.departmentAge
+                + "세 "
+                + (this.moreOrLess.name().equals("MORE") ? "이상" : "이하")
+                + (this.departmentInfo != null ? "(" +this.departmentInfo + ")" : "");
     }
 }

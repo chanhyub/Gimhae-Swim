@@ -4,6 +4,7 @@ import com.alijas.gimhaeswim.module.competition.entity.Department;
 import com.alijas.gimhaeswim.module.competition.enums.MoreOrLess;
 import com.alijas.gimhaeswim.module.competition.enums.status.DepartmentStatus;
 import com.alijas.gimhaeswim.module.competition.repository.DepartmentRepository;
+import com.alijas.gimhaeswim.module.common.enums.Gender;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -100,6 +101,7 @@ public class DepartmentRepositoryTest {
         Department department = new Department(
                 null,
                 departmentAge,
+                Gender.M,
                 MoreOrLess.MORE,
                 DepartmentStatus.ACTIVE,
                 departmentInfo

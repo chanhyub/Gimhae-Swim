@@ -29,7 +29,7 @@
 				let count = $("input:checked[name='competitionEventList']").length;
 				if(count > 2){
 					$(this).prop("checked", false);
-					alert("2개 까지만 선택할 수 있습니다.")
+					alert("참가 종목은 2개 이상 선택할 수 없습니다.")
 				}
 			})
 		});
@@ -163,28 +163,69 @@
 								<div class="more_content_box">
 									<div>
 										<div class="mb_40">
-											<p class="ft_s0 mb_20">개인 경기선택 <span class="f_s2 f_c_active">(최대 2개)</span></p>
+											<p class="ft_s0">개인 경기선택 <span class="f_s2 f_c_active">(최대 2개)</span></p>
 											<ul>
-												<li class="mb_10" th:each="competitionEvent, index : ${competitionEventList}" th:if="${#strings.substringBefore(competitionEvent.eventType, '_').equals('ORGANIZATION')}">
-													<input type="checkbox" th:id="'competitionEvent_' + ${index.count}" name="competitionEventList" th:value="${competitionEvent.id}" class="d-none"/>
-													<label class="checkbox_style1" th:for="'competitionEvent_' + ${index.count}" th:text="${competitionEvent.department} + ' ' + ${#strings.substringBefore(competitionEvent.eventType, '_').equals('ORGANIZATION') ? '단체' : '개인'}+' ' + ${competitionEvent.meter}"></label>
-<!--													TODO :: 분류 어떻게 할지 생각 -->
+												<!-- 남자 -->
+												<li class="f_s5 mb_10" style="margin-top: 20px" th:text="'> ' + 남자"></li>
+												<li class="f_s4" th:each="event : ${eventList}">
+													<p class="f_s3 mb_10" th:text="${event.eventType}"></p>
+													<p class="f_s1 mb_10" th:each="competitionEvent, index : ${competitionEventList}" th:if="${#strings.substringBefore(competitionEvent.eventType, '_').equals('INDIVIDUAL') && competitionEvent.event().equals(event.eventType) && competitionEvent.gender.equals('M')}">
+														<input type="checkbox" th:id="'competitionEvent_' + ${index.count}" name="competitionEventList" th:value="${competitionEvent.id}" class="d-none"/>
+														<label class="checkbox_style1" th:for="'competitionEvent_' + ${index.count}" th:text="${competitionEvent.department} + ' ' + ${#strings.substringBefore(competitionEvent.eventType, '_').equals('ORGANIZATION') ? '단체' : '개인'}+' ' + ${competitionEvent.meter}"></label>
+													</p>
+													<hr />
+												</li>
+												<!-- 여자 -->
+												<li class="f_s5 mb_10" style="margin-top: 20px" th:text="'> ' + 여자"></li>
+												<li class="f_s4" th:each="event : ${eventList}">
+													<p class="f_s3 mb_10" th:text="${event.eventType}"></p>
+													<p class="f_s1 mb_10" th:each="competitionEvent, index : ${competitionEventList}" th:if="${#strings.substringBefore(competitionEvent.eventType, '_').equals('INDIVIDUAL') && competitionEvent.event().equals(event.eventType) && competitionEvent.gender.equals('F')}">
+														<input type="checkbox" th:id="'competitionEvent_' + ${index.count}" name="competitionEventList" th:value="${competitionEvent.id}" class="d-none"/>
+														<label class="checkbox_style1" th:for="'competitionEvent_' + ${index.count}" th:text="${competitionEvent.department} + ' ' + ${#strings.substringBefore(competitionEvent.eventType, '_').equals('ORGANIZATION') ? '단체' : '개인'}+' ' + ${competitionEvent.meter}"></label>
+													</p>
+													<hr />
 												</li>
 												<input type="hidden" name="competitionSeq" th:value="${competition.id}" id="competition_seq" class="d-none"/>
 <!--												<input type="hidden" th:field="*{userId}" id="user_seq" class="d-none"/>-->
 											</ul>
 										</div>
 
-<!--										<div class="mb_40">-->
-<!--											<p class="ft_s0 mb_20">단체 경기선택 <span class="f_s2 f_c_active">(전체 팀원중 한명만 신청 해 주십시오.)</span></p>-->
-<!--											<ul>-->
-<!--												<li class="mb_10" th:each="field, index : ${competitionEventList}" th:if="${competitionEvent.eventType} == 'ORAGANIZATION'">-->
-<!--													<input type="checkbox" th:id="'competitionEvent_team_' + ${index.count}" name="teamCompetitionEventList" th:value="${field.competitionEventSeq}" class="d-none"/>-->
-<!--													<label class="checkbox_style1" th:for="'competitionEvent_team_' + ${index.count}" th:text="${field.sex}+' ' + ${field.division}+' ' + ${field.eventName}+' ' + ${field.meter} + 'm'"></label>-->
-<!--												</li>-->
+										<div class="mb_40">
+											<p class="ft_s0 mb_20">단체 경기선택 <span class="f_s2 f_c_active">(전체 팀원중 한명만 신청 해 주십시오.)</span></p>
+											<ul>
+												<!-- 혼성 -->
+												<li class="f_s5 mb_10" style="margin-top: 20px" th:text="'> ' + 혼성"></li>
+												<li class="f_s4" th:each="event : ${eventList}">
+													<p class="f_s3 mb_10" th:text="${event.eventType}"></p>
+													<p class="f_s1 mb_10" th:each="competitionEvent, index : ${competitionEventList}" th:if="${#strings.substringBefore(competitionEvent.eventType, '_').equals('ORGANIZATION') && competitionEvent.event().equals(event.eventType) && competitionEvent.gender.equals('X')}">
+														<input type="checkbox" th:id="'competitionEvent_' + ${index.count}" name="teamCompetitionEventList" th:value="${competitionEvent.id}" class="d-none"/>
+														<label class="checkbox_style1" th:for="'competitionEvent_' + ${index.count}" th:text="${competitionEvent.department} + ' ' + ${#strings.substringBefore(competitionEvent.eventType, '_').equals('ORGANIZATION') ? '단체' : '개인'}+' ' + ${competitionEvent.meter}"></label>
+													</p>
+													<hr />
+												</li>
+												<!-- 남자 -->
+												<li class="f_s5 mb_10" style="margin-top: 20px" th:text="'> ' + 남자"></li>
+												<li class="f_s4" th:each="event : ${eventList}">
+													<p class="f_s3 mb_10" th:text="${event.eventType}"></p>
+													<p class="f_s1 mb_10" th:each="competitionEvent, index : ${competitionEventList}" th:if="${#strings.substringBefore(competitionEvent.eventType, '_').equals('ORGANIZATION') && competitionEvent.event().equals(event.eventType) && competitionEvent.gender.equals('M')}">
+														<input type="checkbox" th:id="'competitionEvent_' + ${index.count}" name="teamCompetitionEventList" th:value="${competitionEvent.id}" class="d-none"/>
+														<label class="checkbox_style1" th:for="'competitionEvent_' + ${index.count}" th:text="${competitionEvent.department} + ' ' + ${#strings.substringBefore(competitionEvent.eventType, '_').equals('ORGANIZATION') ? '단체' : '개인'}+' ' + ${competitionEvent.meter}"></label>
+													</p>
+													<hr />
+												</li>
+												<!-- 여자 -->
+												<li class="f_s5 mb_10" style="margin-top: 20px" th:text="'> ' + 여자"></li>
+												<li class="f_s4" th:each="event : ${eventList}">
+													<p class="f_s3 mb_10" th:text="${event.eventType}"></p>
+													<p class="f_s1 mb_10" th:each="competitionEvent, index : ${competitionEventList}" th:if="${#strings.substringBefore(competitionEvent.eventType, '_').equals('ORGANIZATION') && competitionEvent.event().equals(event.eventType) && competitionEvent.gender.equals('F')}">
+														<input type="checkbox" th:id="'competitionEvent_' + ${index.count}" name="teamCompetitionEventList" th:value="${competitionEvent.id}" class="d-none"/>
+														<label class="checkbox_style1" th:for="'competitionEvent_' + ${index.count}" th:text="${competitionEvent.department} + ' ' + ${#strings.substringBefore(competitionEvent.eventType, '_').equals('ORGANIZATION') ? '단체' : '개인'}+' ' + ${competitionEvent.meter}"></label>
+													</p>
+													<hr />
+												</li>
 <!--												<input type="hidden" th:field="*{teamSeq}" id="team_seq" class="d-none"/>-->
-<!--											</ul>-->
-<!--										</div>-->
+											</ul>
+										</div>
 
 										<div class="mb_40">
 											<p class="ft_s0 mb_20">경기인 정보 입력 <span class="f_s2 f_c_active">(필수)</span></p>

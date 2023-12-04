@@ -3,7 +3,7 @@ package com.alijas.gimhaeswim.repository;
 import com.alijas.gimhaeswim.module.common.enums.ApplyStatus;
 import com.alijas.gimhaeswim.module.common.enums.RoleType;
 import com.alijas.gimhaeswim.module.user.entity.User;
-import com.alijas.gimhaeswim.module.user.enums.Gender;
+import com.alijas.gimhaeswim.module.common.enums.Gender;
 import com.alijas.gimhaeswim.module.user.enums.UserStatus;
 import com.alijas.gimhaeswim.module.user.repository.UserRepository;
 import org.junit.jupiter.api.Assertions;

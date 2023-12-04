@@ -11,7 +11,7 @@ import com.alijas.gimhaeswim.module.competition.enums.status.EventStatus;
 import com.alijas.gimhaeswim.module.rank.entity.IndividualRank;
 import com.alijas.gimhaeswim.module.rank.repository.IndividualRankRepository;
 import com.alijas.gimhaeswim.module.user.entity.User;
-import com.alijas.gimhaeswim.module.user.enums.Gender;
+import com.alijas.gimhaeswim.module.common.enums.Gender;
 import com.alijas.gimhaeswim.module.user.enums.UserStatus;
 import com.alijas.gimhaeswim.util.DateTimeConverter;
 import org.junit.jupiter.api.Assertions;
@@ -381,6 +381,7 @@ public class IndividualRankRepositoryTest {
         return entityManager.persist(new Department(
                 null,
                 departmentAge,
+                Gender.M,
                 MoreOrLess.LESS,
                 DepartmentStatus.ACTIVE,
                 departmentInfo

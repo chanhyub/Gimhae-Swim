@@ -1,6 +1,7 @@
 package com.alijas.gimhaeswim.module.competition.entity;
 
 import com.alijas.gimhaeswim.module.common.jpa.BaseTime;
+import com.alijas.gimhaeswim.module.competition.dto.EventListApplyDTO;
 import com.alijas.gimhaeswim.module.competition.enums.status.EventStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -33,4 +34,11 @@ public class Event extends BaseTime {
     @Comment("종목 상태")
     @Enumerated(EnumType.STRING)
     private EventStatus status;
+
+    public EventListApplyDTO toEventListApplyDTO() {
+        return new EventListApplyDTO(
+                this.id,
+                this.eventName
+        );
+    }
 }

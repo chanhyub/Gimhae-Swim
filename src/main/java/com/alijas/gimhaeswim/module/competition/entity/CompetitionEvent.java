@@ -74,11 +74,11 @@ public class CompetitionEvent extends BaseTime {
     @ManyToOne
     private Competition competition;
 
-    // toCompetitionEventListApplyDTO 추가
     public CompetitionEventListApplyDTO toCompetitionEventListApplyDTO() {
         return new CompetitionEventListApplyDTO(
                 this.id,
                 this.eventType.name(),
+                this.department.getDepartmentGender().name(),
                 this.department.getDepartmentName(),
                 this.event.getEventName(),
                 this.meter.getMeter()
