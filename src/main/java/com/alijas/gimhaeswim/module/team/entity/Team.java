@@ -23,10 +23,9 @@ public class Team extends BaseTime {
     private Long id;
 
     @Comment("팀 이름")
-    @Column(unique = true)
     private String teamName;
 
     @Comment("팀 선수")
     @ManyToOne
-    private User teamPlayer;
+    private User user;
 }

@@ -25,8 +25,8 @@
 			} else if(isDone === "error"){
 				alert("성별에 맞는 대회를 선택해 주십시오.");
 			}
-			$("input:checkbox[name='competitionEventList']").on("click", function (){
-				let count = $("input:checked[name='competitionEventList']").length;
+			$("input:checkbox[name='individualCompetitionEventIds']").on("click", function (){
+				let count = $("input:checked[name='individualCompetitionEventIds']").length;
 				if(count > 2){
 					$(this).prop("checked", false);
 					alert("참가 종목은 2개 이상 선택할 수 없습니다.")
@@ -140,7 +140,7 @@
 			</div>
 
 			<div class="sub_content_box">
-				<form name="frm" onsubmit="return Checkform()" th:action="@{/competitions/application/register}" method="post" th:object="${applicationSaveRequest}">
+				<form name="frm" onsubmit="return checkForm()" th:action="@{/competitions/{id}/apply(id=${competition.id})}" method="post">
 					<div class="container mb_20">
 						<div class="row kors_list_ui_box">
 							<div class="col">
@@ -166,27 +166,27 @@
 											<p class="ft_s0">개인 경기선택 <span class="f_s2 f_c_active">(최대 2개)</span></p>
 											<ul>
 												<!-- 남자 -->
-												<li class="f_s5 mb_10" style="margin-top: 20px" th:text="'> ' + 남자"></li>
+												<i><li class="ft_s1 mb_10" style="margin-top: 20px; font-weight: bold " th:text="'> ' + 남자"></li></i>
 												<li class="f_s4" th:each="event : ${eventList}">
 													<p class="f_s3 mb_10" th:text="${event.eventType}"></p>
 													<p class="f_s1 mb_10" th:each="competitionEvent, index : ${competitionEventList}" th:if="${#strings.substringBefore(competitionEvent.eventType, '_').equals('INDIVIDUAL') && competitionEvent.event().equals(event.eventType) && competitionEvent.gender.equals('M')}">
-														<input type="checkbox" th:id="'competitionEvent_' + ${index.count}" name="competitionEventList" th:value="${competitionEvent.id}" class="d-none"/>
+														<input type="checkbox" th:id="'competitionEvent_' + ${index.count}" name="individualCompetitionEventIds" th:value="${competitionEvent.id}" class="d-none"/>
 														<label class="checkbox_style1" th:for="'competitionEvent_' + ${index.count}" th:text="${competitionEvent.department} + ' ' + ${#strings.substringBefore(competitionEvent.eventType, '_').equals('ORGANIZATION') ? '단체' : '개인'}+' ' + ${competitionEvent.meter}"></label>
 													</p>
 													<hr />
 												</li>
 												<!-- 여자 -->
-												<li class="f_s5 mb_10" style="margin-top: 20px" th:text="'> ' + 여자"></li>
+												<i><li class="ft_s1 mb_10" style="margin-top: 20px; font-weight: bold" th:text="'> ' + 여자"></li></i>
 												<li class="f_s4" th:each="event : ${eventList}">
 													<p class="f_s3 mb_10" th:text="${event.eventType}"></p>
 													<p class="f_s1 mb_10" th:each="competitionEvent, index : ${competitionEventList}" th:if="${#strings.substringBefore(competitionEvent.eventType, '_').equals('INDIVIDUAL') && competitionEvent.event().equals(event.eventType) && competitionEvent.gender.equals('F')}">
-														<input type="checkbox" th:id="'competitionEvent_' + ${index.count}" name="competitionEventList" th:value="${competitionEvent.id}" class="d-none"/>
+														<input type="checkbox" th:id="'competitionEvent_' + ${index.count}" name="individualCompetitionEventIds" th:value="${competitionEvent.id}" class="d-none"/>
 														<label class="checkbox_style1" th:for="'competitionEvent_' + ${index.count}" th:text="${competitionEvent.department} + ' ' + ${#strings.substringBefore(competitionEvent.eventType, '_').equals('ORGANIZATION') ? '단체' : '개인'}+' ' + ${competitionEvent.meter}"></label>
 													</p>
 													<hr />
 												</li>
-												<input type="hidden" name="competitionSeq" th:value="${competition.id}" id="competition_seq" class="d-none"/>
-<!--												<input type="hidden" th:field="*{userId}" id="user_seq" class="d-none"/>-->
+<!--												<input type="hidden" name="competitionSeq" th:value="${competition.id}" id="competition_seq" class="d-none"/>-->
+												<input type="hidden" name="userId" id="user_seq" th:value="1" class="d-none"/>
 											</ul>
 										</div>
 
@@ -194,31 +194,31 @@
 											<p class="ft_s0 mb_20">단체 경기선택 <span class="f_s2 f_c_active">(전체 팀원중 한명만 신청 해 주십시오.)</span></p>
 											<ul>
 												<!-- 혼성 -->
-												<li class="f_s5 mb_10" style="margin-top: 20px" th:text="'> ' + 혼성"></li>
+												<i><li class="ft_s1 mb_10" style="margin-top: 20px; font-weight: bold" th:text="'> ' + 혼성"></li></i>
 												<li class="f_s4" th:each="event : ${eventList}">
 													<p class="f_s3 mb_10" th:text="${event.eventType}"></p>
 													<p class="f_s1 mb_10" th:each="competitionEvent, index : ${competitionEventList}" th:if="${#strings.substringBefore(competitionEvent.eventType, '_').equals('ORGANIZATION') && competitionEvent.event().equals(event.eventType) && competitionEvent.gender.equals('X')}">
-														<input type="checkbox" th:id="'competitionEvent_' + ${index.count}" name="teamCompetitionEventList" th:value="${competitionEvent.id}" class="d-none"/>
+														<input type="checkbox" th:id="'competitionEvent_' + ${index.count}" name="organizationCompetitionEventIds" th:value="${competitionEvent.id}" class="d-none"/>
 														<label class="checkbox_style1" th:for="'competitionEvent_' + ${index.count}" th:text="${competitionEvent.department} + ' ' + ${#strings.substringBefore(competitionEvent.eventType, '_').equals('ORGANIZATION') ? '단체' : '개인'}+' ' + ${competitionEvent.meter}"></label>
 													</p>
 													<hr />
 												</li>
 												<!-- 남자 -->
-												<li class="f_s5 mb_10" style="margin-top: 20px" th:text="'> ' + 남자"></li>
+												<i><li class="ft_s1 mb_10" style="margin-top: 20px; font-weight: bold" th:text="'> ' + 남자"></li></i>
 												<li class="f_s4" th:each="event : ${eventList}">
 													<p class="f_s3 mb_10" th:text="${event.eventType}"></p>
 													<p class="f_s1 mb_10" th:each="competitionEvent, index : ${competitionEventList}" th:if="${#strings.substringBefore(competitionEvent.eventType, '_').equals('ORGANIZATION') && competitionEvent.event().equals(event.eventType) && competitionEvent.gender.equals('M')}">
-														<input type="checkbox" th:id="'competitionEvent_' + ${index.count}" name="teamCompetitionEventList" th:value="${competitionEvent.id}" class="d-none"/>
+														<input type="checkbox" th:id="'competitionEvent_' + ${index.count}" name="organizationCompetitionEventIds" th:value="${competitionEvent.id}" class="d-none"/>
 														<label class="checkbox_style1" th:for="'competitionEvent_' + ${index.count}" th:text="${competitionEvent.department} + ' ' + ${#strings.substringBefore(competitionEvent.eventType, '_').equals('ORGANIZATION') ? '단체' : '개인'}+' ' + ${competitionEvent.meter}"></label>
 													</p>
 													<hr />
 												</li>
 												<!-- 여자 -->
-												<li class="f_s5 mb_10" style="margin-top: 20px" th:text="'> ' + 여자"></li>
+												<i><li class="ft_s1 mb_10" style="margin-top: 20px; font-weight: bold" th:text="'> ' + 여자"></li></i>
 												<li class="f_s4" th:each="event : ${eventList}">
 													<p class="f_s3 mb_10" th:text="${event.eventType}"></p>
 													<p class="f_s1 mb_10" th:each="competitionEvent, index : ${competitionEventList}" th:if="${#strings.substringBefore(competitionEvent.eventType, '_').equals('ORGANIZATION') && competitionEvent.event().equals(event.eventType) && competitionEvent.gender.equals('F')}">
-														<input type="checkbox" th:id="'competitionEvent_' + ${index.count}" name="teamCompetitionEventList" th:value="${competitionEvent.id}" class="d-none"/>
+														<input type="checkbox" th:id="'competitionEvent_' + ${index.count}" name="organizationCompetitionEventIds" th:value="${competitionEvent.id}" class="d-none"/>
 														<label class="checkbox_style1" th:for="'competitionEvent_' + ${index.count}" th:text="${competitionEvent.department} + ' ' + ${#strings.substringBefore(competitionEvent.eventType, '_').equals('ORGANIZATION') ? '단체' : '개인'}+' ' + ${competitionEvent.meter}"></label>
 													</p>
 													<hr />
@@ -227,19 +227,20 @@
 											</ul>
 										</div>
 
+<!--									TODO :: 로그인 한 유저의 소속 팀을 조회	-->
 										<div class="mb_40">
-											<p class="ft_s0 mb_20">경기인 정보 입력 <span class="f_s2 f_c_active">(필수)</span></p>
+											<p class="ft_s0 mb_20">소속팀 정보 선택<span class="f_s2 f_c_active">(단체 경기 참가시 입력)</span></p>
 											<ul>
-												<li class="mb_10"><input type="text" id="name" placeholder="이름" class="kors_input1"></li>
-												<li class="mb_10"><input type="password" id="pwd" placeholder="비밀번호" class="kors_input1"></li>
-												<li><button type="button" onclick="userCheck();" id="check_user" class="kors_btn1">경기인 확인</button></li>
-											</ul>
-										</div>
-
-										<div class="mb_40">
-											<p class="ft_s0 mb_20">소속팀 정보 입력 <span class="f_s2 f_c_active">(단체 경기 참가시 입력)</span></p>
-											<ul>
-												<li class="mb_10"><input type="text" id="teamName" placeholder="소속팀 이름" class="kors_input1"></li>
+												<li class="mb_10">
+<!--												<input type="text" id="teamName" placeholder="소속팀 이름" class="kors_input1">-->
+													<select class="kors_input1 f_c_active3" name="teamId">
+														<option value="" selected>팀을 선택해주세요</option>
+														<option value="1">테스트 팀1</option>
+														<option value="2">테스트 팀2</option>
+														<option value="3">테스트 팀3</option>
+													</select>
+													<!--												<option th:each="team : ${teamList}" th:value="${team.id}" th:text="${team.teamName}"></option>-->
+												</li>
 												<li><button type="button" onclick="teamCheck();" id="check_team" class="kors_btn1">소속팀 확인</button></li>
 											</ul>
 										</div>
@@ -272,78 +273,66 @@
 			</div>
 		</section>
 		<script type="text/javascript">
-			function userCheck(){
-				var userName = document.getElementById("name").value;
-				var userPwd = document.getElementById("pwd").value;
-				var competitionSeq = [[${competitionSeq}]]
-				$.ajax({
-					type: "GET",
-					url: "/admin/user/find/competition",
-					// async: false,
-					data: {userName : userName, password : userPwd, competitionSeq : competitionSeq},
-					error : function(request,status,error) {
-						alert("존재하지 않는 사용자 입니다.")
-						console.log("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
-					},
-					success: function (data) {
-						if(data === "isExist"){
-							alert("이미 대회에 신청한 경기인입니다.")
-							location.reload();
-						}else{
-							alert("성공적으로 확인되었습니다.")
-							document.getElementById("user_seq").value = data;
-						}
-					}
-				});
-			}
+			// function userCheck(){
+			// 	var userName = document.getElementById("name").value;
+			// 	var userPwd = document.getElementById("pwd").value;
+			// 	var competitionSeq = [[${competitionSeq}]]
+			// 	$.ajax({
+			// 		type: "GET",
+			// 		url: "/admin/user/find/competition",
+			// 		// async: false,
+			// 		data: {userName : userName, password : userPwd, competitionSeq : competitionSeq},
+			// 		error : function(request,status,error) {
+			// 			alert("존재하지 않는 사용자 입니다.")
+			// 			console.log("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+			// 		},
+			// 		success: function (data) {
+			// 			if(data === "isExist"){
+			// 				alert("이미 대회에 신청한 경기인입니다.")
+			// 				location.reload();
+			// 			}else{
+			// 				alert("성공적으로 확인되었습니다.")
+			// 				document.getElementById("user_seq").value = data;
+			// 			}
+			// 		}
+			// 	});
+			// }
 
-			function teamCheck(){
-				var teamName = document.getElementById("teamName").value;
-				var competitionSeq = [[${competitionSeq}]]
-				$.ajax({
-					type: "GET",
-					url: "/admin/team/find/application",
-					// async: false,
-					data: {teamName : teamName, competitionSeq : competitionSeq},
-					error : function(request,status,error) {
-						alert("존재하지 않는 소속팀 입니다.")
-						location.reload();
-					},
-					success: function (data) {
-						if(data === "isExist"){
-							alert("이미 대회에 신청한 소속팀입니다.")
-							location.reload();
-						}else{
-							alert("성공적으로 확인되었습니다.")
-							document.getElementById("team_seq").value = data;
-						}
-					}
-				});
-			}
+			// function teamCheck(){
+			// 	var teamName = document.getElementById("teamName").value;
+			// 	var competitionSeq = [[${competitionSeq}]]
+			// 	$.ajax({
+			// 		type: "GET",
+			// 		url: "/admin/team/find/application",
+			// 		// async: false,
+			// 		data: {teamName : teamName, competitionSeq : competitionSeq},
+			// 		error : function(request,status,error) {
+			// 			alert("존재하지 않는 소속팀 입니다.")
+			// 			location.reload();
+			// 		},
+			// 		success: function (data) {
+			// 			if(data === "isExist"){
+			// 				alert("이미 대회에 신청한 소속팀입니다.")
+			// 				location.reload();
+			// 			}else{
+			// 				alert("성공적으로 확인되었습니다.")
+			// 				document.getElementById("team_seq").value = data;
+			// 			}
+			// 		}
+			// 	});
+			// }
 
-			function Checkform() {
+			function checkForm() {
 
-				if ($("input:checkbox[name='competitionEventList']").is(":checked")==false && $("input:checkbox[name='teamCompetitionEventList']").is(":checked")==false) {
-					alert("대회를 선택해 주십시오.");
+				if ($("input:checkbox[name='individualCompetitionEventIds']").is(":checked")==false && $("input:checkbox[name='individualCompetitionEventIds']").is(":checked")==false) {
+					alert("종목을 선택해 주십시오.");
 					return false;
 
-				} else if($("input:checkbox[name='teamCompetitionEventList']").is(":checked")==true){
+				} else if($("input:checkbox[name='organizationCompetitionEventIds']").is(":checked")==true){
 					if (frm.teamName.value == "") {
 						frm.teamName.focus();
 						alert("소속팀을 확인해 주십시오.");
 						return false;
-					}
-				} else if($("input:checkbox[name='competitionEventList']").is(":checked")==true) {
-					if (frm.name.value == "") {
-						frm.name.focus();
-						alert("경기인을 확인해 주십시오.");
-						return false;
-
-					} else if (frm.pwd.value == "") {
-						frm.pwd.focus();
-						alert("경기인을 확인해 주십시오.");
-						return false;
-
 					}
 				}
 			}

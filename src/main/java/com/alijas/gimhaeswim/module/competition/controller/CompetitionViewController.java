@@ -1,6 +1,7 @@
 package com.alijas.gimhaeswim.module.competition.controller;
 
 import com.alijas.gimhaeswim.exception.CustomException;
+import com.alijas.gimhaeswim.module.applycompetition.request.ApplyCompetitionSaveRequest;
 import com.alijas.gimhaeswim.module.competition.dto.CompetitionEventListApplyDTO;
 import com.alijas.gimhaeswim.module.competition.dto.CompetitionListDTO;
 import com.alijas.gimhaeswim.module.competition.dto.EventListApplyDTO;
@@ -96,6 +97,7 @@ public class CompetitionViewController {
         model.addAttribute("competition", competition.toCompetitionApplyDTO());
         model.addAttribute("competitionEventList", competitionEventApplyDTOList);
         model.addAttribute("eventList", eventListApplyDTOList);
+        model.addAttribute("applyCompetitionSaveRequest", new ApplyCompetitionSaveRequest());
 
         return "competitionApply";
     }
