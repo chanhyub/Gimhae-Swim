@@ -3,7 +3,7 @@ package com.alijas.gimhaeswim.module.lane.entity;
 import com.alijas.gimhaeswim.module.common.jpa.BaseTime;
 import com.alijas.gimhaeswim.module.referee.entity.Referee;
 import com.alijas.gimhaeswim.module.section.entity.Section;
-import com.alijas.gimhaeswim.module.team.entity.Team;
+import com.alijas.gimhaeswim.module.team.entity.TeamMember;
 import com.alijas.gimhaeswim.module.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -34,7 +34,7 @@ public class Lane extends BaseTime {
 
     @Comment("레인 참가 팀")
     @ManyToOne
-    private Team team;
+    private TeamMember team;
 
     @Comment("레인 담당 심판")
     @ManyToOne

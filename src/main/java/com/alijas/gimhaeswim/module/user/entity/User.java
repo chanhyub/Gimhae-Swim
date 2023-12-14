@@ -28,6 +28,9 @@ public class User extends BaseTime {
     @Column(unique = true)
     private String username;
 
+    @Comment("사용자 이름")
+    private String fullName;
+
     @Comment("사용자 비밀번호")
     private String password;
 

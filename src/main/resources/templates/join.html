@@ -126,39 +126,44 @@
 						<div class="kors_user_form1">
 							<div class="col">
 								<p class="text-center mb_30 ft_s1 fw_pb">다음 내용에 입력해주세요.</p>
-								<form name="frm" action="/admin/user/register" onSubmit="return Checkform()" method="post">
+								<form id="frm" onSubmit="return Checkform()">
 									<div>
 										<ul>
 											<li class="d-flex">
 												<div class="mr_10">
 													<label class="d-none">성별</label>
-													<input checked type="radio" name="sex" value="male" id="kors_man" class="d-none">
+													<input checked type="radio" name="gender" value="M" id="kors_man" class="d-none">
 													<label class="radio_style1" for="kors_man">남자</label>
 												</div>
 												<div>
-													<input type="radio" name="sex" value="female"  id="kors_woman" class="d-none">
+													<input type="radio" name="gender" value="F" id="kors_woman" class="d-none">
 													<label class="radio_style1" for="kors_woman">여자</label>
 												</div>
 											</li>
 											<li>
 												<label class="d-none">이름</label>
-												<input type="text" name="name" id="name" class="kors_input2 w-100" placeholder="이름">
+												<input type="text" name="fullName" id="fullName" class="kors_input2 w-100" placeholder="성명">
+											</li>
+											<li>
+												<label class="d-none">아이디</label>
+												<input type="text" name="username" id="name" class="kors_input2 w-100" placeholder="아이디">
 											</li>
 											<li>
 												<label class="d-none">비밀번호</label>
-												<input type="password" name="pwd" id="pwd" class="kors_input2 w-100" placeholder="비밀번호">
+												<input type="password" name="password" id="pwd" class="kors_input2 w-100" placeholder="비밀번호">
 											</li>
 											<li>
 												<label class="d-none">비밀번호</label>
-												<input type="password" name="pwdCheck" id="pwdCheck" class="kors_input2 w-100" placeholder="비밀번호 확인">
+												<input type="password" name="confirmPassword" id="pwdCheck" class="kors_input2 w-100" placeholder="비밀번호 확인">
 											</li>
 											<li>
 												<label class="d-none">주민등록번호 앞자리</label>
-												<input type="text" name="birthday" id="birthday" class="kors_input2 w-100" placeholder="주민등록번호 앞자리">
+												<input type="text" name="birthday" id="birthday" class="kors_input2 w-100" placeholder="주민등록번호 앞자리"
+													   oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" maxlength="8">
 											</li>
 											<li>
 												<label class="d-none">전화번호</label>
-												<input type="text" name="phoneNum" id="phoneNum" class="kors_input2 w-100" placeholder="전화번호">
+												<input type="text" name="phoneNumber" id="phoneNum" class="kors_input2 w-100" placeholder="전화번호">
 											</li>
 											<li>
 												<label class="d-none">이메일</label>
@@ -166,25 +171,26 @@
 											</li>
 											<li>
 												<label class="d-none">소속팀(소속팀이 있는 경우 정확하게 입력해주세요. ex) 띄어쓰기, 맞춤법 등등..)</label>
-												<input type="text" name="organization" id="organization" class="kors_input2 w-100" placeholder="(소속팀이 있는 경우 정확하게 입력해주세요. ex) 띄어쓰기, 맞춤법 등등..)">
-												<input type="hidden" name="team_seq" id="team_seq" class="d-none"/>
+												<input type="text" id="team" class="kors_input2 w-100" placeholder="(소속팀이 있는 경우 정확하게 입력해주세요. ex) 띄어쓰기, 맞춤법 등등..)">
+												<input type="hidden" name="teamId" id="teamId" class="d-none"/>
 											</li>
 											<li><button type="button" onclick="teamCheck();" id="check_user" class="kors_btn1">소속팀 확인</button></li>
 											<li>
 												<script>
 													function teamCheck(){
-														var teamName = document.getElementById("organization").value;
+														var teamName = document.getElementById("team").value;
 														$.ajax({
 															type: "GET",
-															url: "/admin/team/find",
+															url: "/teams/find",
 															// async: false,
 															data: {teamName : teamName},
 															error : function(request,status,error) {
-																alert("존재하지 않는 팀 입니다.")
-																if (confirm("팀을 생성 하시겠습니까?"))
+																console.log(request);
+																alert(request.responseText);
+																if (confirm("팀을 생성 하시겠습니까?\n팀을 생성하시면 팀장이 되며 다른 팀에 가입할 수 없습니다."))
 																	$.ajax({
 																		type: "POST",
-																		url: "/admin/create/team",
+																		url: "/teams/save",
 																		// async: false,
 																		data: {teamName : teamName},
 																		error : function(request,status,error) {
@@ -193,13 +199,13 @@
 																		},
 																		success: function (data) {
 																			alert("팀이 생성되었습니다.");
-																			document.getElementById("team_seq").value = data;
+																			document.getElementById("teamId").value = data;
 																		}
 																	});
 															},
 															success: function (data) {
 																alert("성공적으로 확인되었습니다.")
-																document.getElementById("team_seq").value = data;
+																document.getElementById("teamId").value = data;
 															}
 														});
 													}
@@ -321,8 +327,38 @@
 												</div>
 											</li>
 											<li>
-												<button id="submit" type="submit" class="kors_btn3 w-100">신청하기</button>
+												<button type="button" onclick="checkForm()" class="kors_btn3 w-100">신청하기</button>
 											</li>
+											<script>
+												function save() {
+													var id = "frm";
+													var form = document.getElementById(id);
+													var formData = new FormData(form);
+
+													var serializedData = {};
+
+													// FormData를 객체로 변환
+													formData.forEach(function(value, key) {
+														serializedData[key] = value;
+													});
+
+													$.ajax({
+														type: "POST",
+														url: "/users/save",
+														data: JSON.stringify(serializedData),
+														contentType: "application/json; charset=utf-8",
+														error : function(request,status,error) {
+															alert(request.responseText);
+															console.log("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+														},
+														success: function (data) {
+															console.log(data);
+															alert(data);
+															// document.getElementById("team_seq").value = data;
+														}
+													});
+												}
+											</script>
 										</ul>
 									</div>
 								</form>
@@ -336,54 +372,55 @@
 			</div>
 		</section>
 	<script>
-		function Checkform() {
-
-			if (frm.name.value == "") {
-				frm.name.focus();
+		function checkForm() {
+			if (frm.fullName.value === "") {
+				frm.fullName.focus();
 				alert("성명을 입력해 주십시오.");
 				return false;
-
-			}else if (frm.pwd.value == "") {
-				frm.pwd.focus();
+			} else if (frm.username.value === "") {
+				frm.username.focus();
+				alert("아이디를 입력해 주십시오.");
+				return false;
+			} else if (frm.password.value === "") {
+				frm.password.focus();
 				alert("패스워드를 입력해 주십시오.");
 				return false;
 
-			}else if (frm.pwdCheck.value == "") {
-				frm.pwdCheck.focus();
-				alert("패스워드를 입력해 주십시오.");
+			}else if (frm.confirmPassword.value === "") {
+				frm.confirmPassword.focus();
+				alert("비밀번호 확인을 입력해 주십시오.");
 				return false;
 
-			}else if (frm.birthday.value == "") {
+			} else if(frm.confirmPassword.value !== frm.password.value) {
+				frm.password.focus();
+				alert("비밀번호가 일치하지 않습니다.");
+				return false;
+			}else if (frm.birthday.value === "") {
 				frm.birthday.focus();
 				alert("주민번호 앞자리를 입력해 주십시오.");
 				return false;
 
-			}else if (frm.phoneNum.value == "") {
-				frm.phoneNum.focus();
+			}else if (frm.phoneNumber.value === "") {
+				frm.phoneNumber.focus();
 				alert("휴대폰 번호를 입력해 주십시오.");
 				return false;
 
-			}else if (frm.email.value == "") {
+			}else if (frm.email.value === "") {
 				frm.email.focus();
 				alert("이메일을 입력해 주십시오.");
 				return false;
 
-			}else if (frm.pwd.value != frm.pwdCheck.value) {
-				frm.pwdCheck.focus();
-				alert("동일한 비밀번호를 입력해 주십시오.");
-				return false;
-
-			} else if($('#kors_consent1').is(":checked") == false){
+			} else if($('#kors_consent1').is(":checked") === false){
 				alert("개인정보의 수집·이용에 관한 사항 동의를 해주십시오.");
 				return false;
-			} else if($('#kors_consent2').is(":checked") == false){
-				alert("개인정보의 수집·이용에 관한 사항 동의를 해주십시오.");
+			} else if($('#kors_consent2').is(":checked") === false){
+				alert("개인정보의 제공에 관한 사항 동의를 해주십시오.");
 				return false;
-			} else if($('#kors_consent3').is(":checked") == false){
+			} else if($('#kors_consent3').is(":checked") === false){
 				alert("민감정보 및 고유식별정보의 처리에 관한 사항 동의를 해주십시오.");
 				return false;
 			}
-			alert("경기인 등록 신청이 완료되었습니다.");
+			save();
 		}
 
 	</script>

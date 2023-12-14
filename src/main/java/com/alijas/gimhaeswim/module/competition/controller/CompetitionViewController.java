@@ -48,7 +48,7 @@ public class CompetitionViewController {
         Page<CompetitionListDTO> competitionPage = competitionService.findAll(pageable);
         PageUtil.set(pageable, model, competitionPage.getTotalPages());
         model.addAttribute("competitionPage", competitionPage);
-        return "competitionList";
+        return "competitions/competitionList";
     }
 
     @GetMapping("/{id}")
@@ -63,7 +63,7 @@ public class CompetitionViewController {
 
         model.addAttribute("competition", competition.toCompetitionDetailDTO());
 
-        return "competitionDetail";
+        return "competitions/competitionDetail";
     }
 
     @GetMapping("/{id}/applications")
@@ -99,6 +99,6 @@ public class CompetitionViewController {
         model.addAttribute("eventList", eventListApplyDTOList);
         model.addAttribute("applyCompetitionSaveRequest", new ApplyCompetitionSaveRequest());
 
-        return "competitionApply";
+        return "/competitions/competitionApply";
     }
 }

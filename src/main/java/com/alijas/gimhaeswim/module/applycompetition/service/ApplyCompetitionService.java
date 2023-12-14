@@ -2,10 +2,10 @@ package com.alijas.gimhaeswim.module.applycompetition.service;
 
 import com.alijas.gimhaeswim.module.applycompetition.entity.ApplyCompetition;
 import com.alijas.gimhaeswim.module.applycompetition.repository.ApplyCompetitionRepository;
-import com.alijas.gimhaeswim.module.applycompetition.request.ApplyCompetitionSaveRequest;
 import com.alijas.gimhaeswim.module.common.enums.ApplyStatus;
 import com.alijas.gimhaeswim.module.competition.entity.CompetitionEvent;
 import com.alijas.gimhaeswim.module.team.entity.Team;
+import com.alijas.gimhaeswim.module.team.entity.TeamMember;
 import com.alijas.gimhaeswim.module.user.entity.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

@@ -7,6 +7,7 @@ import com.alijas.gimhaeswim.module.competition.entity.CompetitionEvent;
 import com.alijas.gimhaeswim.module.competition.service.CompetitionEventService;
 import com.alijas.gimhaeswim.module.competition.service.CompetitionService;
 import com.alijas.gimhaeswim.module.team.entity.Team;
+import com.alijas.gimhaeswim.module.team.entity.TeamMember;
 import com.alijas.gimhaeswim.module.team.service.TeamService;
 import com.alijas.gimhaeswim.module.user.entity.User;
 import com.alijas.gimhaeswim.module.user.service.UserService;

@@ -2,7 +2,7 @@ package com.alijas.gimhaeswim.module.rank.entity;
 
 import com.alijas.gimhaeswim.module.common.jpa.BaseTime;
 import com.alijas.gimhaeswim.module.competition.entity.CompetitionEvent;
-import com.alijas.gimhaeswim.module.team.entity.Team;
+import com.alijas.gimhaeswim.module.team.entity.TeamMember;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -32,5 +32,5 @@ public class TeamRank extends BaseTime {
 
     @Comment("대회 참가팀")
     @ManyToOne
-    private Team team;
+    private TeamMember team;
 }

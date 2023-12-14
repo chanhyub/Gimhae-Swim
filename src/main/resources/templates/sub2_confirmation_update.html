@@ -41,7 +41,7 @@
 					data: {userName : name, password : pwd, competitionSeq : competitionSeq},
 					error : function(request,status,error) {
 						alert("존재하지 않는 사용자 입니다.")
-						location.href="/competition/confirm/update";
+						location.href="competitions/confirm/update";
 						console.log("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
 					},
 					success: function (data) {
@@ -164,7 +164,7 @@
 						<div class="kors_user_form1">
 							<div class="col">
 								<p class="text-center mb_30 ft_s1 fw_pb">경기인 정보를 입력해주세요.</p>
-								<form name="frm" onsubmit="return Checkform()" th:action="@{/competition/application/update}" method="post" th:object="${updateApplicationDto}">
+								<form name="frm" onsubmit="return Checkform()" th:action="@{/templates/competitions/application/update}" method="post" th:object="${updateApplicationDto}">
 									<div>
 										<ul>
 											<li>

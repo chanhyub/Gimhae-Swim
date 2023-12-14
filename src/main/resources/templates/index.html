@@ -34,10 +34,10 @@
 								<a th:href="@{/group}" class="f_s3">조직도</a>
 							</li>
 							<li>
-								<a th:href="@{/competition}" class="f_s3">대회정보</a>
+								<a th:href="@{/templates/competitions}" class="f_s3">대회정보</a>
 							</li>
 							<li>
-								<a th:href="@{/competition/confirm}" class="f_s3">대회신청확인</a>
+								<a th:href="@{/templates/competitions/confirm}" class="f_s3">대회신청확인</a>
 							</li>
 							<li>
 								<a th:href="@{/register}" class="f_s3">경기인등록</a>
@@ -80,10 +80,10 @@
 								<p><a th:href="@{/group}">조직도</a></p>
 							</li>
 							<li>
-								<p><a th:href="@{/competition}">대회정보</a></p>
+								<p><a th:href="@{/templates/competitions}">대회정보</a></p>
 							</li>
 							<li>
-								<p><a th:href="@{/competition/confirm}">대회신청확인</a></p>
+								<p><a th:href="@{/templates/competitions/confirm}">대회신청확인</a></p>
 							</li>
 							<li>
 								<p><a th:href="@{/register}">경기인등록</a></p>
@@ -150,13 +150,13 @@
 											</a>
 										</li>
 										<li>
-											<a th:href="@{/competition}">
+											<a th:href="@{/templates/competitions}">
 												<div class="img_box"><img th:src="@{/assets/img/m1_icon4.png}" alt="대회신청"></div>
 												<p>대회신청</p>
 											</a>
 										</li>
 										<li>
-											<a th:href="@{/competition/confirm}">
+											<a th:href="@{/templates/competitions/confirm}">
 												<div class="img_box"><img th:src="@{/assets/img/m1_icon5.png}" alt="대회신청확인"></div>
 												<p>대회신청확인</p>
 											</a>
@@ -206,9 +206,9 @@
 <!--								<span></span>-->
 <!--							</div>-->
 							<div class="main_side1-btn f_s1">
-								<a th:href="@{/competition/detail(competitionSeq=${field.competitionSeq})}" onfocus="blur();">내용보기</a>
-								<a th:href="@{/competition/application(competitionSeq=${field.competitionSeq}, isDone='success')}" target="_self">참가신청</a>
-								<a th:href="@{/competition/confirm/update(competitionSeq=${field.competitionSeq})}" target="_self">참가변경</a>
+								<a th:href="@{/templates/competitions/detail(competitionSeq=${field.competitionSeq})}" onfocus="blur();">내용보기</a>
+								<a th:href="@{/templates/competitions/application(competitionSeq=${field.competitionSeq}, isDone='success')}" target="_self">참가신청</a>
+								<a th:href="@{/templates/competitions/confirm/update(competitionSeq=${field.competitionSeq})}" target="_self">참가변경</a>
 							</div>
 						</div>
 					</div>
