@@ -179,6 +179,10 @@
 												<script>
 													function teamCheck(){
 														var teamName = document.getElementById("team").value;
+														if (teamName === "") {
+															alert("소속팀을 입력해 주십시오.");
+															return false;
+														}
 														$.ajax({
 															type: "GET",
 															url: "/teams/find",

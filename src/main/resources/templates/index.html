@@ -52,6 +52,10 @@
 					</div>
 				</div>
 
+				<div class="d-flex align-items-center" th:if="${!session.isEmpty()}">
+					<a class="f_s3" th:href="@{/user/{id}(id=${session.user.id})}"><span th:text="${session.user.fullName} + '님'"></span></a>
+				</div>
+
 
 				<div class="col f_s2">
 					<div class="d-flex align-items-center">
@@ -194,71 +198,73 @@
 				</div>
 
 				<div class="main_slide_box1" id="main_banner1_show">
-					<div class="slide_box" th:each="field : ${competitionList}">
+					<div class="slide_box" th:each="competition : ${competitionList}">
 						<div class="main_side1-top">
-							<p class="fw_pl" th:text="${field.place}"></p>
-							<p class="f_s4" th:text="${field.competitionPeriod}"></p>
+							<p class="fw_pl" th:text="${competition.competitionPlace}"></p>
+							<p class="f_s4" th:text="${competition.competitionApplyStartDate + ' ~ ' + competition.competitionApplyEndDate}"></p>
 						</div>
 						<div class="main_side1-bot">
-							<h3 class="f_s4" th:text="${field.competitionName}"></h3>
+							<h3 class="f_s4" th:text="${competition.competitionName}"></h3>
 <!--							<div class="main_side1-date">-->
 <!--								<p class="f_s1">신청마감</p>-->
 <!--								<span></span>-->
 <!--							</div>-->
 							<div class="main_side1-btn f_s1">
-								<a th:href="@{/templates/competitions/detail(competitionSeq=${field.competitionSeq})}" onfocus="blur();">내용보기</a>
-								<a th:href="@{/templates/competitions/application(competitionSeq=${field.competitionSeq}, isDone='success')}" target="_self">참가신청</a>
-								<a th:href="@{/templates/competitions/confirm/update(competitionSeq=${field.competitionSeq})}" target="_self">참가변경</a>
+								<a th:href="@{/competitions/{competitionId}(competitionId=${competition.id})}" onfocus="blur();">내용보기</a>
+								<a th:if="${!session.isEmpty()}" th:href="@{/competitions/{competitionId}/applications(competitionId=${competition.id}, isDone='')}" target="_self">참가신청</a>
+<!--								<a th:href="@{/templates/competitions/confirm/update(competitionSeq=${field.competitionSeq})}" target="_self">참가변경</a>-->
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 
-			<div class="main_list1 main_box_p1">
-				<div class="container">
-					<div class="row">
-						<div class="col col-12 col-lg-7 left_box">
-							<div class="main_list1_top mb_30 d-flex justify-content-between align-items-center">
-								<h3 class="fw_pb ft_s3 mb-0">GSF 새소식</h3>
-								<div class="d-flex">
-									<ul class="d-flex main_list_tab f_s4 fw_pb f_c_g2 align-items-center">
-										<li class="active">공지사항</li>
-									</ul>
-									<a href="/notice" class="m-more_btn">+</a>
-								</div>
-							</div>
-							<div class="main_list1_bottom">
-								<div class="list_title">
-									<div class="img_box">
-										<p class="f_s0" th:text="${#strings.substring(noticeList.get(0).getRegistrationDate(), 0, 7)}"></p>
-										<p class="ft_s2 fw_pb" th:text="${#strings.substring(noticeList.get(0).getRegistrationDate(), 8, 10)}">21</p>
-									</div>
-									<div class="text_box">
-										<p class="f_s4 fw_pb" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 50%" th:text="${noticeList.get(0).getNoticeTitle()}"></p>
-										<p class="f_s2 f_c_g2" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 50%" th:text="${noticeList.get(0).getNoticeDetail()}"></p>
-									</div>
-								</div>
-								<ul class="m-list1 f_s2" th:each="field, index : ${noticeList}" th:if="${index.index} > 0 and ${index.index} <= 3">
-									<li>
-										<a href="#" class="fw_pb" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 50%" th:text="${field.getNoticeTitle()}"></a>
-										<span class="f_s1 f_c_g2" th:text="${field.getRegistrationDate()}"></span>
-									</li>
-								</ul>
-							</div>
-						</div>
+			<!-- TODO :: 여기 살리기 -->
+<!--			<div class="main_list1 main_box_p1">-->
+<!--				<div class="container">-->
+<!--					<div class="row">-->
+<!--						<div class="col col-12 col-lg-7 left_box">-->
+<!--							<div class="main_list1_top mb_30 d-flex justify-content-between align-items-center">-->
+<!--								<h3 class="fw_pb ft_s3 mb-0">GSF 새소식</h3>-->
+<!--								<div class="d-flex">-->
+<!--									<ul class="d-flex main_list_tab f_s4 fw_pb f_c_g2 align-items-center">-->
+<!--										<li class="active">공지사항</li>-->
+<!--									</ul>-->
+<!--									<a href="/notice" class="m-more_btn">+</a>-->
+<!--								</div>-->
+<!--							</div>-->
+<!--							<div class="main_list1_bottom">-->
+<!--								<div class="list_title">-->
+<!--									<div class="img_box">-->
+<!--										<p class="f_s0" th:text="${#strings.substring(noticeList.get(0).getRegistrationDate(), 0, 7)}"></p>-->
+<!--										<p class="ft_s2 fw_pb" th:text="${#strings.substring(noticeList.get(0).getRegistrationDate(), 8, 10)}">21</p>-->
+<!--									</div>-->
+<!--									<div class="text_box">-->
+<!--										<p class="f_s4 fw_pb" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 50%" th:text="${noticeList.get(0).getNoticeTitle()}"></p>-->
+<!--										<p class="f_s2 f_c_g2" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 50%" th:text="${noticeList.get(0).getNoticeDetail()}"></p>-->
+<!--									</div>-->
+<!--								</div>-->
+<!--								<ul class="m-list1 f_s2" th:each="field, index : ${noticeList}" th:if="${index.index} > 0 and ${index.index} <= 3">-->
+<!--									<li>-->
+<!--										<a href="#" class="fw_pb" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 50%" th:text="${field.getNoticeTitle()}"></a>-->
+<!--										<span class="f_s1 f_c_g2" th:text="${field.getRegistrationDate()}"></span>-->
+<!--									</li>-->
+<!--								</ul>-->
+<!--							</div>-->
+<!--						</div>-->
 
-						<div class="col col-12 col-lg-5" style="height: 403px">
-							<div class="main_list1_top mb_30">
-								<h3 class="fw_pb ft_s3">GSF 경기영상</h3>
-							</div>
-							<div class="m-move1">
-								<iframe width="100%" height="100%" th:src="@{https://www.youtube.com/embed/xnOh90-erwA}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
+<!--						<div class="col col-12 col-lg-5" style="height: 403px">-->
+<!--							<div class="main_list1_top mb_30">-->
+<!--								<h3 class="fw_pb ft_s3">GSF 경기영상</h3>-->
+<!--							</div>-->
+<!--							<div class="m-move1">-->
+<!--								<iframe width="100%" height="100%" th:src="@{https://www.youtube.com/embed/xnOh90-erwA}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>-->
+<!--							</div>-->
+<!--						</div>-->
+<!--					</div>-->
+<!--				</div>-->
+<!--			</div>-->
+
 
 <!--			<div class="main_banner2 main_box_p1">-->
 <!--				<div class="container">-->
@@ -299,27 +305,28 @@
 <!--				</div>-->
 <!--			</div>-->
 
-			<div class="main_slide2 main_box_p1">
-				<div class="container">
-					<div class="row">
-						<div class="col">
-							<h3 class="fw_pb ft_s3 text-center f_c_g6 mb_30">포토갤러리</h3>
+			<!-- TODO :: 여기 살리기 -->
+<!--			<div class="main_slide2 main_box_p1">-->
+<!--				<div class="container">-->
+<!--					<div class="row">-->
+<!--						<div class="col">-->
+<!--							<h3 class="fw_pb ft_s3 text-center f_c_g6 mb_30">포토갤러리</h3>-->
 
-							<div id="main_slide2_box">
-								<div class="slide_box" th:each="field : ${photoList}">
-									<a th:href="@{/photo/detail(photoSeq=${field.photoSeq})}" onfocus="blur();">
-										<div class="img_box" th:style="'background:url(' + ${field.photoImageList[0].getPhotoUrl()} + ')  no-repeat center / cover;'"></div>
-										<div class="text_box">
-											<p class="f_s4 mb_20 w-100 text-over-h" th:text="${field.photoTitle}"></p>
-											<p class="f_s2 f_c_g2" th:text="${field.registrationDate}"></p>
-										</div>
-									</a>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
+<!--							<div id="main_slide2_box">-->
+<!--								<div class="slide_box" th:each="field : ${photoList}">-->
+<!--									<a th:href="@{/photo/detail(photoSeq=${field.photoSeq})}" onfocus="blur();">-->
+<!--										<div class="img_box" th:style="'background:url(' + ${field.photoImageList[0].getPhotoUrl()} + ')  no-repeat center / cover;'"></div>-->
+<!--										<div class="text_box">-->
+<!--											<p class="f_s4 mb_20 w-100 text-over-h" th:text="${field.photoTitle}"></p>-->
+<!--											<p class="f_s2 f_c_g2" th:text="${field.registrationDate}"></p>-->
+<!--										</div>-->
+<!--									</a>-->
+<!--								</div>-->
+<!--							</div>-->
+<!--						</div>-->
+<!--					</div>-->
+<!--				</div>-->
+<!--			</div>-->
 
 <!--			<div class="main_slide3">-->
 <!--				<div id="main_slide3_box">-->

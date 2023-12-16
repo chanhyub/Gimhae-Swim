@@ -12,10 +12,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional(readOnly = true)
-@RequiredArgsConstructor
 public class SecurityService implements UserDetailsService {
 
     private final UserRepository userRepository;
+
+    public SecurityService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -26,10 +29,6 @@ public class SecurityService implements UserDetailsService {
             throw new UsernameNotFoundException("비활성화 된 계정입니다.");
         }
 
-        return User.builder()
-                .username(user.getUsername())
-                .password(user.getPassword())
-                .roles(user.getRole().name())
-                .build();
+        return new CustomUserDetails(user);
     }
 }

@@ -4,6 +4,7 @@ import com.alijas.gimhaeswim.module.common.enums.ApplyStatus;
 import com.alijas.gimhaeswim.module.common.enums.RoleType;
 import com.alijas.gimhaeswim.module.common.jpa.BaseTime;
 import com.alijas.gimhaeswim.module.common.enums.Gender;
+import com.alijas.gimhaeswim.module.user.dto.UserDTO;
 import com.alijas.gimhaeswim.module.user.enums.UserStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -61,4 +62,18 @@ public class User extends BaseTime {
     @Comment("사용자 권한")
     @Enumerated(EnumType.STRING)
     private RoleType role;
+
+
+    public UserDTO toUserDTO() {
+        return new UserDTO(
+                id,
+                username,
+                fullName,
+                birthday,
+                phoneNumber,
+                email,
+                gender.name(),
+                role.name()
+        );
+    }
 }

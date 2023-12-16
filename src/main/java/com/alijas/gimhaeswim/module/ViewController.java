@@ -1,22 +1,53 @@
 package com.alijas.gimhaeswim.module;
 
+import com.alijas.gimhaeswim.config.security.CustomUserDetails;
+import com.alijas.gimhaeswim.module.competition.dto.CompetitionListDTO;
 import com.alijas.gimhaeswim.module.competition.service.CompetitionService;
+import com.alijas.gimhaeswim.module.user.entity.User;
+import com.alijas.gimhaeswim.module.user.service.UserService;
+import jakarta.servlet.http.HttpSession;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+
+import java.util.Optional;
+
 
 @Controller
 public class ViewController {
 
     private final CompetitionService competitionService;
 
-    public ViewController(CompetitionService competitionService) {
+    private final UserService userService;
+
+    public ViewController(CompetitionService competitionService, UserService userService) {
         this.competitionService = competitionService;
+        this.userService = userService;
     }
 
     @GetMapping({"/", ""})
-    public String index() {
+    public String index(
+            @PageableDefault(sort = "id" ,direction = Sort.Direction.DESC, size = 5) Pageable pageable,
+            Model model,
+            @AuthenticationPrincipal CustomUserDetails customUserDetails,
+            HttpSession session
+    ) {
+        Page<CompetitionListDTO> competitionListDTOS = competitionService.findAll(pageable);
+        model.addAttribute("competitionList", competitionListDTOS);
 
-
+        if (customUserDetails != null) {
+            Optional<User> optionalUser = userService.getUser(customUserDetails.getUser().getId());
+            if (optionalUser.isPresent()) {
+                User user = optionalUser.get();
+                session.setAttribute("user", user.toUserDTO());
+                System.out.println("TEST");
+            }
+        }
         return "index";
     }
 

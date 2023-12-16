@@ -48,23 +48,24 @@ public class UserController {
             throw new CustomRestException("이미 존재하는 아이디입니다.", HttpStatus.BAD_REQUEST);
         });
 
-        User user = userService.saveUser(userSaveRequest.toEntity());
-
-        Optional<Team> team = teamService.getTeam(Long.parseLong(userSaveRequest.teamId()));
-        if (team.isEmpty()) {
-            throw new CustomRestException("존재하지 않는 팀입니다.", HttpStatus.BAD_REQUEST);
-        }
+        User user = userService.saveUser(userSaveRequest);
 
         if (!userSaveRequest.teamId().isEmpty()) {
+            Optional<Team> team = teamService.getTeam(Long.parseLong(userSaveRequest.teamId()));
+            if (team.isEmpty()) {
+                throw new CustomRestException("존재하지 않는 팀입니다.", HttpStatus.BAD_REQUEST);
+            }
+
             List<TeamMember> teamMemberList = teamMemberService.getTeamMember(team.get());
             if (teamMemberList.isEmpty()) {
                 teamMemberService.saveTeamMember(team.get(), user, "LEADER");
             } else {
                 teamMemberService.saveTeamMember(team.get(), user, "MEMBER");
             }
-
         }
 
         return ResponseEntity.ok("경기인 신청이 완료되었습니다.");
     }
+
+
 }

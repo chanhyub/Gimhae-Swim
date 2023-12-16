@@ -10,6 +10,8 @@ import org.springframework.security.config.annotation.web.configurers.HeadersCon
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.logout.HeaderWriterLogoutHandler;
+import org.springframework.security.web.header.writers.ClearSiteDataHeaderWriter;
 import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
@@ -18,6 +20,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
 import static org.springframework.security.config.Customizer.withDefaults;
+import static org.springframework.security.web.header.writers.ClearSiteDataHeaderWriter.Directive.COOKIES;
 
 @Configuration
 @EnableMethodSecurity(securedEnabled = true)
@@ -47,13 +50,14 @@ public class SecurityConfig {
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
-                        .defaultSuccessUrl("/admin", true)
+                        .defaultSuccessUrl("/", true)
                         .permitAll()
                 )
                 .logout(logout -> logout
                         .logoutSuccessUrl("/login")
                         .invalidateHttpSession(true)
                         .deleteCookies("JSESSIONID")
+//                        .addLogoutHandler(new HeaderWriterLogoutHandler(new ClearSiteDataHeaderWriter(COOKIES)))
                 )
         ;
         return http.build();

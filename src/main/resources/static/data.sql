@@ -1,7 +1,7 @@
 INSERT INTO USERS (username, full_name, password, birthday, phone_number, email, gender, is_agree, status, apply_status, role, created_date, modified_date)
 VALUES
-    ('Jorge', '박진협', '1234', '1999-10-28', '01083384583', 'test1234@test.com', 'M', true, 'ACTIVE', 'APPROVED', 'ADMIN', '2023-11-20 00:00:00', '2023-11-20 00:00:00'),
-    ('kkr0787', '권경렬', '1234', '1997-02-19', '01028268801', 'user1@example.com', 'M', true, 'ACTIVE', 'APPROVED', 'USER', '2023-11-20 00:00:00', '2023-11-20 00:00:00'),
+    ('Jorge', '박진협', '$2a$10$zG7hMrPY77D4YGyljxeK2uAE8.ujhC5HJ2Cy/CsDrtCctLzf.EGYW', '1999-10-28', '01083384583', 'test1234@test.com', 'M', true, 'ACTIVE', 'APPROVED', 'ADMIN', '2023-11-20 00:00:00', '2023-11-20 00:00:00'),
+    ('kkr0787', '권경렬', '$2a$10$zG7hMrPY77D4YGyljxeK2uAE8.ujhC5HJ2Cy/CsDrtCctLzf.EGYW', '1997-02-19', '01028268801', 'user1@example.com', 'M', true, 'ACTIVE', 'APPROVED', 'USER', '2023-11-20 00:00:00', '2023-11-20 00:00:00'),
     ('user2', '김호현', 'password2', '1990-01-01', '01012345678', 'user2@example.com', 'M', true, 'ACTIVE', 'APPROVED', 'USER', '2023-11-20 00:00:00', '2023-11-20 00:00:00'),
     ('user3', '장희선', 'password3', '1990-01-01', '01012345678', 'user3@example.com', 'M', true, 'ACTIVE', 'APPROVED', 'USER', '2023-11-20 00:00:00', '2023-11-20 00:00:00'),
     ('user4', '박진희', 'password4', '1990-01-01', '01012345678', 'user4@example.com', 'M', true, 'ACTIVE', 'APPROVED', 'USER', '2023-11-20 00:00:00', '2023-11-20 00:00:00'),
