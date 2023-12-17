@@ -1,6 +1,7 @@
 package com.alijas.gimhaeswim.module.team.entity;
 
 import com.alijas.gimhaeswim.module.common.jpa.BaseTime;
+import com.alijas.gimhaeswim.module.team.dto.TeamMemberDTO;
 import com.alijas.gimhaeswim.module.team.enums.TeamMemberPosition;
 import com.alijas.gimhaeswim.module.user.entity.User;
 import jakarta.persistence.*;
@@ -34,4 +35,12 @@ public class TeamMember extends BaseTime {
     @Comment("팀 선수의 포지션")
     @Enumerated(EnumType.STRING)
     private TeamMemberPosition position;
+
+    public TeamMemberDTO toDTO() {
+        return new TeamMemberDTO(
+            this.id,
+            this.team.getTeamName(),
+            this.position.name()
+        );
+    }
 }

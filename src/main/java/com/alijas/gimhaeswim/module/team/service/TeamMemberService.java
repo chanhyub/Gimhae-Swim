@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TeamMemberService {
@@ -33,5 +34,9 @@ public class TeamMemberService {
 
     public List<TeamMember> getTeamMember(Team team) {
         return teamMemberRepository.findByTeam(team);
+    }
+
+    public Optional<TeamMember> getUserTeam(User user) {
+        return teamMemberRepository.findByUser(user);
     }
 }

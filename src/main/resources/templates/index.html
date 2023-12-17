@@ -1,109 +1,14 @@
 <!DOCTYPE html>
-<html lang="ko">
-	<head>
-		<meta charset="utf-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-		<title>김해시수영연맹</title>
-		<link rel="stylesheet" th:href="@{/assets/css/normalize.css}">
-		<link rel="stylesheet" th:href="@{/assets/css/bootstrap.min.css}">
-		<link rel="stylesheet" th:href="@{/assets/css/bootstrap-theme.css}">
-		<link rel="stylesheet" th:href="@{/assets/css/slick.css}">
-		<link rel="stylesheet" th:href="@{/assets/css/slick-theme.css}">
-		<link rel="stylesheet" th:href="@{/assets/css/kors_style.css}">
-		<script th:src="@{/assets/js/bootstrap.bundle.min.js}"></script>
-		<script th:src="@{/assets/js/jquery.min.js}"></script>
-		<script th:src="@{/assets/js/slick.min.js}"></script>
-		<script th:src="@{/assets/js/kors_js.js}"></script>
-	</head>
+<html lang="ko"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{common/layout}">
+<head layout:fragment="ConfigFrament">
 
-	<body>
-		<header id="kors_header">
-			<div id="kors_top_box" class="row row-cols-auto justify-content-between">
-				<div class="col header_logo">
-					<div class="d-flex align-items-center">
-						<a th:href="@{/}">
-							<h1 class="ft_s2">김해시수영연맹</h1>
-						</a>
+</head>
 
-						<ul class="kors_top_menu d-flex align-items-center">
-							<li>
-								<a th:href="@{/history}" class="f_s3">연혁</a>
-							</li>
-							<li>
-								<a th:href="@{/group}" class="f_s3">조직도</a>
-							</li>
-							<li>
-								<a th:href="@{/templates/competitions}" class="f_s3">대회정보</a>
-							</li>
-							<li>
-								<a th:href="@{/templates/competitions/confirm}" class="f_s3">대회신청확인</a>
-							</li>
-							<li>
-								<a th:href="@{/register}" class="f_s3">경기인등록</a>
-							</li>
-							<li>
-								<a th:href="@{/notice}" class="f_s3">공지사항</a>
-							</li>
-							<li>
-								<a th:href="@{/photo}" class="f_s3">포토갤러리</a>
-							</li>
-						</ul>
-					</div>
-				</div>
-
-				<div class="d-flex align-items-center" th:if="${!session.isEmpty()}">
-					<a class="f_s3" th:href="@{/user/{id}(id=${session.user.id})}"><span th:text="${session.user.fullName} + '님'"></span></a>
-				</div>
-
-
-				<div class="col f_s2">
-					<div class="d-flex align-items-center">
-						<div class="mo_nav" role="navigation" th:onclick="me_menu_on()">
-							<button type="button" class="navbar-toggle collapsed menu-btn" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-								<span class="icon-bar top-bar"></span>
-								<span class="icon-bar middle-bar"></span>
-								<span class="icon-bar bottom-bar"></span>
-							</button>
-						</div>
-					</div>
-				</div>
-			</div>
-
-			<div class="md_menu_box">
-				<div class="md_menu_con">
-					<div class="md_menu_top">
-						<button class="md_menu_close" th:onclick="me_menu_off()"><img th:src="@{/assets/img/xclose_w.png}"></button>
-					</div>
-					<div class="md_menu_bottom">
-						<ul>
-							<li>
-								<p><a th:href="@{/history}">연혁</a></p>
-							</li>
-							<li>
-								<p><a th:href="@{/group}">조직도</a></p>
-							</li>
-							<li>
-								<p><a th:href="@{/templates/competitions}">대회정보</a></p>
-							</li>
-							<li>
-								<p><a th:href="@{/templates/competitions/confirm}">대회신청확인</a></p>
-							</li>
-							<li>
-								<p><a th:href="@{/register}">경기인등록</a></p>
-							</li>
-							<li>
-								<p><a th:href="@{/notice}">공지사항</a></p>
-							</li>
-							<li>
-								<p><a th:href="@{/photo}">포토갤러리</a></p>
-							</li>
-						</ul>
-					</div>
-				</div>
-			</div>
-		</header>
-
+<body>
+<header layout:fragment="HeaderFragment"></header>
 		<section class="main_content">
 			<div class="main_banner1">
 				<div class="container">

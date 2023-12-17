@@ -3,6 +3,9 @@ package com.alijas.gimhaeswim.module;
 import com.alijas.gimhaeswim.config.security.CustomUserDetails;
 import com.alijas.gimhaeswim.module.competition.dto.CompetitionListDTO;
 import com.alijas.gimhaeswim.module.competition.service.CompetitionService;
+import com.alijas.gimhaeswim.module.team.entity.TeamMember;
+import com.alijas.gimhaeswim.module.team.service.TeamMemberService;
+import com.alijas.gimhaeswim.module.team.service.TeamService;
 import com.alijas.gimhaeswim.module.user.entity.User;
 import com.alijas.gimhaeswim.module.user.service.UserService;
 import jakarta.servlet.http.HttpSession;
@@ -25,9 +28,15 @@ public class ViewController {
 
     private final UserService userService;
 
-    public ViewController(CompetitionService competitionService, UserService userService) {
+    private final TeamMemberService teamMemberService;
+
+    private final TeamService teamService;
+
+    public ViewController(CompetitionService competitionService, UserService userService, TeamMemberService teamMemberService, TeamService teamService) {
         this.competitionService = competitionService;
         this.userService = userService;
+        this.teamMemberService = teamMemberService;
+        this.teamService = teamService;
     }
 
     @GetMapping({"/", ""})
@@ -42,10 +51,19 @@ public class ViewController {
 
         if (customUserDetails != null) {
             Optional<User> optionalUser = userService.getUser(customUserDetails.getUser().getId());
+
             if (optionalUser.isPresent()) {
                 User user = optionalUser.get();
                 session.setAttribute("user", user.toUserDTO());
-                System.out.println("TEST");
+
+                Optional<TeamMember> userTeam = teamMemberService.getUserTeam(user);
+                if (userTeam.isPresent()) {
+                    System.out.println("TEST");
+                    session.setAttribute("team", userTeam.get().toDTO());
+                }
+                else {
+                    session.setAttribute("team", null);
+                }
             }
         }
         return "index";

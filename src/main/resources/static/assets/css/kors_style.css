@@ -226,7 +226,7 @@ body {font-size:13px;}
 .top_sub_list.show, .pc_sub_menu_bg.show {height:600px; opacity: 1;}
 
 .md_menu_box {display:none; position:fixed; top:0; left:0; width:100%; height:100%; background-color:rgba(0,0,0,0.5); z-index:99;}
-.md_menu_con {position:absolute; right:-560px; top:0; height:100%; width:560px; background-color:#fff; transition: right 0.3s;}
+.md_menu_con {position:absolute; right:-560px; top:0; height:100%; width:500px; background-color:#fff; transition: right 0.3s;}
 .show .md_menu_con{right:0;}
 .md_menu_top {display:flex; align-items: center; justify-content: space-between;}
 .md_login_btn {padding:0 40px;}

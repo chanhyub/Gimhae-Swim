@@ -99,6 +99,6 @@ public class CompetitionViewController {
         model.addAttribute("eventList", eventListApplyDTOList);
         model.addAttribute("applyCompetitionSaveRequest", new ApplyCompetitionSaveRequest());
 
-        return "/competitions/competitionApply";
+        return "competitions/competitionApply";
     }
 }
