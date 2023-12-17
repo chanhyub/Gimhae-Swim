@@ -56,7 +56,7 @@
             </div>
 
             <div class="d-flex align-items-center">
-                <a class="f_s3 mr_10" th:if="${!session.isEmpty()}" th:href="@{/user/{id}(id=${session.user.id})}"><span th:text="${session.user.fullName} + '님'"></span></a>
+                <a class="f_s3 mr_10" th:if="${!session.isEmpty()}" th:href="@{/user/{id}(id=${session.user.id})}" th:text="${session.user.fullName} + '님'"></a>
                 <!--					<a class="f_s3" th:if="${!session.isEmpty()}" th:href="@{/logout}"><span th:text="로그아웃"></span></a>-->
                 <a class="f_s3" th:if="${session.isEmpty()}" th:href="@{/login}"><span th:text="로그인"></span></a>
             </div>

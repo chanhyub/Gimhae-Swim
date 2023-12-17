@@ -2,6 +2,7 @@ package com.alijas.gimhaeswim.mock;
 
 import com.alijas.gimhaeswim.config.SecurityConfig;
 import com.alijas.gimhaeswim.example.CompetitionExample;
+import com.alijas.gimhaeswim.module.applycompetition.service.ApplyCompetitionService;
 import com.alijas.gimhaeswim.module.competition.controller.CompetitionViewController;
 import com.alijas.gimhaeswim.module.competition.dto.CompetitionListDTO;
 import com.alijas.gimhaeswim.module.competition.entity.Competition;
@@ -9,6 +10,7 @@ import com.alijas.gimhaeswim.module.competition.enums.status.CompetitionStatus;
 import com.alijas.gimhaeswim.module.competition.service.CompetitionEventService;
 import com.alijas.gimhaeswim.module.competition.service.CompetitionService;
 import com.alijas.gimhaeswim.module.competition.service.EventService;
+import com.alijas.gimhaeswim.module.user.service.UserService;
 import com.alijas.gimhaeswim.util.DateTimeConverter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -51,10 +53,16 @@ public class CompetitionMockTest {
     @MockBean
     private EventService eventService;
 
+    @MockBean
+    private UserService userService;
+
+    @MockBean
+    private ApplyCompetitionService applyCompetitionService;
+
     @BeforeEach
     public void setUp() {
         mvc = MockMvcBuilders.standaloneSetup(
-                        new CompetitionViewController(competitionService, competitionEventService, eventService)
+                        new CompetitionViewController(competitionService, competitionEventService, eventService, userService, applyCompetitionService, null)
                 )
                 .setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver())
                 .build();

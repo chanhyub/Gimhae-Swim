@@ -1,7 +1,9 @@
 package com.alijas.gimhaeswim.module.competition.controller;
 
+import com.alijas.gimhaeswim.config.security.CustomUserDetails;
 import com.alijas.gimhaeswim.exception.CustomException;
-import com.alijas.gimhaeswim.module.applycompetition.request.ApplyCompetitionSaveRequest;
+import com.alijas.gimhaeswim.module.applycompetition.request.ApplyCompetitionIndividualSaveRequest;
+import com.alijas.gimhaeswim.module.applycompetition.service.ApplyCompetitionService;
 import com.alijas.gimhaeswim.module.competition.dto.CompetitionEventListApplyDTO;
 import com.alijas.gimhaeswim.module.competition.dto.CompetitionListDTO;
 import com.alijas.gimhaeswim.module.competition.dto.EventListApplyDTO;
@@ -11,12 +13,17 @@ import com.alijas.gimhaeswim.module.competition.entity.Event;
 import com.alijas.gimhaeswim.module.competition.service.CompetitionEventService;
 import com.alijas.gimhaeswim.module.competition.service.CompetitionService;
 import com.alijas.gimhaeswim.module.competition.service.EventService;
+import com.alijas.gimhaeswim.module.team.entity.TeamMember;
+import com.alijas.gimhaeswim.module.team.service.TeamMemberService;
+import com.alijas.gimhaeswim.module.user.entity.User;
+import com.alijas.gimhaeswim.module.user.service.UserService;
 import com.alijas.gimhaeswim.util.PageUtil;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,16 +38,29 @@ import java.util.Optional;
 @RequestMapping("/competitions")
 public class CompetitionViewController {
 
+    final String INDIVIDUAL = "INDIVIDUAL";
+
+    final String ORGANIZATION = "ORGANIZATION";
+
     private final CompetitionService competitionService;
 
     private final CompetitionEventService competitionEventService;
 
     private final EventService eventService;
 
-    public CompetitionViewController(CompetitionService competitionService, CompetitionEventService competitionEventService, EventService eventService) {
+    private final UserService userService;
+
+    private final ApplyCompetitionService applyCompetitionService;
+
+    private final TeamMemberService teamMemberService;
+
+    public CompetitionViewController(CompetitionService competitionService, CompetitionEventService competitionEventService, EventService eventService, UserService userService, ApplyCompetitionService applyCompetitionService, TeamMemberService teamMemberService) {
         this.competitionService = competitionService;
         this.competitionEventService = competitionEventService;
         this.eventService = eventService;
+        this.userService = userService;
+        this.applyCompetitionService = applyCompetitionService;
+        this.teamMemberService = teamMemberService;
     }
 
     @GetMapping({"/", ""})
@@ -67,7 +87,62 @@ public class CompetitionViewController {
     }
 
     @GetMapping("/{id}/applications")
-    public String getCompetitionApply(@PathVariable Long id, Model model) {
+    public String getCompetitionApply(
+            @PathVariable Long id,
+            Model model,
+            @AuthenticationPrincipal CustomUserDetails customUserDetails
+    ) {
+        if (customUserDetails == null) {
+            throw new CustomException("로그인이 필요합니다.", HttpStatus.BAD_REQUEST);
+        }
+
+        Optional<User> optionalUser = userService.getUser(customUserDetails.getUser().getId());
+        if (optionalUser.isEmpty()) {
+            throw new CustomException("잘못된 접근입니다.", HttpStatus.BAD_REQUEST);
+        }
+        User user = optionalUser.get();
+
+        Optional<Competition> optionalCompetition = competitionService.getCompetition(id);
+        if(optionalCompetition.isEmpty()) {
+            throw new CustomException("존재하지 않는 대회입니다.", HttpStatus.BAD_REQUEST);
+        }
+        Competition competition = optionalCompetition.get();
+
+
+        competitionEventService.getCompetitionEventByCompetitionId(competition.getId(), INDIVIDUAL).forEach(competitionEvent -> {
+            applyCompetitionService.getApplyCompetitionByUserAndCompetitionEvent(user, competitionEvent)
+                .ifPresent(applyCompetition -> {
+                    if (applyCompetition.getCompetitionEvent().getId().equals(competitionEvent.getId())) {
+                        throw new CustomException("이미 신청한 대회입니다.", HttpStatus.BAD_REQUEST);
+                    }
+                });
+            });
+
+        List<CompetitionEvent> competitionEventList = competitionEventService.getCompetitionEventByCompetitionIdAndType(competition.getId(), INDIVIDUAL);
+
+        List<CompetitionEventListApplyDTO> competitionEventApplyDTOList = new ArrayList<>();
+
+        competitionEventList.forEach(competitionEvent -> {
+            competitionEventApplyDTOList.add(competitionEvent.toCompetitionEventListApplyDTO());
+        });
+
+        List<Event> eventList = eventService.getEventList();
+        List<EventListApplyDTO> eventListApplyDTOList = new ArrayList<>();
+
+        eventList.forEach(event -> {
+            eventListApplyDTOList.add(event.toEventListApplyDTO());
+        });
+
+        model.addAttribute("competition", competition.toCompetitionApplyDTO());
+        model.addAttribute("competitionEventList", competitionEventApplyDTOList);
+        model.addAttribute("eventList", eventListApplyDTOList);
+        model.addAttribute("applyCompetitionSaveRequest", new ApplyCompetitionIndividualSaveRequest());
+
+        return "competitions/competitionApply";
+    }
+
+    @GetMapping("/{id}/applications/update")
+    public String getCompetitionApplyUpdate(@PathVariable Long id, Model model) {
         Optional<Competition> optionalCompetition = competitionService.getCompetition(id);
 
         if(optionalCompetition.isEmpty()) {
@@ -76,7 +151,7 @@ public class CompetitionViewController {
 
         Competition competition = optionalCompetition.get();
 
-        List<CompetitionEvent> competitionEventList = competitionEventService.getCompetitionEventByCompetitionId(competition.getId());
+        List<CompetitionEvent> competitionEventList = competitionEventService.getCompetitionEventByCompetitionId(competition.getId(), INDIVIDUAL);
         List<CompetitionEventListApplyDTO> competitionEventApplyDTOList = new ArrayList<>();
 
         competitionEventList.forEach(competitionEvent -> {
@@ -97,8 +172,73 @@ public class CompetitionViewController {
         model.addAttribute("competition", competition.toCompetitionApplyDTO());
         model.addAttribute("competitionEventList", competitionEventApplyDTOList);
         model.addAttribute("eventList", eventListApplyDTOList);
-        model.addAttribute("applyCompetitionSaveRequest", new ApplyCompetitionSaveRequest());
+        model.addAttribute("applyCompetitionSaveRequest", new ApplyCompetitionIndividualSaveRequest());
 
-        return "competitions/competitionApply";
+        return "competitions/competitionApplyUpdate";
+    }
+
+    @GetMapping("/{id}/applications/teams")
+    public String getCompetitionApplyTeam(
+            @PathVariable Long id,
+            Model model,
+            @AuthenticationPrincipal CustomUserDetails customUserDetails
+    ) {
+        if (customUserDetails == null) {
+            throw new CustomException("로그인이 필요합니다.", HttpStatus.BAD_REQUEST);
+        }
+
+        Optional<User> optionalUser = userService.getUser(customUserDetails.getUser().getId());
+        if (optionalUser.isEmpty()) {
+            throw new CustomException("잘못된 접근입니다.", HttpStatus.BAD_REQUEST);
+        }
+        User user = optionalUser.get();
+
+        Optional<TeamMember> optionalTeamMember = teamMemberService.getUserTeam(user);
+        if (optionalTeamMember.isEmpty()) {
+            throw new CustomException("팀이 없습니다.\n 팀을 생성하거나 가입 후 신청하세요.", HttpStatus.BAD_REQUEST);
+        }
+
+        TeamMember teamMember = optionalTeamMember.get();
+        if (!teamMember.getPosition().name().equals("LEADER")) {
+            throw new CustomException("팀장만 신청할 수 있습니다.", HttpStatus.BAD_REQUEST);
+        }
+
+        Optional<Competition> optionalCompetition = competitionService.getCompetition(id);
+        if(optionalCompetition.isEmpty()) {
+            throw new CustomException("존재하지 않는 대회입니다.", HttpStatus.BAD_REQUEST);
+        }
+        Competition competition = optionalCompetition.get();
+
+
+        competitionEventService.getCompetitionEventByCompetitionId(competition.getId(), ORGANIZATION).forEach(competitionEvent -> {
+            applyCompetitionService.getApplyCompetitionByUserAndCompetitionEvent(user, competitionEvent)
+                    .ifPresent(applyCompetition -> {
+                        if (applyCompetition.getCompetitionEvent().getId().equals(competitionEvent.getId())) {
+                            throw new CustomException("이미 신청한 대회입니다.", HttpStatus.BAD_REQUEST);
+                        }
+                    });
+        });
+
+        List<CompetitionEvent> competitionEventList = competitionEventService.getCompetitionEventByCompetitionIdAndType(competition.getId(), ORGANIZATION);
+        List<CompetitionEventListApplyDTO> competitionEventApplyDTOList = new ArrayList<>();
+
+        competitionEventList.forEach(competitionEvent -> {
+            competitionEventApplyDTOList.add(competitionEvent.toCompetitionEventListApplyDTO());
+        });
+
+        List<Event> eventList = eventService.getEventList();
+        List<EventListApplyDTO> eventListApplyDTOList = new ArrayList<>();
+
+        eventList.forEach(event -> {
+            eventListApplyDTOList.add(event.toEventListApplyDTO());
+        });
+
+        model.addAttribute("competition", competition.toCompetitionApplyDTO());
+        model.addAttribute("competitionEventList", competitionEventApplyDTOList);
+        model.addAttribute("eventList", eventListApplyDTOList);
+        model.addAttribute("applyCompetitionSaveRequest", new ApplyCompetitionIndividualSaveRequest());
+        model.addAttribute("team", teamMember.toDTO());
+
+        return "competitions/competitionApplyTeam";
     }
 }

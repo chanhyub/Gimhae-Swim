@@ -360,6 +360,8 @@ body {font-size:13px;}
 .kors_list_ui2 .list_box.top li {padding:20px 0; }
 .kors_list_ui2 .list_box.center li {padding:38px 0; border-bottom:1px solid #dbdbdb;}
 
+apply-btn-box .kors_btn2 {padding: 0;}
+
 .kors_user_form1 {width:100%; max-width:600px; margin:0 auto;}
 .kors_user_form1 li {margin-bottom:10px;}
 .kors_input2 {height:60px; padding:10px 15px;}

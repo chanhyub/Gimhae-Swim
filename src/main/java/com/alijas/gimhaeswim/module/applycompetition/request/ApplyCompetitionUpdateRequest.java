@@ -1,6 +1,10 @@
 package com.alijas.gimhaeswim.module.applycompetition.request;
 
-public record ApplyCompetitionUpdateRequest(
+public class ApplyCompetitionUpdateRequest {
 
-) {
+    String individualCompetitionEventIds;
+
+    String organizationCompetitionEventIds;
+
+    String teamId;
 }

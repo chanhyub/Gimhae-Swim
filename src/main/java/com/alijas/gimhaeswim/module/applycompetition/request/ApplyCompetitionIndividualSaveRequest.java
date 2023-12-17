@@ -6,12 +6,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ApplyCompetitionSaveRequest {
-    String userId;
-
+public class ApplyCompetitionIndividualSaveRequest {
     String individualCompetitionEventIds;
-
-    String organizationCompetitionEventIds;
-
-    String teamId;
 }

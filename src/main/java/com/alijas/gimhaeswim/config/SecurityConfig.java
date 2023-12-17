@@ -50,6 +50,7 @@ public class SecurityConfig {
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
+                        .failureUrl("/login")
                         .defaultSuccessUrl("/", true)
                         .permitAll()
                 )
