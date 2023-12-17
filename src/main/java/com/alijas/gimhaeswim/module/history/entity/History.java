@@ -1,6 +1,7 @@
 package com.alijas.gimhaeswim.module.history.entity;
 
 import com.alijas.gimhaeswim.module.common.jpa.BaseTime;
+import com.alijas.gimhaeswim.module.history.dto.HistoryDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -29,4 +30,13 @@ public class History extends BaseTime {
 
     @Comment("연혁 내용")
     private String content;
+
+    public HistoryDTO toDTO() {
+        return new HistoryDTO(
+                id,
+                historyYear,
+                historyMonth,
+                content
+        );
+    }
 }
