@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ko"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{common/layout}">
+<head layout:fragment="ConfigFrament">
+
+</head>
+
+<body>
+<header layout:fragment="HeaderFragment"></header>
+		
+		<section class="sub_content">
+
+			<div class="sub_top_box">
+				<div class="container">
+					<div class="row">
+						<div class="col">
+							<h3 class="fw_pb ft_s4">공지사항</h3>
+							<p class="f_s1 fw_pl f_s3">국민의 사랑을 받는 스포츠로 발전할 수 있도록 노력하고 앞장서겠습니다.</p>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="sub_top_text">
+				<div class="container">
+					<div class="row">
+						<div class="col">
+							<p class="f_s1"><span><img src="/assets/img/home.png"></span> 공지사항</p>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="sub_content_box">
+				<div class="container mb_20">
+					<div class="row">
+						<div class="col">
+							<div class="sub_search_box">
+								<div class="d-flex justify-content-end">
+									<select class="kors_selet1 mr_15">
+										<option>제목</option>
+										<option>내용</option>
+										<option>제목+내용</option>
+										<option>작성자</option>
+									</select>
+
+									<input class="kors_input1" type="text" placeholder="검색어를 입력해주세요.">
+
+									<button class="kors_btn1">검색</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="container">
+					<div class="row">
+						<div class="col">
+							<p class="f_s2 f_c_g1 sub_paging">전체 <span class="f_c_active fw_b">1366건</span> | 페이지 <span class="fw_b">1/137</span></p>
+							<div class="kors_list_ui2">
+								<ul class="top d-none d-lg-block list_box type2 text-center">
+									<li>
+										<div>날짜</div>
+										<div>제목</div>
+									</li>
+								</ul>
+								
+								<ul class="center list_box type2 fw_pl">
+									<li th:each="notice : ${noticePage}">
+										<div class="text-center d-flex justify-content-center">
+											<div class="year_box">
+												<p class="f_s4 fw_pb f_c_w">
+													[[${notice.createdYear}]]
+													<br />
+													[[${notice.createdMonthAndDay}]]
+												</p>
+											</div>
+										</div>
+										<div>
+											<a th:href="@{/notices/{id}(id=${notice.id})}"><p class="f_s5 text-over-h list_title fw_pb" th:text="${notice.title}"></p></a>
+										</div>
+									</li>
+
+								</ul>
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col">
+							<div class="list_paeging">
+								<ul class="d-flex justify-content-center">
+									<a type="button" th:if ="${!noticePage.isFirst()}" th:href="@{notices(page=0,size=${noticePage.getPageable().getPageSize()})}">
+										<button><<</button>
+									</a>
+
+									<a th:if ="${prev}" th:href="@{/notices(page=${((noticePage.getPageable().getPageNumber() / basePage) - 1) * basePage},size=${noticePage.getPageable().getPageSize()})}">
+										<button><</button>
+									</a>
+
+									<a th:each="pageNum : ${#numbers.sequence(startPage, endPage)}"  th:href="@{/notices(page=${pageNum}-1,size=${noticePage.getPageable().getPageSize()})}">
+										<button  th:class="${pageNum} == ${noticePage.getPageable().getPageNumber() + 1} ? 'active' : ''" th:text="${pageNum}"></button>
+									</a>
+
+									<a th:if ="${next}" th:href="@{notices(page=${((noticePage.getPageable().getPageNumber() / basePage) + 1) * basePage},size=${noticePage.getPageable().getPageSize()})}">
+										<button>></button>
+									</a>
+
+									<a th:if ="${!noticePage.isLast()}" th:href="@{notices(page=${noticePage.getTotalPages() -1},size=${noticePage.getPageable().getPageSize()})}">
+										<button>>></button>
+									</a>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+	<footer id="kors_footer">
+		<div class="container-fluid f_s1 fw_pl">
+			<div class="row footer_top justify-content-between row-cols-auto">
+				<div class="col d-flex">
+					<div class="logo_box">
+						<h2>김해시수영연맹</h2>
+					</div>
+					<div class="text_box">
+						<p><span class="f_c_w">사단법인 김해시수영연맹</span></p>
+						<p>
+							<span>경남 김해시 생림면 나전로 249번길 13-67</span>
+						</p>
+						<p>
+							<span>회장 최성일 : 010-3865-6621</span>
+							<span>부회장 : 김용태 010-9313-3644</span>
+							<span>전무 : 조광제 010-8468-2213</span>
+							<span>사무국장 : 김경태 010-3180-2367</span>
+						</p>
+						<p>
+							<span>FAX : 055-323-9260</span>
+							<span>email : khsw2019@naver.com</span>
+						</p>
+					</div>
+				</div>
+			</div>
+
+			<div class="row footer_bottom">
+				<div class="col d-flex justify-content-between">
+					<p class="cop_text">Copyright © 2023 사단법인 김해시수영연맹(Gimhae Swimming Federation). All Rights Reserved. </p>
+					<ul class="d-flex f-list">
+						<li><a href="https://www.korswim.co.kr/page/privacy" style="color: #fff;">개인정보처리방침</a></li>
+						<li><a href="https://www.korswim.co.kr/page/terms">이용약관</a></li>
+						<li><a href="#null">이메일무단수집거부</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</footer>
+	</body>
+</html>

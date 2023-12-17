@@ -9,19 +9,20 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Comment;
 
+@Table(name = "FILE_INFO")
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "FILE_INFO")
 public class FileInfo extends BaseTime {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Comment("고유번호")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Comment("파일 출처")
     @Enumerated(EnumType.STRING)
-    private FileType type;
+    private FileType fileType;
 }

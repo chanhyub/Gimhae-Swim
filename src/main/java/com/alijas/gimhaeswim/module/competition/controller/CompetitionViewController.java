@@ -64,7 +64,9 @@ public class CompetitionViewController {
     }
 
     @GetMapping({"/", ""})
-    public String getCompetitionList(@PageableDefault(sort = "id" ,direction = Sort.Direction.DESC, size = 5) Pageable pageable, Model model) {
+    public String getCompetitionList(
+            @PageableDefault(sort = "id" ,direction = Sort.Direction.DESC, size = 5) Pageable pageable, Model model
+    ) {
         Page<CompetitionListDTO> competitionPage = competitionService.findAll(pageable);
         PageUtil.set(pageable, model, competitionPage.getTotalPages());
         model.addAttribute("competitionPage", competitionPage);

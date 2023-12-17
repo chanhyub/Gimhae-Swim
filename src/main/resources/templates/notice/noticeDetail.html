@@ -35,95 +35,71 @@
 
 			<div class="sub_content_box">
 				<div class="container mb_20">
-					<div class="row">
+					<div class="row kors_list_ui_box">
 						<div class="col">
-							<div class="sub_search_box">
-								<div class="d-flex justify-content-end">
-									<select class="kors_selet1 mr_15">
-										<option>제목</option>
-										<option>내용</option>
-										<option>제목+내용</option>
-										<option>작성자</option>
-									</select>
+							<div class="kors_list_ui1 more_type">
+								<ul>
+									<li>
+										<div class="text_box">
+											<h4 class="list_title ft_s0 fw_pm" th:text="${notice.title()()}"></h4>
 
-									<input class="kors_input1" type="text" placeholder="검색어를 입력해주세요.">
-
-									<button class="kors_btn1">검색</button>
+											<div class="text_list1">
+												<dl class="d-flex">
+													<dt class="f_c_active">등록일</dt>
+													<dd class="f_c_g1" th:text="${notice.createdDate}"></dd>
+												</dl>
+												<dl class="d-flex">
+													<dt class="f_c_active">작성자</dt>
+													<dd class="f_c_g1" th:text="${notice.writer}"></dd>
+												</dl>
+											</div>
+										</div>
+									</li>
+								</ul>
+							</div>
+							<div class="more_content_box mb-0">
+								<div>
+									<pre th:text="${notice.content}">
+									</pre>
 								</div>
 							</div>
 						</div>
 					</div>
-				</div>
 
-				<div class="container">
 					<div class="row">
 						<div class="col">
-							<p class="f_s2 f_c_g1 sub_paging">전체 <span class="f_c_active fw_b">1366건</span> | 페이지 <span class="fw_b">1/137</span></p>
-							<div class="kors_list_ui2">
-								<ul class="top d-none d-lg-block list_box type2 text-center">
-									<li>
-										<div>날짜</div>
-										<div>제목</div>
-									</li>
-								</ul>
-								
-								<ul class="center list_box type2 fw_pl">
-									<li th:each="field : ${noticeList}">
-										<div class="text-center d-flex justify-content-center">
-											<div class="year_box">
-												<p class="f_s4 fw_pb f_c_w">
-													[[${#strings.substring(field.registrationDate, 0, 4)}]]
-													<br />
-													[[${#strings.substring(field.registrationDate, 5, 10)}]]
-												</p>
-											</div>
-										</div>
-										<div>
-											<a th:href="@{/notice/detail(noticeSeq=${field.noticeSeq})}"><p class="f_s5 text-over-h list_title fw_pb" th:text="${field.noticeTitle}"></p></a>
-										</div>
-									</li>
-
-								</ul>
-							</div>
+							<ul class="more_dow_box">
+<!--								<li>-->
+<!--									<dl>-->
+<!--										<dt>첨부파일</dt>-->
+<!--										<dd>-->
+<!--											<a href="#" class="f_c_g1 text-over-h">CEOB689_20230104.pdf (2.3 MB)</a>-->
+<!--											<a href="#" class="f_c_g1 youtube_btn1 f_s2">다운로드</a>-->
+<!--										</dd>-->
+<!--									</dl>-->
+<!--								</li>-->
+<!--								<li>-->
+<!--									<dl>-->
+<!--										<dt>첨부파일</dt>-->
+<!--										<dd>-->
+<!--											<a href="#" class="f_c_g1 text-over-h">CEOB689_20230104.pdf (2.3 MB)</a>-->
+<!--											<a href="#" class="f_c_g1 youtube_btn1 f_s2">다운로드</a>-->
+<!--										</dd>-->
+<!--									</dl>-->
+<!--								</li>-->
+							</ul>
 						</div>
 					</div>
-
+					
 					<div class="row">
-						<div class="col">
-							<div class="list_paeging">
-								<ul class="d-flex justify-content-center">
-									<li class="prev2 img_btn">
-										<button>첫페이지</button>
-									</li>
-									<li class="prev1 img_btn">
-										<button>전페이지</button>
-									</li>
-									<li>
-										<button>1</button>
-									</li>
-									<li>
-										<button>2</button>
-									</li>
-									<li>
-										<button>3</button>
-									</li>
-									<li>
-										<button>4</button>
-									</li>
-									<li>
-										<button>5</button>
-									</li>
-									<li class="next1 img_btn">
-										<button>다음페이지</button>
-									</li>
-									<li class="next2 img_btn">
-										<button>끝페이지</button>
-									</li>
-								</ul>
+						<div class="col">							
+							<div class="more_page_btn">
+								<a href="/notice">목록</a>
 							</div>
 						</div>
 					</div>
 				</div>
+
 			</div>
 		</section>
 

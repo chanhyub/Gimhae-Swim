@@ -2,8 +2,11 @@ package com.alijas.gimhaeswim.module.notice.entity;
 
 import com.alijas.gimhaeswim.module.common.jpa.BaseTime;
 import com.alijas.gimhaeswim.module.file.entity.FileInfo;
+import com.alijas.gimhaeswim.module.notice.dto.NoticeDTO;
+import com.alijas.gimhaeswim.module.notice.dto.NoticeListDTO;
 import com.alijas.gimhaeswim.module.notice.enums.NoticeStatus;
 import com.alijas.gimhaeswim.module.user.entity.User;
+import com.alijas.gimhaeswim.util.DateTimeConverter;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -42,4 +45,24 @@ public class Notice extends BaseTime {
     @Comment("공지사항 첨부파일")
     @ManyToOne
     private FileInfo fileInfo;
+
+    public NoticeListDTO toListDTO() {
+        String createdDate = DateTimeConverter.LocalDateTimeToStringYYYYMMDD(getCreatedDate());
+        return new NoticeListDTO(
+                id,
+                title,
+                createdDate.substring(0, 4),
+                createdDate.substring(5)
+        );
+    }
+
+    public NoticeDTO toDTO() {
+        return new NoticeDTO(
+                id,
+                title,
+                content,
+                user.getFullName(),
+                DateTimeConverter.LocalDateTimeToStringYYYYMMDD(getCreatedDate())
+        );
+    }
 }
