@@ -4,7 +4,9 @@ import com.alijas.gimhaeswim.config.security.CustomUserDetails;
 import com.alijas.gimhaeswim.exception.CustomException;
 import com.alijas.gimhaeswim.module.applycompetition.request.ApplyCompetitionIndividualSaveRequest;
 import com.alijas.gimhaeswim.module.applycompetition.request.ApplyCompetitionOrganizationSaveRequest;
+import com.alijas.gimhaeswim.module.applycompetition.service.ApplyCompetitionEventService;
 import com.alijas.gimhaeswim.module.applycompetition.service.ApplyCompetitionService;
+import com.alijas.gimhaeswim.module.competition.entity.Competition;
 import com.alijas.gimhaeswim.module.competition.entity.CompetitionEvent;
 import com.alijas.gimhaeswim.module.competition.service.CompetitionEventService;
 import com.alijas.gimhaeswim.module.competition.service.CompetitionService;
@@ -29,6 +31,8 @@ public class CompetitionController {
 
     private final ApplyCompetitionService applyCompetitionService;
 
+    private final ApplyCompetitionEventService applyCompetitionEventService;
+
     private final CompetitionService competitionService;
 
     private final CompetitionEventService competitionEventService;
@@ -37,8 +41,9 @@ public class CompetitionController {
 
     private final TeamService teamService;
 
-    public CompetitionController(ApplyCompetitionService applyCompetitionService, CompetitionService competitionService, CompetitionEventService competitionEventService, UserService userService, TeamService teamService) {
-        this.applyCompetitionService = applyCompetitionService;
+    public CompetitionController(ApplyCompetitionService applyCompetitionService1, ApplyCompetitionEventService applyCompetitionService, CompetitionService competitionService, CompetitionEventService competitionEventService, UserService userService, TeamService teamService) {
+        this.applyCompetitionService = applyCompetitionService1;
+        this.applyCompetitionEventService = applyCompetitionService;
         this.competitionService = competitionService;
         this.competitionEventService = competitionEventService;
         this.userService = userService;
@@ -62,7 +67,7 @@ public class CompetitionController {
             throw new CustomException("잘못된 접근입니다.", HttpStatus.BAD_REQUEST);
         }
 
-        competitionService.getCompetition(competitionId)
+        Competition competition = competitionService.getCompetition(competitionId)
                 .orElseThrow(() -> new CustomException("존재하지 않는 대회입니다.", HttpStatus.BAD_REQUEST));
 
         if(errors.hasErrors()) {
@@ -86,7 +91,9 @@ public class CompetitionController {
 //            individualCompetitionEvents.add(competitionEventService.getCompetitionEvent(Long.parseLong(applyIndividualCompetitionEvent)).get());
 //        }
 
-        applyCompetitionService.individualSave(individualCompetitionEvents, user.get());
+
+        applyCompetitionService.individualSave(competition, user.get());
+        applyCompetitionEventService.individualSave(individualCompetitionEvents, user.get());
 
         return "redirect:/competitions";
     }
@@ -114,7 +121,7 @@ public class CompetitionController {
 
         Team team = optionalTeam.get();
 
-        competitionService.getCompetition(competitionId)
+        Competition competition = competitionService.getCompetition(competitionId)
                 .orElseThrow(() -> new CustomException("존재하지 않는 대회입니다.", HttpStatus.BAD_REQUEST));
 
         if(errors.hasErrors()) {
@@ -135,7 +142,8 @@ public class CompetitionController {
 //            organizationCompetitionEvents.add(competitionEventService.getCompetitionEvent(Long.parseLong(applyOrganizationCompetitionEvent)).get());
 //        }
 
-        applyCompetitionService.organizationSave(organizationCompetitionEvents, user.get(), team);
+        applyCompetitionService.organizationSave(competition, team);
+        applyCompetitionEventService.organizationSave(organizationCompetitionEvents, user.get(), team);
 
         return "redirect:/competitions";
     }

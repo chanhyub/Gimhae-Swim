@@ -2,7 +2,7 @@ package com.alijas.gimhaeswim.mock;
 
 import com.alijas.gimhaeswim.config.SecurityConfig;
 import com.alijas.gimhaeswim.example.CompetitionExample;
-import com.alijas.gimhaeswim.module.applycompetition.service.ApplyCompetitionService;
+import com.alijas.gimhaeswim.module.applycompetition.service.ApplyCompetitionEventService;
 import com.alijas.gimhaeswim.module.competition.controller.CompetitionViewController;
 import com.alijas.gimhaeswim.module.competition.dto.CompetitionListDTO;
 import com.alijas.gimhaeswim.module.competition.entity.Competition;
@@ -57,7 +57,7 @@ public class CompetitionMockTest {
     private UserService userService;
 
     @MockBean
-    private ApplyCompetitionService applyCompetitionService;
+    private ApplyCompetitionEventService applyCompetitionService;
 
     @BeforeEach
     public void setUp() {

@@ -3,7 +3,7 @@ package com.alijas.gimhaeswim.module.competition.controller;
 import com.alijas.gimhaeswim.config.security.CustomUserDetails;
 import com.alijas.gimhaeswim.exception.CustomException;
 import com.alijas.gimhaeswim.module.applycompetition.request.ApplyCompetitionIndividualSaveRequest;
-import com.alijas.gimhaeswim.module.applycompetition.service.ApplyCompetitionService;
+import com.alijas.gimhaeswim.module.applycompetition.service.ApplyCompetitionEventService;
 import com.alijas.gimhaeswim.module.competition.dto.CompetitionEventListApplyDTO;
 import com.alijas.gimhaeswim.module.competition.dto.CompetitionListDTO;
 import com.alijas.gimhaeswim.module.competition.dto.EventListApplyDTO;
@@ -50,11 +50,11 @@ public class CompetitionViewController {
 
     private final UserService userService;
 
-    private final ApplyCompetitionService applyCompetitionService;
+    private final ApplyCompetitionEventService applyCompetitionService;
 
     private final TeamMemberService teamMemberService;
 
-    public CompetitionViewController(CompetitionService competitionService, CompetitionEventService competitionEventService, EventService eventService, UserService userService, ApplyCompetitionService applyCompetitionService, TeamMemberService teamMemberService) {
+    public CompetitionViewController(CompetitionService competitionService, CompetitionEventService competitionEventService, EventService eventService, UserService userService, ApplyCompetitionEventService applyCompetitionService, TeamMemberService teamMemberService) {
         this.competitionService = competitionService;
         this.competitionEventService = competitionEventService;
         this.eventService = eventService;

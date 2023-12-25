@@ -51,15 +51,15 @@
                                 </div>
                                 -->
 								<div class="main_style2_2" style="width: 90%; margin: auto">
-									<ul class="d-flex w-100 justify-content-between">
-										<li>
-											<a th:href="@{/register}">
+									<ul th:if="${session.isEmpty()}" class="d-flex w-100 justify-content-between">
+										<li th:if="${session.isEmpty()}">
+											<a th:href="@{/join}">
 												<div class="img_box"><img th:src="@{/assets/img/m1_icon3.png}" alt="경기인 등록"></div>
 												<p>경기인 등록</p>
 											</a>
 										</li>
 										<li>
-											<a th:href="@{/templates/competitions}">
+											<a th:href="@{/competitions}">
 												<div class="img_box"><img th:src="@{/assets/img/m1_icon4.png}" alt="대회신청"></div>
 												<p>대회신청</p>
 											</a>

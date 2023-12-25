@@ -1,6 +1,7 @@
 package com.alijas.gimhaeswim.module;
 
 import com.alijas.gimhaeswim.config.security.CustomUserDetails;
+import com.alijas.gimhaeswim.exception.CustomException;
 import com.alijas.gimhaeswim.module.competition.dto.CompetitionListDTO;
 import com.alijas.gimhaeswim.module.competition.service.CompetitionService;
 import com.alijas.gimhaeswim.module.team.entity.TeamMember;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -75,7 +77,12 @@ public class ViewController {
     }
 
     @GetMapping("/join")
-    public String join() {
+    public String join(
+            @AuthenticationPrincipal CustomUserDetails customUserDetails
+    ) {
+        if (customUserDetails != null) {
+            throw new CustomException("이미 경기인으로 등록이 되어있습니다.", HttpStatus.BAD_REQUEST);
+        }
         return "join";
     }
 }
