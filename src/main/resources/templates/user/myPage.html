@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+    <head th:replace="common/layout::ConfigFragment"></head>
+
+    <body>
+        <header th:replace="common/layout::HeaderFragment"></header>
+
+
+        <section class="sub_content">
+            <div class="sub_top_box">
+                <div class="container">
+                    <div class="row">
+                        <div class="col">
+                            <h3 class="fw_pb ft_s4">마이페이지</h3>
+                            <p class="f_s1 fw_pl f_s3">국민의 사랑을 받는 스포츠로 발전할 수 있도록 노력하고 앞장서겠습니다.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sub_top_text">
+                <div class="container">
+                    <div class="row">
+                        <div class="col">
+                            <p class="f_s1"><span><img src="/assets/img/home.png"></span> 마이페이지</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--      내 정보 수정      -->
+            <div class="sub_content_box">
+                <div class="container">
+                    <div class="row">
+                        <div class="col" style="border-right: 1px solid #ccc">
+                            <form id="frm">
+                                <p class="ft_s1">내 정보</p>
+                                <p class="mt-3">아이디</p>
+                                <input type="text" required class="kors_input3 w-75" th:value="${user.username}" name="username" id="username" placeholder="아이디" readonly>
+                                <p class="mt-3">비밀번호</p>
+                                <input type="password" required class="kors_input3 w-75" name="password" id="password" placeholder="비밀번호" readonly>
+                                <p class="mt-3">비밀번호확인</p>
+                                <input type="password" required class="kors_input3 w-75" id="pwdCheck" placeholder="비밀번호 확인" readonly>
+                                <p class="mt-3">성명</p>
+                                <input type="text" required class="kors_input3 w-75" th:value="${user.fullName}" name="fullName" id="fullName" placeholder="성명" readonly>
+                                <p class="mt-3">연락처</p>
+                                <input type="text" required class="kors_input3 w-75" th:value="${user.phoneNumber}" name="phoneNumber" id="phoneNumber" placeholder="휴대폰 번호" readonly>
+                                <p class="mt-3">이메일</p>
+                                <input type="text" required class="kors_input3 w-75" th:value="${user.email}" name="email" id="email" placeholder="이메일" readonly>
+                                <div class="d-flex justify-content-center mt-3 mr_150" id="updateBtnBox" style="display: none">
+                                    <button type="button" class="kors_btn1" id="updateBtn" style="display: none" onclick="update()">완료</button>
+                                </div>
+                                <div class="d-flex justify-content-center mt-3 mr_150">
+                                    <button type="button" class="kors_btn1" id="editBtn">편집</button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="col">
+                            <p class="ft_s1">팀 관리</p>
+                            <div class="" th:if="${team == null}">
+                                <p class="mb-3 text-center">팀에 가입되어 있지 않습니다.</p>
+                                <div>
+                                    <p class="mb-2 ">팀 가입하기</p>
+                                    <label class="d-none">가입팀 이름을 정확하게 입력해주세요. ex) 띄어쓰기, 맞춤법 등등..</label>
+                                    <input type="text" id="findTeam" class="kors_input3 w-75" placeholder="가입팀 이름을 정확하게 입력해주세요. ex) 띄어쓰기, 맞춤법 등등..">
+                                    <input type="hidden" name="teamId" id="findTeamId" class="d-none"/>
+                                    </br>
+                                    <button type="button" onclick="teamCheck();" id="check_user1" class="kors_btn1 mt-2">가입하기</button>
+                                </div>
+                                <div>
+                                    <p class="mb-2">팀 생성하기</p>
+                                    <label class="d-none">생성팀 이름을 정확하게 입력해주세요. ex) 띄어쓰기, 맞춤법 등등..</label>
+                                    <input type="text" id="saveTeam" class="kors_input3 w-75" placeholder="생성팀 이름을 정확하게 입력해주세요. ex) 띄어쓰기, 맞춤법 등등..">
+<!--                                    <input type="hidden" name="teamId" id="saveTeamId" class="d-none"/>-->
+                                    </br>
+                                    <button type="button" onclick="teamCreate();" id="check_user2" class="kors_btn1 mt-2">생성하기</button>
+                                </div>
+                            </div>
+                            <script>
+                                function teamCheck() {
+                                    var teamName = document.getElementById("findTeam").value;
+                                    if (teamName === "") {
+                                        alert("가입할 팀 이름을 입력해 주십시오.");
+                                        return false;
+                                    }
+
+                                    $.ajax({
+                                        type: "GET",
+                                        url: "/teams/find",
+                                        // async: false,
+                                        data: {teamName : teamName},
+                                        error : function(request,status,error) {
+                                            console.log(request);
+                                            alert(request.responseText);
+                                        },
+                                        success: function (data) {
+                                            $.ajax({
+                                                type: "POST",
+                                                url: "/teams/members/save",
+                                                // async: false,
+                                                data: {teamId : data},
+                                                error : function(request,status,error) {
+                                                    console.log(request);
+                                                    alert(request.responseText);
+                                                },
+                                                success: function (data) {
+                                                    alert("성공적으로 가입되었습니다.");
+                                                    location.reload();
+                                                    // document.getElementById("findTeamId").value = data;
+                                                }
+                                            });
+                                        }
+                                    });
+                                }
+
+                                function teamCreate() {
+                                    var teamName = document.getElementById("saveTeam").value;
+                                    if (teamName === "") {
+                                        alert("생성할 팀 이름을 입력해 주십시오.");
+                                        return false;
+                                    }
+                                    if (confirm("팀을 생성 하시겠습니까?\n팀을 생성하시면 팀장이 되며 다른 팀에 가입할 수 없습니다."))
+                                    $.ajax({
+                                        type: "POST",
+                                        url: "/teams/save",
+                                        // async: false,
+                                        data: {teamName : teamName},
+                                        error : function(request,status,error) {
+                                            console.log(request);
+                                            alert(request.responseText);
+                                        },
+                                        success: function (data) {
+                                            $.ajax({
+                                                type: "POST",
+                                                url: "/teams/members/save",
+                                                // async: false,
+                                                data: {teamId : data},
+                                                error : function(request,status,error) {
+                                                    console.log(request);
+                                                    alert(request.responseText);
+                                                },
+                                                success: function (data) {
+                                                    alert("성공적으로 생성되었습니다.");
+                                                    location.reload();
+                                                    // document.getElementById("findTeamId").value = data;
+                                                }
+                                            });
+                                        }
+                                    });
+                                }
+                            </script>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--      내 신청 현황      -->
+            <div class="sub_content_box">
+
+            </div>
+
+        </section>
+
+
+
+        <footer th:replace="common/layout::FooterFragment"></footer>
+
+    <script>
+
+        $(function () {
+            $('#editBtn').on("click", function () {
+                $('.kors_input3').attr("readonly", false);
+                $('#editBtn').css("display", "none");
+                $('#updateBtn').css("display", "inline-block");
+                $('#updateBtnBox').css("display", "inline-block");
+            });
+        });
+
+        function update() {
+            // $('#updateBtn').on("click", function () {
+            // var form = $("#form").serialize();
+            // var formData = new FormData()
+
+            // var id = "frm";
+            if ($('#password').val() == "") {
+                alert("비밀번호를 입력해주세요.");
+                return false;
+            }
+
+            if ($('#pwdCheck').val() == "") {
+                alert("비밀번호 확인을 입력해주세요.");
+                return false;
+            }
+            var form = document.getElementById('frm');
+            var formData = new FormData(form);
+
+            var serializedData = {};
+
+            // FormData를 객체로 변환
+            formData.forEach(function(value, key) {
+                serializedData[key] = value;
+            });
+
+            var password = $('#password').val();
+            var pwdCheck = $('#pwdCheck').val();
+            if(password != pwdCheck && password != "" && pwdCheck != ""){
+                alert("비밀번호가 일치하지 않습니다.");
+                return false;
+            }
+            $.ajax({
+                type: "PUT",
+                url: "/users/update",
+                data: JSON.stringify(serializedData),
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    alert("수정이 완료되었습니다.");
+                    console.log("success");
+                    location.href = "/users/my-page";
+                },
+                error: function (request, status, error) {
+                    $('.kors_input3').attr("readonly", true);
+                    $('#editBtn').css("display", "inline-block");
+                    $('#updateBtn').css("display", "none");
+                    $('#updateBtnBox').css("display", "none");
+                    alert("수정에 실패하였습니다.");
+                    console.log("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+                    return false;
+                }
+            });
+            // });
+        }
+    </script>
+
+
+    </body>
+
+</html>

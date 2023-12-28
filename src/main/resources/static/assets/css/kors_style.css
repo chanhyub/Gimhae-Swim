@@ -167,6 +167,13 @@ body {font-size:13px;}
 .mr_10 {margin-right:10px;}
 .mr_15 {margin-right:15px;}
 .mr_30 {margin-right:30px;}
+.mr_40 {margin-right:40px;}
+.mr_50 {margin-right:50px;}
+.mr_60 {margin-right:60px;}
+.mr_70 {margin-right:70px;}
+.mr_80 {margin-right:80px;}
+.mr_100 {margin-right:100px;}
+.mr_150 {margin-right:150px;}
 
 .mb_5 {margin-bottom:5px;}
 .mb_10 {margin-bottom:10px;}
@@ -365,6 +372,7 @@ apply-btn-box .kors_btn2 {padding: 0;}
 .kors_user_form1 {width:100%; max-width:600px; margin:0 auto;}
 .kors_user_form1 li {margin-bottom:10px;}
 .kors_input2 {height:60px; padding:10px 15px;}
+.kors_input3 {height: 40px; padding: 10px 15px;}
 .kors_btn3 {height:60px; padding: 10px 15px; background-color: #034EA2; color: #fff; border-radius: 0px;}
 
 .list_paeging {padding:40px 0;}

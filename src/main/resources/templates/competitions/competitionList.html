@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="ko"
 	  xmlns:th="http://www.thymeleaf.org"
-	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	  layout:decorate="~{common/layout}">
-<head layout:fragment="ConfigFrament">
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<!--<head layout:fragment="ConfigFrament">-->
 
-</head>
+<!--</head>-->
+<head th:replace="common/layout::ConfigFragment"></head>
 
 <body>
-<header layout:fragment="HeaderFragment"></header>
+<header th:replace="common/layout::HeaderFragment"></header>
 		<section class="sub_content">
 
 			<div class="sub_top_box">
@@ -123,43 +123,6 @@
 			</div>
 		</section>
 
-		<footer id="kors_footer">
-			<div class="container-fluid f_s1 fw_pl">
-				<div class="row footer_top justify-content-between row-cols-auto">
-					<div class="col d-flex">
-						<div class="logo_box">
-							<h2>김해시수영연맹</h2>
-						</div>
-						<div class="text_box">
-							<p><span class="f_c_w">사단법인 김해시수영연맹</span></p>
-							<p>
-								<span>경남 김해시 생림면 나전로 249번길 13-67</span>
-							</p>
-							<p>
-								<span>회장 최성일 : 010-3865-6621</span>
-								<span>부회장 : 김용태 010-9313-3644</span>
-								<span>전무 : 조광제 010-8468-2213</span>
-								<span>사무국장 : 김경태 010-3180-2367</span>
-							</p>
-							<p>
-								<span>FAX : 055-323-9260</span>
-								<span>email : khsw2019@naver.com</span>
-							</p>
-						</div>
-					</div>
-				</div>
-
-				<div class="row footer_bottom">
-					<div class="col d-flex justify-content-between">
-						<p class="cop_text">Copyright © 2023 사단법인 김해시수영연맹(Gimhae Swimming Federation). All Rights Reserved. </p>
-						<ul class="d-flex f-list">
-							<li><a href="https://www.korswim.co.kr/page/privacy" style="color: #fff;">개인정보처리방침</a></li>
-							<li><a href="https://www.korswim.co.kr/page/terms">이용약관</a></li>
-							<li><a href="#null">이메일무단수집거부</a></li>
-						</ul>
-					</div>
-				</div>
-			</div>
-		</footer>
+		<footer th:replace="common/layout::FooterFragment"></footer>
 	</body>
 </html>

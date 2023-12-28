@@ -6,12 +6,14 @@ import com.alijas.gimhaeswim.module.common.jpa.BaseTime;
 import com.alijas.gimhaeswim.module.common.enums.Gender;
 import com.alijas.gimhaeswim.module.user.dto.UserDTO;
 import com.alijas.gimhaeswim.module.user.enums.UserStatus;
+import com.alijas.gimhaeswim.module.user.request.UserUpdateRequest;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Comment;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Entity
 @Table(name = "USERS")
@@ -75,5 +77,14 @@ public class User extends BaseTime {
                 gender.name(),
                 role.name()
         );
+    }
+
+    public void updateUser(UserUpdateRequest userUpdateRequest) {
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+
+        this.fullName = userUpdateRequest.fullName();
+        this.password = bCryptPasswordEncoder.encode(userUpdateRequest.password());
+        this.phoneNumber = userUpdateRequest.phoneNumber();
+        this.email = userUpdateRequest.email();
     }
 }

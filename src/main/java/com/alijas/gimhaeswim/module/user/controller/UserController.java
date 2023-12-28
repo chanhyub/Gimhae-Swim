@@ -8,6 +8,7 @@ import com.alijas.gimhaeswim.module.team.service.TeamMemberService;
 import com.alijas.gimhaeswim.module.team.service.TeamService;
 import com.alijas.gimhaeswim.module.user.entity.User;
 import com.alijas.gimhaeswim.module.user.request.UserSaveRequest;
+import com.alijas.gimhaeswim.module.user.request.UserUpdateRequest;
 import com.alijas.gimhaeswim.module.user.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -65,6 +66,22 @@ public class UserController {
         }
 
         return ResponseEntity.ok("경기인 신청이 완료되었습니다.");
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<String> updateUser(
+            @RequestBody @Valid UserUpdateRequest userUpdateRequest,
+            Errors errors
+    ) {
+        if (errors.hasErrors()) {
+            throw new CustomRestException(errors.getAllErrors().get(0).getDefaultMessage(), HttpStatus.BAD_REQUEST);
+        }
+
+        User user = userService.getUser(userUpdateRequest.username()).orElseThrow(() -> new CustomRestException("존재하지 않는 아이디입니다.", HttpStatus.BAD_REQUEST));
+
+        userService.updateUser(user, userUpdateRequest);
+
+        return ResponseEntity.ok("경기인 정보가 수정되었습니다.");
     }
 
 

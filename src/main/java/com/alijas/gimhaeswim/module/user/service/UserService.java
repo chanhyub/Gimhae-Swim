@@ -3,6 +3,7 @@ package com.alijas.gimhaeswim.module.user.service;
 import com.alijas.gimhaeswim.module.user.entity.User;
 import com.alijas.gimhaeswim.module.user.repository.UserRepository;
 import com.alijas.gimhaeswim.module.user.request.UserSaveRequest;
+import com.alijas.gimhaeswim.module.user.request.UserUpdateRequest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,5 +37,11 @@ public class UserService {
         user.setPassword(encode);
 
         return userRepository.save(user);
+    }
+
+    @Transactional
+    public void updateUser(User user, UserUpdateRequest userUpdateRequest) {
+        user.updateUser(userUpdateRequest);
+        userRepository.save(user);
     }
 }
