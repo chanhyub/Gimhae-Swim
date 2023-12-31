@@ -1,6 +1,5 @@
 package com.alijas.gimhaeswim.module.user.controller;
 
-import com.alijas.gimhaeswim.exception.CustomException;
 import com.alijas.gimhaeswim.exception.CustomRestException;
 import com.alijas.gimhaeswim.module.team.entity.Team;
 import com.alijas.gimhaeswim.module.team.entity.TeamMember;
@@ -13,7 +12,6 @@ import com.alijas.gimhaeswim.module.user.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
@@ -57,7 +55,7 @@ public class UserController {
                 throw new CustomRestException("존재하지 않는 팀입니다.", HttpStatus.BAD_REQUEST);
             }
 
-            List<TeamMember> teamMemberList = teamMemberService.getTeamMember(team.get());
+            List<TeamMember> teamMemberList = teamMemberService.getTeamMemberList(team.get());
             if (teamMemberList.isEmpty()) {
                 teamMemberService.saveTeamMember(team.get(), user, "LEADER");
             } else {

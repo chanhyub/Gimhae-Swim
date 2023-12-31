@@ -4,7 +4,6 @@ import com.alijas.gimhaeswim.config.security.CustomUserDetails;
 import com.alijas.gimhaeswim.exception.CustomException;
 import com.alijas.gimhaeswim.module.team.entity.TeamMember;
 import com.alijas.gimhaeswim.module.team.service.TeamMemberService;
-import com.alijas.gimhaeswim.module.user.dto.UserDTO;
 import com.alijas.gimhaeswim.module.user.entity.User;
 import com.alijas.gimhaeswim.module.user.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -14,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -42,7 +42,9 @@ public class UserViewController {
 
         Optional<TeamMember> userTeam = teamMemberService.getUserTeam(user);
         if (userTeam.isPresent()) {
-            model.addAttribute("team", userTeam.get().getTeam().getTeamName());
+            TeamMember teamMember = userTeam.get();
+            List<TeamMember> teamMemberList = teamMemberService.getTeamMemberList(teamMember.getTeam());
+            model.addAttribute("team", teamMemberList);
         } else {
             model.addAttribute("team", null);
         }

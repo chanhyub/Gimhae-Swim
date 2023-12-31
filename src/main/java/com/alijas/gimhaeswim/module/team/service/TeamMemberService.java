@@ -32,11 +32,20 @@ public class TeamMemberService {
         );
     }
 
-    public List<TeamMember> getTeamMember(Team team) {
+    public List<TeamMember> getTeamMemberList(Team team) {
         return teamMemberRepository.findByTeam(team);
     }
 
     public Optional<TeamMember> getUserTeam(User user) {
         return teamMemberRepository.findByUser(user);
+    }
+
+    @Transactional
+    public void deleteTeamMember(TeamMember teamMember) {
+        teamMemberRepository.delete(teamMember);
+    }
+
+    public Optional<TeamMember> getTeamMember(Long teamMemberId) {
+        return teamMemberRepository.findById(teamMemberId);
     }
 }
