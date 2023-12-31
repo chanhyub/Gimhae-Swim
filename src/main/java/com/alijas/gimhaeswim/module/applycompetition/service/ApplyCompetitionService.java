@@ -9,8 +9,10 @@ import com.alijas.gimhaeswim.module.competition.entity.CompetitionEvent;
 import com.alijas.gimhaeswim.module.team.entity.Team;
 import com.alijas.gimhaeswim.module.user.entity.User;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ApplyCompetitionService {
@@ -22,8 +24,8 @@ public class ApplyCompetitionService {
     }
 
 
-    public void individualSave(Competition competition, User user) {
-        applyCompetitionRepository.save(
+    public ApplyCompetition individualSave(Competition competition, User user) {
+        return applyCompetitionRepository.save(
                 new ApplyCompetition(
                         null,
                         competition,
@@ -35,8 +37,8 @@ public class ApplyCompetitionService {
         );
     }
 
-    public void organizationSave(Competition competition, Team team) {
-        applyCompetitionRepository.save(
+    public ApplyCompetition organizationSave(Competition competition, Team team) {
+        return applyCompetitionRepository.save(
                 new ApplyCompetition(
                         null,
                         competition,
@@ -46,5 +48,26 @@ public class ApplyCompetitionService {
                         ApplyStatus.WAITING
                 )
         );
+    }
+
+    public Optional<ApplyCompetition> getApplyCompetition(Long id) {
+        return applyCompetitionRepository.findById(id);
+    }
+
+    public List<ApplyCompetition> getApplyCompetition(User user) {
+        return applyCompetitionRepository.findByUser(user);
+    }
+
+    public List<ApplyCompetition> getApplyCompetition(User user, Team team) {
+        return applyCompetitionRepository.findByUserOrTeam(user, team);
+    }
+
+    public List<ApplyCompetition> getApplyCompetitionByTeam(Team team) {
+        return applyCompetitionRepository.findByTeam(team);
+    }
+
+    @Transactional
+    public void deleteApplyCompetition(ApplyCompetition applyCompetition) {
+        applyCompetitionRepository.delete(applyCompetition);
     }
 }

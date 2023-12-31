@@ -1,5 +1,6 @@
 package com.alijas.gimhaeswim.module.applycompetition.entity;
 
+import com.alijas.gimhaeswim.module.applycompetition.dto.ApplyCompetitionListDTO;
 import com.alijas.gimhaeswim.module.applycompetition.enums.DepositStatus;
 import com.alijas.gimhaeswim.module.common.enums.ApplyStatus;
 import com.alijas.gimhaeswim.module.competition.entity.Competition;
@@ -47,4 +48,14 @@ public class ApplyCompetition {
     @Enumerated(EnumType.STRING)
     @ColumnDefault("'WAITING'")
     private ApplyStatus applyStatus;
+
+    public ApplyCompetitionListDTO toApplyCompetitionListDTO() {
+        return new ApplyCompetitionListDTO(
+                this.id,
+                this.getCompetition().getId().toString(),
+                this.competition.getCompetitionName(),
+                this.depositStatus.name(),
+                null
+        );
+    }
 }

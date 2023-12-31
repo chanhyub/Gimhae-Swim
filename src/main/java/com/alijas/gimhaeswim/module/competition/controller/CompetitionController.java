@@ -2,6 +2,8 @@ package com.alijas.gimhaeswim.module.competition.controller;
 
 import com.alijas.gimhaeswim.config.security.CustomUserDetails;
 import com.alijas.gimhaeswim.exception.CustomException;
+import com.alijas.gimhaeswim.exception.CustomRestException;
+import com.alijas.gimhaeswim.module.applycompetition.entity.ApplyCompetition;
 import com.alijas.gimhaeswim.module.applycompetition.request.ApplyCompetitionIndividualSaveRequest;
 import com.alijas.gimhaeswim.module.applycompetition.request.ApplyCompetitionOrganizationSaveRequest;
 import com.alijas.gimhaeswim.module.applycompetition.service.ApplyCompetitionEventService;
@@ -16,6 +18,7 @@ import com.alijas.gimhaeswim.module.user.entity.User;
 import com.alijas.gimhaeswim.module.user.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.Errors;
@@ -92,8 +95,8 @@ public class CompetitionController {
 //        }
 
 
-        applyCompetitionService.individualSave(competition, user.get());
-        applyCompetitionEventService.individualSave(individualCompetitionEvents, user.get());
+        ApplyCompetition optionalApplyCompetition = applyCompetitionService.individualSave(competition, user.get());
+        applyCompetitionEventService.individualSave(individualCompetitionEvents, user.get(), optionalApplyCompetition);
 
         return "redirect:/competitions";
     }
@@ -142,10 +145,38 @@ public class CompetitionController {
 //            organizationCompetitionEvents.add(competitionEventService.getCompetitionEvent(Long.parseLong(applyOrganizationCompetitionEvent)).get());
 //        }
 
-        applyCompetitionService.organizationSave(competition, team);
-        applyCompetitionEventService.organizationSave(organizationCompetitionEvents, user.get(), team);
+        ApplyCompetition applyCompetition = applyCompetitionService.organizationSave(competition, team);
+        applyCompetitionEventService.organizationSave(organizationCompetitionEvents, user.get(), team, applyCompetition);
 
         return "redirect:/competitions";
+    }
+
+    @DeleteMapping("/{applyCompetitionId}/delete")
+    @ResponseBody
+    public ResponseEntity<String> deleteCompetition(
+            @PathVariable Long applyCompetitionId,
+            @AuthenticationPrincipal CustomUserDetails customUserDetails
+    ) {
+        if (customUserDetails == null) {
+            throw new CustomRestException("로그인이 필요합니다.", HttpStatus.BAD_REQUEST);
+        }
+
+        Optional<User> user = userService.getUser(customUserDetails.getUser().getId());
+        if (user.isEmpty()) {
+            throw new CustomRestException("잘못된 접근입니다.", HttpStatus.BAD_REQUEST);
+        }
+
+
+        Optional<ApplyCompetition> optionalApplyCompetition = applyCompetitionService.getApplyCompetition(applyCompetitionId);
+        if (optionalApplyCompetition.isEmpty()) {
+            throw new CustomRestException("존재하지 않는 신청입니다.", HttpStatus.BAD_REQUEST);
+        }
+
+        ApplyCompetition applyCompetition = optionalApplyCompetition.get();
+        applyCompetitionEventService.deleteApplyCompetitionEvent(applyCompetition);
+        applyCompetitionService.deleteApplyCompetition(applyCompetition);
+
+        return ResponseEntity.ok("삭제되었습니다.");
     }
 
 }

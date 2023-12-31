@@ -91,50 +91,105 @@
                                         </tr>
                                         <tr th:each="teamMember, index : ${team}">
                                             <td class="" th:text="${teamMember.user.fullName}"></td>
-                                            <td class="" th:text="${teamMember.position}"></td>
+                                            <td class="" th:text="${teamMember.position.name.equals('LEADER') ? '팀장' : '팀원'}"></td>
                                             <td>
-                                                <button type="button" th:onclick="deleteTeam([[${index.count}]])" class="kors_btn mt-1 mb-1">탈퇴</button>
+                                                <button type="button" th:if="${session.user.id == teamMember.user.id || isLeader}" th:onclick="deleteTeam([[${index.count}]])" class="kors_btn mt-1 mb-1">탈퇴</button>
                                             </td>
                                             <input type="hidden" th:id="'teamMemberId_' + ${index.count}" th:value="${teamMember.id}">
 <!--                                            <input type="hidden" id="teamMemberTeamId" th:value="${teamMember.team.id}">-->
                                         </tr>
-                                        <script>
-                                            function deleteTeam(index) {
-                                                var teamMemberId = document.getElementById("teamMemberId_" + index).value;
-                                                if (confirm("팀을 탈퇴하시겠습니까?"))
-                                                    $.ajax({
-                                                        type: "DELETE",
-                                                        url: "/teams/members/delete",
-                                                        // async: false,
-                                                        data: {
-                                                            teamMemberId : teamMemberId
-                                                        },
-                                                        error : function(request,status,error) {
-                                                            console.log(request);
-                                                            alert(request.responseText);
-                                                        },
-                                                        success: function (data) {
-                                                            alert(data);
-                                                            location.reload();
-                                                            // document.getElementById("findTeamId").value = data;
-                                                        }
-                                                    });
-                                            }
-                                        </script>
                                     </table>
                                 </div>
                             </div>
                         </div>
-
-
                     </div>
+
+                    <div class="mt-5">
+                        <p class="ft_s1">대회신청현황</p>
+                        <div class="table_box1">
+                            <table class="w-100">
+                                <thead>
+                                <tr>
+                                    <th>대회명</th>
+                                    <th>종목</th>
+                                    <th>상태</th>
+                                    <th>신청취소</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:if="${!applyCompetitionIndividualList.isEmpty()}" th:each="applyCompetitionIndividual : ${applyCompetitionIndividualList}">
+                                    <td><p class="f_s5 text-over-h list_title fw_pb" th:text="${applyCompetitionIndividual.competition.competitionName}"></p></td>
+                                    <td>
+                                        <ul class="table_ul">
+                                            <li th:if="${#strings.substringBefore(applyCompetitionEvent.competitionEvent.eventType, '_').equals('INDIVIDUAL')}" th:each="applyCompetitionEvent : ${applyCompetitionEventList}" th:text="${applyCompetitionEvent.competitionEvent.department.getDepartmentName()}+' '+${applyCompetitionEvent.competitionEvent.department.departmentGender.name.equals('M') ? '남자' : '여자'}+' ' +${applyCompetitionEvent.competitionEvent.event.eventName + ' ' + applyCompetitionEvent.competitionEvent.meter.meter} + '(' + ${#strings.substringBefore(applyCompetitionEvent.competitionEvent.eventType, '_').equals('ORGANIZATION') ? '단체' : '개인'} + ')'"></li>
+<!--                                            <li th:if="${#strings.substringBefore(applyCompetitionEvent.competitionEvent.eventType, '_').equals('INDIVIDUAL')}" th:each="applyCompetitionEvent : ${applyCompetitionEventList}" th:text="${applyCompetitionEvent.competitionEvent.department.getDepartmentName()}+' '+${applyCompetitionEvent.competitionEvent.department.departmentGender.name.equals('M') ? '남자' : '여자'}+' ' +${applyCompetitionEvent.competitionEvent.event.eventName + ' ' + applyCompetitionEvent.competitionEvent.meter.meter} + '(' + ${#strings.substringBefore(applyCompetitionEvent.competitionEvent.eventType, '_').equals('ORGANIZATION') ? '단체' : '개인'} + ')'"></li>-->
+
+<!--                                            <li th:if="${#strings.substringBefore(applyCompetitionEvent.competitionEvent.eventType, '_').equals('ORGANIZATION')}" th:each="applyCompetitionEvent : ${applyCompetitionEventList}" th:text="${applyCompetitionEvent.competitionEvent.department.getDepartmentName()}+' '+${applyCompetitionEvent.competitionEvent.department.departmentGender.name.equals('M') ? '남자' : '여지'}+' ' +${applyCompetitionEvent.competitionEvent.event.eventName + ' ' + applyCompetitionEvent.competitionEvent.meter.meter} + '(' + ${#strings.substringBefore(applyCompetitionEvent.competitionEvent.eventType, '_').equals('ORGANIZATION') ? '단체' : '개인'} + ')'"></li>-->
+<!--                                            <li th:if="${#strings.substringBefore(applyCompetitionEvent.competitionEvent.eventType, '_').equals('INDIVIDUAL')}" th:each="applyCompetitionEvent : ${applyCompetitionEventList}" th:text="${applyCompetitionEvent.competitionEvent.department.getDepartmentName()}+' '+${applyCompetitionEvent.competitionEvent.department.departmentGender.name.equals('M') ? '남자' : '여자'}+' ' +${applyCompetitionEvent.competitionEvent.event.eventName + ' ' + applyCompetitionEvent.competitionEvent.meter.meter} + '(' + ${#strings.substringBefore(applyCompetitionEvent.competitionEvent.eventType, '_').equals('ORGANIZATION') ? '단체' : '개인'} + ')'"></li>-->
+                                        </ul>
+                                    </td>
+                                    <td>
+                                        <span th:if="${applyCompetitionIndividual.depositStatus.name.equals('DEPOSITED')}" class="match_state type1">접수완료</span>
+                                        <span th:if="${applyCompetitionIndividual.depositStatus.name.equals('NOT_DEPOSITED')}" class="match_state type2">입금 확인중</span>
+                                    </td>
+                                    <td>
+<!--                                        <button th:onclick="|javascript:deleteApplication('${applicationDetail.applicationDetailSeq}')|" class="match_state type3">신청취소</button>-->
+                                        <button th:onclick="deleteApplication([[${applyCompetitionIndividual.id}]])" class="match_state type3">신청취소</button>
+                                    </td>
+                                </tr>
+
+                                <tr th:if="${!applyCompetitionOrganizationList.isEmpty()}" th:each="applyCompetitionOrganization : ${applyCompetitionOrganizationList}">
+                                    <td><p class="f_s5 text-over-h list_title fw_pb" th:text="${applyCompetitionOrganization.competition.competitionName}"></p></td>
+                                    <td>
+                                        <ul class="table_ul">
+                                            <li th:if="${#strings.substringBefore(applyCompetitionEvent.competitionEvent.eventType, '_').equals('ORGANIZATION') && applyCompetitionOrganization.competition.id == applyCompetitionEvent.competitionEvent.competition.id}" th:each="applyCompetitionEvent : ${applyCompetitionEventList}" th:text="${applyCompetitionEvent.competitionEvent.department.getDepartmentName()}+' '+${applyCompetitionEvent.competitionEvent.department.departmentGender.name.equals('M') ? '남자' : '여자'}+' ' +${applyCompetitionEvent.competitionEvent.event.eventName + ' ' + applyCompetitionEvent.competitionEvent.meter.meter} + '(' + ${#strings.substringBefore(applyCompetitionEvent.competitionEvent.eventType, '_').equals('ORGANIZATION') ? '단체' : '개인'} + ')'"></li>
+                                            <!--                                            <li th:if="${#strings.substringBefore(applyCompetitionEvent.competitionEvent.eventType, '_').equals('INDIVIDUAL')}" th:each="applyCompetitionEvent : ${applyCompetitionEventList}" th:text="${applyCompetitionEvent.competitionEvent.department.getDepartmentName()}+' '+${applyCompetitionEvent.competitionEvent.department.departmentGender.name.equals('M') ? '남자' : '여자'}+' ' +${applyCompetitionEvent.competitionEvent.event.eventName + ' ' + applyCompetitionEvent.competitionEvent.meter.meter} + '(' + ${#strings.substringBefore(applyCompetitionEvent.competitionEvent.eventType, '_').equals('ORGANIZATION') ? '단체' : '개인'} + ')'"></li>-->
+
+                                            <!--                                            <li th:if="${#strings.substringBefore(applyCompetitionEvent.competitionEvent.eventType, '_').equals('ORGANIZATION')}" th:each="applyCompetitionEvent : ${applyCompetitionEventList}" th:text="${applyCompetitionEvent.competitionEvent.department.getDepartmentName()}+' '+${applyCompetitionEvent.competitionEvent.department.departmentGender.name.equals('M') ? '남자' : '여지'}+' ' +${applyCompetitionEvent.competitionEvent.event.eventName + ' ' + applyCompetitionEvent.competitionEvent.meter.meter} + '(' + ${#strings.substringBefore(applyCompetitionEvent.competitionEvent.eventType, '_').equals('ORGANIZATION') ? '단체' : '개인'} + ')'"></li>-->
+                                            <!--                                            <li th:if="${#strings.substringBefore(applyCompetitionEvent.competitionEvent.eventType, '_').equals('INDIVIDUAL')}" th:each="applyCompetitionEvent : ${applyCompetitionEventList}" th:text="${applyCompetitionEvent.competitionEvent.department.getDepartmentName()}+' '+${applyCompetitionEvent.competitionEvent.department.departmentGender.name.equals('M') ? '남자' : '여자'}+' ' +${applyCompetitionEvent.competitionEvent.event.eventName + ' ' + applyCompetitionEvent.competitionEvent.meter.meter} + '(' + ${#strings.substringBefore(applyCompetitionEvent.competitionEvent.eventType, '_').equals('ORGANIZATION') ? '단체' : '개인'} + ')'"></li>-->
+                                        </ul>
+                                    </td>
+                                    <td>
+                                        <span th:if="${applyCompetitionOrganization.depositStatus.name.equals('DEPOSITED')}" class="match_state type1">접수완료</span>
+                                        <span th:if="${applyCompetitionOrganization.depositStatus.name.equals('NOT_DEPOSITED')}" class="match_state type2">입금 확인중</span>
+                                    </td>
+                                    <td>
+                                        <!--                                        <button th:onclick="|javascript:deleteApplication('${applicationDetail.applicationDetailSeq}')|" class="match_state type3">신청취소</button>-->
+                                        <button type="button" th:onclick="deleteApplication([[${applyCompetitionOrganization.id}]])" class="match_state type3">신청취소</button>
+                                    </td>
+
+                                    <script th:inline="javascript">
+
+
+
+
+                                    </script>
+                                </tr>
+
+
+                                <!--										<tr th:each="applyCompetition : ${applyCompetitionList}" th:if="${applyCompetition.depositStatus.equals('NOT_DEPOSITED')}">-->
+                                <!--											<td><p class="f_s5 text-over-h list_title fw_pb" th:text="${applicationDetail.competition.competitionName}"></p></td>-->
+                                <!--											<td>-->
+                                <!--												<ul class="table_ul">-->
+                                <!--													<li th:each="field : ${applicationDetail.CompetitionEventApplicationDetailList}" th:text="${field.competitionEvent.sex}+' '+${field.competitionEvent.division}+' '+${field.competitionEvent.eventName}+' '+${field.competitionEvent.meter}+'m'"></li>-->
+                                <!--												</ul>-->
+                                <!--											</td>-->
+                                <!--											<td>-->
+                                <!--												<span class="match_state type2">입금 확인중</span>-->
+                                <!--											</td>-->
+                                <!--											<td><button th:onclick="|javascript:deleteApplication('${applicationDetail.applicationDetailSeq}')|" class="match_state type3">신청취소</button></td>-->
+                                <!--										</tr>-->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+
                 </div>
             </div>
 
             <!--      내 신청 현황      -->
-            <div class="sub_content_box">
-
-            </div>
+            <div class="sub_content_box"></div>
 
         </section>
 
@@ -285,6 +340,49 @@
 
 
 
+
+
+        function deleteTeam(index) {
+            var teamMemberId = document.getElementById("teamMemberId_" + index).value;
+            if (confirm("팀을 탈퇴하시겠습니까?"))
+                $.ajax({
+                    type: "DELETE",
+                    url: "/teams/members/delete",
+                    // async: false,
+                    data: {
+                        teamMemberId : teamMemberId
+                    },
+                    error : function(request,status,error) {
+                        console.log(request);
+                        alert(request.responseText);
+                    },
+                    success: function (data) {
+                        alert(data);
+                        location.reload();
+                        // document.getElementById("findTeamId").value = data;
+                    }
+                });
+        }
+
+
+        function deleteApplication(applyCompetitionId) {
+            if (confirm("신청을 취소 하시겠습니까?"))
+                $.ajax({
+                    type: "DELETE",
+                    url: "/competitions/"+ applyCompetitionId +"/delete",
+                    // async: false,
+                    data: applyCompetitionId,
+                    error : function(request,status,error) {
+                        alert("실패 하였습니다."+"\n"+"문의 부탁드립니다.");
+                        location.reload();
+                        console.log("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+                    },
+                    success: function (data) {
+                        alert("신청이 취소 되었습니다.");
+                        location.reload();
+                    }
+                });
+        }
 
 
 

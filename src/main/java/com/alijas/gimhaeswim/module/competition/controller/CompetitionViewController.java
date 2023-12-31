@@ -213,7 +213,7 @@ public class CompetitionViewController {
 
 
         competitionEventService.getCompetitionEventByCompetitionId(competition.getId(), ORGANIZATION).forEach(competitionEvent -> {
-            applyCompetitionService.getApplyCompetitionByUserAndCompetitionEvent(user, competitionEvent)
+            applyCompetitionService.getApplyCompetitionByTeamAndCompetitionEvent(teamMember.getTeam(), competitionEvent)
                     .ifPresent(applyCompetition -> {
                         if (applyCompetition.getCompetitionEvent().getId().equals(competitionEvent.getId())) {
                             throw new CustomException("이미 신청한 대회입니다.", HttpStatus.BAD_REQUEST);

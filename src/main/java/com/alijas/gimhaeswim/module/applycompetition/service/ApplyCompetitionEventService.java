@@ -1,5 +1,6 @@
 package com.alijas.gimhaeswim.module.applycompetition.service;
 
+import com.alijas.gimhaeswim.module.applycompetition.entity.ApplyCompetition;
 import com.alijas.gimhaeswim.module.applycompetition.entity.ApplyCompetitionEvent;
 import com.alijas.gimhaeswim.module.applycompetition.repository.ApplyCompetitionEventRepository;
 import com.alijas.gimhaeswim.module.common.enums.ApplyStatus;
@@ -22,26 +23,28 @@ public class ApplyCompetitionEventService {
     }
 
     @Transactional
-    public void individualSave(List<CompetitionEvent> individualCompetitionEvents, User user) {
+    public void individualSave(List<CompetitionEvent> individualCompetitionEvents, User user, ApplyCompetition applyCompetition) {
         individualCompetitionEvents.forEach(individualCompetitionEvent -> {
             applyCompetitionEventRepository.save(new ApplyCompetitionEvent(
                     null,
                     individualCompetitionEvent,
                     user,
                     null,
+                    applyCompetition,
                     ApplyStatus.WAITING
             ));
         });
     }
 
     @Transactional
-    public void organizationSave(List<CompetitionEvent> organizationCompetitionEvents, User user, Team team) {
+    public void organizationSave(List<CompetitionEvent> organizationCompetitionEvents, User user, Team team, ApplyCompetition applyCompetition) {
         organizationCompetitionEvents.forEach(organizationCompetitionEvent -> {
             applyCompetitionEventRepository.save(new ApplyCompetitionEvent(
                     null,
                     organizationCompetitionEvent,
-                    user,
+                    null,
                     team,
+                    applyCompetition,
                     ApplyStatus.WAITING
             ));
         });
@@ -51,7 +54,25 @@ public class ApplyCompetitionEventService {
         return applyCompetitionEventRepository.findByUserAndCompetitionEvent(user, competitionEvent);
     }
 
+    public Optional<ApplyCompetitionEvent> getApplyCompetitionByTeamAndCompetitionEvent(Team team, CompetitionEvent competitionEvent) {
+        return applyCompetitionEventRepository.findByTeamAndCompetitionEvent(team, competitionEvent);
+    }
+
     public List<ApplyCompetitionEvent> getApplyCompetitionByUser(User user) {
         return applyCompetitionEventRepository.findByUser(user);
+    }
+
+    public List<ApplyCompetitionEvent> getApplyCompetitionByUserOrTeam(User user, Team team) {
+        return applyCompetitionEventRepository.findByUserOrTeam(user, team);
+    }
+
+
+    public List<ApplyCompetitionEvent> getApplyCompetitionByTeam(Team team) {
+        return applyCompetitionEventRepository.findByTeam(team);
+    }
+
+    @Transactional
+    public void deleteApplyCompetitionEvent(ApplyCompetition applyCompetition) {
+        applyCompetitionEventRepository.deleteByApplyCompetition(applyCompetition);
     }
 }

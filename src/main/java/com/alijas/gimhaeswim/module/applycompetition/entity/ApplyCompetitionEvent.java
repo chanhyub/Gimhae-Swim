@@ -39,6 +39,10 @@ public class ApplyCompetitionEvent extends BaseTime {
     @ManyToOne
     private Team team;
 
+    @Comment("신청 대회 FK")
+    @ManyToOne
+    private ApplyCompetition applyCompetition;
+
     @Comment("승인 상태")
     @Enumerated(EnumType.STRING)
     private ApplyStatus applyStatus;
