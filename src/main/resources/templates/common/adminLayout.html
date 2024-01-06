@@ -1,0 +1,40 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="ConfigFragment">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>김해시수영연맹</title>
+    <link rel="stylesheet" href="/assets/css/normalize.css">
+    <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/assets/css/bootstrap-theme.css">
+    <link rel="stylesheet" href="/assets/css/slick.css">
+    <link rel="stylesheet" href="/assets/css/slick-theme.css">
+    <link rel="stylesheet" href="/assets/css/kors_style.css">
+    <script src="/assets/js/bootstrap.bundle.min.js"></script>
+    <script src="/assets/js/jquery.min.js"></script>
+    <script src="/assets/js/slick.min.js"></script>
+    <script src="/assets/js/kors_js.js"></script>
+</head>
+
+
+<header th:fragment="HeaderFragment">
+    <div>
+        <div class="admin_nav_banner">
+            <div>
+                <p class="f_s1">관리자</p>
+                <h1 class="f_s5 fw_pb">김해시수연영맹</h1>
+            </div>
+        </div>
+        <ul class="admin_nav_list">
+            <li><a href="/admin/users" class="active">경기인 관리</a></li>
+            <li><a href="/admin/users/apply">경기인 접수</a></li>
+            <li><a href="/admin/competitions">대회 관리</a></li>
+            <li><a href="/admin/competition/request">대회 신청관리</a></li>
+            <li><a href="/admin/notices">공지사항</a></li>
+            <li><a href="/admin/photos">포토갤러리</a></li>
+            <li><a href="/admin/histories">연혁</a></li>
+            <li><a href="/admin/referees">심판 관리</a></li>
+        </ul>
+    </div>
+</header>

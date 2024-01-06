@@ -4,6 +4,7 @@ import com.alijas.gimhaeswim.module.common.enums.ApplyStatus;
 import com.alijas.gimhaeswim.module.common.enums.RoleType;
 import com.alijas.gimhaeswim.module.common.jpa.BaseTime;
 import com.alijas.gimhaeswim.module.common.enums.Gender;
+import com.alijas.gimhaeswim.module.user.dto.UserAdminDTO;
 import com.alijas.gimhaeswim.module.user.dto.UserDTO;
 import com.alijas.gimhaeswim.module.user.enums.UserStatus;
 import com.alijas.gimhaeswim.module.user.request.UserUpdateRequest;
@@ -76,6 +77,18 @@ public class User extends BaseTime {
                 email,
                 gender.name(),
                 role.name()
+        );
+    }
+
+    public UserAdminDTO toUserAdminDTO() {
+        return new UserAdminDTO(
+                id,
+                username,
+                birthday,
+                phoneNumber,
+                email,
+                null,
+                gender.name()
         );
     }
 

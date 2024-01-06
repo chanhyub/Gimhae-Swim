@@ -39,16 +39,16 @@
 								<ul>
 									<li>
 										<div class="text_box">
-											<h4 class="list_title ft_s0 fw_pm" th:text="${photo.getPhotoTitle()}"></h4>
+											<h4 class="list_title ft_s0 fw_pm" th:text="${photo.title}"></h4>
 
 											<div class="text_list1">
 												<dl class="d-flex">
 													<dt class="f_c_active">등록일</dt>
-													<dd class="f_c_g1" th:text="${photo.getRegistrationDate()}"></dd>
+													<dd class="f_c_g1" th:text="${photo.createdDate}"></dd>
 												</dl>
 												<dl class="d-flex">
 													<dt class="f_c_active">작성자</dt>
-													<dd class="f_c_g1" th:text="${photo.getPhotoWriter()}"></dd>
+													<dd class="f_c_g1" th:text="${photo.writer}"></dd>
 												</dl>
 											</div>
 										</div>
@@ -59,8 +59,8 @@
 								<div>
 									<div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel" style="width: 50%; margin: auto; background-color: lightgray">
 										<div class="carousel-inner">
-											<div class="carousel-item" style="height: 500px" th:each="field, index : ${photoImageList}" th:classappend="${index.index == 0 ? 'active' : ''}">
-												<img th:src="${field.getPhotoUrl()}" height="500px" class="d-block" style="object-fit: fill; margin: auto">
+											<div class="carousel-item" style="height: 500px" th:each="field, index : ${photo.fileUrl}" th:classappend="${index.index == 0 ? 'active' : ''}">
+												<img th:src="${field}" height="500px" class="d-block" style="object-fit: fill; margin: auto">
 											</div>
 										</div>
 										<button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
@@ -77,7 +77,7 @@
 <!--											<img th:src="${field.getPhotoUrl()}" class="m_w-100" width="100%">-->
 <!--										</a>-->
 <!--									</div>-->
-									<pre th:text="${photo.getPhotoDetail()}">
+									<pre th:text="${photo.content}">
 
 									</pre>
 								</div>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+	<head th:replace="common/adminLayout::ConfigFragment"></head>
+
+	
+	<body class="admin_body">	
+		<div id="admin_ui" class="d-flex">
+			<header th:replace="common/adminLayout::HeaderFragment"></header>
+
+
+			<section class="kors_admin_content">
+				<div class="container-fluid mb_80">
+					<div class="row">
+						<div class="col">
+							<h2>대회 관리</h2>
+						</div>
+					</div>
+				</div>
+
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col">
+							<div class="d-flex justify-content-end mb_20">
+								<a href="/admin/competitions/save">
+									<button class="kors_btn1">대회등록</button>
+								</a>
+							</div>
+
+							<div class="table_box1">
+								<table class="w-100">
+									<thead>
+										<tr>
+											<th>년도</th>
+											<th>대회명</th>
+											<th>장소</th>
+											<th>대회기간</th>
+											<th>비고</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr th:each="field : ${competitionListDTOS}">
+											<td th:text="${field.competitionDate.substring(0, 4)}"></td>
+											<td th:text="${field.competitionName}"></td>
+											<td th:text="${field.competitionPlace}"></td>
+											<td th:text="${field.competitionApplyStartDate + ' ~ ' + field.competitionApplyEndDate}"></td>
+											<td>
+												<div>
+<!--													<a th:href="@{/excel/download(competitionSeq=${field.competitionSeq})}" class="kors_btn2 mr_10">엑셀다운</a>-->
+													<a th:href="@{/admin/competition/update(competitionSeq=${field.id})}" class="kors_btn2 mr_10">수정</a>
+<!--													<a th:href="@{/admin/competition/set/lane(competitionSeq=${field.id}, competitionEventSeq=${field.getCompetitionEventList[0].competitionEventSeq})}" class="kors_btn2 mr_10">레인관리</a>-->
+<!--													<a th:href="@{/admin/competition/set/rank(competitionSeq=${field.id}, competitionEventSeq=${field.getCompetitionEventList[0].competitionEventSeq})}" class="kors_btn2">순위관리</a>-->
+													<a href="#" th:onclick="|javascript:deleteUser(${field.id})|" class="kors_btn2 type2">삭제</a>
+												</div>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+								<div class="list_paeging">
+									<ul class="d-flex justify-content-center">
+										<a type="button" th:if ="${!competitionListDTOS.isFirst()}" th:href="@{/admin/competitions(page=0,size=${competitionListDTOS.getPageable().getPageSize()})}">
+											<button><<</button>
+										</a>
+
+										<a th:if ="${prev}" th:href="@{/admin/competitions(page=${((competitionListDTOS.getPageable().getPageNumber() / basePage) - 1) * basePage},size=${competitionListDTOS.getPageable().getPageSize()})}">
+											<button><</button>
+										</a>
+
+										<a th:each="pageNum : ${#numbers.sequence(startPage, endPage)}"  th:href="@{/admin/competitions(page=${pageNum}-1,size=${competitionListDTOS.getPageable().getPageSize()})}">
+											<button  th:class="${pageNum} == ${competitionListDTOS.getPageable().getPageNumber() + 1} ? 'active' : ''" th:text="${pageNum}"></button>
+										</a>
+
+										<a th:if ="${next}" th:href="@{/admin/competitions(page=${((competitionListDTOS.getPageable().getPageNumber() / basePage) + 1) * basePage},size=${competitionListDTOS.getPageable().getPageSize()})}">
+											<button>></button>
+										</a>
+
+										<a th:if ="${!competitionListDTOS.isLast()}" th:href="@{/admin/competitions(page=${competitionListDTOS.getTotalPages() -1},size=${competitionListDTOS.getPageable().getPageSize()})}">
+											<button>>></button>
+										</a>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+			<script type="text/javascript">
+				function deleteUser(competitionSeq) {
+					if (confirm("삭제 하시겠습니까?"))
+						$.ajax({
+							type: "POST",
+							url: "/admin/competition/delete/" + competitionSeq,
+							// async: false,
+							data: competitionSeq,
+							error : function(request,status,error) {
+								console.log("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+							},
+							success: function (data) {
+								alert("삭제 되었습니다.");
+								location.reload();
+							}
+						});
+				}
+
+			</script>
+		</div>
+	</body>
+</html>

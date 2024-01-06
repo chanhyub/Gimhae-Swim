@@ -29,6 +29,7 @@ public class File extends BaseTime {
     private String fileName;
 
     @Comment("파일 경로")
+    @Column(length = 500)
     private String fileUrl;
 
     @Comment("파일 사이즈")

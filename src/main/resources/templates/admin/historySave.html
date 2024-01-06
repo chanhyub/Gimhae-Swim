@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head th:replace="~{common/adminLayout::ConfigFragment}"></head>
+	
+	<body class="admin_body">	
+		<div id="admin_ui" class="d-flex">
+			<header th:replace="~{common/adminLayout::HeaderFragment}"></header>
+
+			<section class="kors_admin_content">
+				<div class="container-fluid mb_80">
+					<div class="row">
+						<div class="col">
+							<h2>연혁</h2>
+						</div>
+					</div>
+				</div>
+
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col">
+							<div class="con_add_form">
+								<form name="frm">
+									<ul>
+										<li class="w_size1">
+											<div><label class="f_s5 fw_pb">연도</label></div>
+											<input type="text" class="kors_input1 w-100" id="historyYear" name="historyYear">
+										</li>
+
+										<li class="w_size1">
+											<div><label class="f_s5 fw_pb">월</label></div>
+											<input type="text" class="kors_input1 w-100" id="historyMonth" name="historyMonth">
+										</li>
+
+										<li class="w_size1">
+											<div><label class="f_s5 fw_pb">내용</label></div>
+											<input type="text" class="kors_input1 w-100" id="content" name="content">
+										</li>
+										<li class="w_size1">
+											<button type="button" class="kors_btn1 w-100" th:onclick="|javascript:checkForm()|"> 연혁 등록하기</button>
+										</li>
+									</ul>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+			<script type="text/javascript">
+				function checkForm() {
+					var fileCheck = $('#img').val();
+					if (frm.historyYear.value === "") {
+						frm.historyYear.focus();
+						alert("연도를 입력해 주십시오.");
+						return false;
+
+					}else if (frm.historyMonth.value === "") {
+						frm.historyMonth.focus();
+						alert("월을 입력해 주십시오.");
+						return false;
+
+					}else if (frm.content.value == "") {
+						frm.content.focus();
+						alert("내용을 입력해 주십시오.");
+						return false;
+					}
+					save();
+				}
+
+
+				function save() {
+					$.ajax({
+						type: 'POST',
+						url: '/admin/histories/save',
+						contentType: 'application/json; charset=utf-8',
+						data: JSON.stringify({
+							historyYear: $('#historyYear').val(),
+							historyMonth: $('#historyMonth').val(),
+							content: $('#content').val()
+						}),
+						error: function (request, status, error) {
+							console.log("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+							alert(request.responseText);
+							return false;
+						},
+						success: function (data) {
+							alert(data);
+							location.href = '/admin/histories';
+						}
+					});
+				}
+			</script>
+		</div>
+	</body>
+</html>

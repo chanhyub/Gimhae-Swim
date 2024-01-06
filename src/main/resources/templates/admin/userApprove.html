@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ko">
+	<head th:replace="common/adminLayout::ConfigFragment"></head>
+	
+	<body class="admin_body">	
+		<div id="admin_ui" class="d-flex">
+			<header th:replace="common/adminLayout::HeaderFragment"></header>
+
+
+			<section class="kors_admin_content">
+				<div class="container-fluid mb_80">
+					<div class="row">
+						<div class="col">
+							<h2>경기인 접수</h2>
+						</div>
+					</div>
+				</div>
+
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col">
+							<div class="table_box1">
+								<table class="w-100">
+									<thead>
+									<tr>
+										<th>No</th>
+										<th>이름</th>
+										<th>생년월일</th>
+										<th>전화번호</th>
+										<th>이메일</th>
+										<th>소속팀</th>
+										<th>성별</th>
+										<th>비고</th>
+									</tr>
+									</thead>
+									<tbody>
+										<tr th:each="user, index : ${userPage}">
+											<td th:text="${index.count}"></td>
+											<td th:text="${user.username}"></td>
+											<td th:text="${user.birthday}"></td>
+											<td th:text="${user.phoneNumber}"></td>
+											<td th:text="${user.email}"></td>
+											<td th:text="${user.teamName}"></td>
+											<td th:text="${user.gender}"></td>
+											<td><div><a href="#" th:onclick="|javascript:accept(${user.id})|" class="kors_btn2 mr_10">승인</a> <a href="#" th:onclick="|javascript:deleteUser(${user.id})|" class="kors_btn2 type2">미승인</a></div></td>
+										</tr>
+									</tbody>
+									<tfoot class="f_s1"></tfoot>
+								</table>
+								<div class="list_paeging">
+
+									<ul class="d-flex justify-content-center">
+										<a type="button" th:if ="${!userPage.isFirst()}" th:href="@{/admin/users/apply(page=0,size=${userPage.getPageable().getPageSize()})}">
+											<button><<</button>
+										</a>
+
+										<a th:if ="${prev}" th:href="@{/admin/users/apply(page=${((userPage.getPageable().getPageNumber() / basePage) - 1) * basePage},size=${userPage.getPageable().getPageSize()})}">
+											<button><</button>
+										</a>
+
+										<a th:each="pageNum : ${#numbers.sequence(startPage, endPage)}"  th:href="@{/admin/users/apply(page=${pageNum}-1,size=${userPage.getPageable().getPageSize()})}">
+											<button  th:class="${pageNum} == ${userPage.getPageable().getPageNumber() + 1} ? 'active' : ''" th:text="${pageNum}"></button>
+										</a>
+
+										<a th:if ="${next}" th:href="@{/admin/users/apply(page=${((userPage.getPageable().getPageNumber() / basePage) + 1) * basePage},size=${userPage.getPageable().getPageSize()})}">
+											<button>></button>
+										</a>
+
+										<a th:if ="${!userPage.isLast()}" th:href="@{/admin/users/apply(page=${userPage.getTotalPages() -1},size=${userPage.getPageable().getPageSize()})}">
+											<button>>></button>
+										</a>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+			<script type="text/javascript">
+				function accept(userId) {
+					console.log(userId);
+					if (confirm("승인하시겠습니까?"))
+						$.ajax({
+							type: "PUT",
+							url: "/admin/users/accept",
+							// async: false,
+							data: JSON.stringify(userId),
+							contentType: "application/json; charset=utf-8",
+							error : function(request,status,error) {
+								console.log("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+								alert(request.responseText);
+							},
+							success: function (data) {
+								alert(data);
+								location.reload();
+							}
+						});
+				}
+
+				function deleteUser(userId) {
+					if (confirm("미승인 처리 하시겠습니까?"))
+						$.ajax({
+							type: "DELETE",
+							url: "/admin/users/delete",
+							// async: false,
+							data: JSON.stringify(userId),
+							contentType: "application/json; charset=utf-8",
+							error : function(request,status,error) {
+								console.log("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+								alert(request.responseText);
+								return false;
+							},
+							success: function (data) {
+								alert(data);
+								location.reload();
+							}
+						});
+				}
+
+			</script>
+		</div>
+	</body>
+</html>

@@ -15,9 +15,9 @@
 		<script src="/assets/js/jquery.min.js"></script>
 		<script src="/assets/js/slick.min.js"></script>
 		<script src="/assets/js/kors_js.js"></script>
-	</head>	
-	
-	<body>		
+	</head>
+
+	<body>
 		<section class="sub_content">
 
 			<div class="sub_content_box admin_login">
@@ -26,19 +26,19 @@
 						<div class="kors_user_form1">
 							<div class="col">
 								<p class="text-center mb_30 ft_s1 fw_pb f_c_w">관리자 로그인</p>
-								<form id="form">
+								<form id="form" th:action="@{/login}" th:method="POST">
 									<div>
 										<ul>
 											<li>
 												<label class="d-none">아이디</label>
-												<input type="text" required class="kors_input2 w-100" name="id" id="id" placeholder="아이디">
+												<input type="text" required class="kors_input2 w-100" name="username" id="username" placeholder="아이디">
 											</li>
 											<li>
 												<label class="d-none">비밀번호</label>
-												<input type="password" required class="kors_input2 w-100" name="pwd" id="pwd" placeholder="비밀번호">
+												<input type="password" required class="kors_input2 w-100" name="password" id="password" placeholder="비밀번호">
 											</li>
 											<li>
-												<button class="kors_btn3 w-100" type="button" id="submit">로그인</button>
+												<button class="kors_btn3 w-100" type="submit" id="submit">로그인</button>
 											</li>
 										</ul>
 									</div>
@@ -49,38 +49,39 @@
 
 				</div>
 
-				
+
 			</div>
 		</section>
 	</body>
 	<script>
 
-		$(function(){
-			$('#submit').on("click",function () {
-
-				var form1 = $("#form").serialize();
-
-				console.log(form1);
-				$.ajax({
-					type: "post",
-					url: "/admin/login",
-					data: form1,
-					success: function (data) {
-						console.log(data)
-						if(data == "success"){
-							location.href="/admin/user/list";
-						}else{
-							alert("아이디 또는 패스워드가 일치하지 않습니다.");
-							location.reload();
-						}
-					},
-					error: function (request, status, error) {
-						console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
-
-					}
-				});
-			});
-		});
+		// $(function(){
+		// 	$('#submit').on("click",function () {
+		//
+		// 		// var form1 = $("#form").serialize();
+		// 		var form1 = {
+		// 			username: $("#username").val(),
+		// 			password: $("#password").val()
+		// 		}
+		//
+		// 		// console.log(form1);
+		// 		$.ajax({
+		// 			type: "post",
+		// 			url: "/admin/login",
+		// 			data: JSON.stringify(form1),
+		// 			contentType: "application/json; charset=utf-8",
+		// 			success: function (data) {
+		// 				alert('로그인 성공');
+		// 				location.reload();
+		// 			},
+		// 			error: function (request, status, error) {
+		// 				console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+		// 				alert('로그인 실패');
+		// 				return false;
+		// 			}
+		// 		});
+		// 	});
+		// });
 
 	</script>
 </html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head th:replace="~{common/adminLayout::ConfigFragment}"></head>
+	
+	<body class="admin_body">	
+		<div id="admin_ui" class="d-flex">
+			<header th:replace="~{common/adminLayout::HeaderFragment}"></header>
+
+			<section class="kors_admin_content">
+				<div class="container-fluid mb_80">
+					<div class="row">
+						<div class="col">
+							<h2>연혁</h2>
+						</div>
+					</div>
+				</div>
+
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col">
+							<div class="d-flex justify-content-end mb_20">
+								<a href="/admin/histories/save">
+									<button class="kors_btn1">연혁 등록</button>
+								</a>
+							</div>
+
+							<div class="table_box1">
+								<table class="w-100">
+									<thead>
+										<tr>
+											<th>No</th>
+											<th>연도</th>
+											<th>월</th>
+											<th>내용</th>
+											<th>비고</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr th:each="field, index : ${historyPage}">
+											<td th:text="${index.count}"></td>
+											<td th:text="${field.historyYear}"></td>
+											<td th:text="${field.historyMonth}"></td>
+											<td th:text="${field.content}"></td>
+											<td>
+												<div>
+													<a th:href="@{/admin/histories/{id}/update(id=${field.id})}" class="kors_btn2 mr_10">수정</a>
+													<a th:onclick="|javascript:deleteHistory(${field.id})|" class="kors_btn2 type2">삭제</a>
+												</div>
+											</td>
+										</tr>
+
+									</tbody>
+								</table>
+								<div class="list_paeging">
+									<ul class="d-flex justify-content-center">
+										<a type="button" th:if ="${!historyPage.isFirst()}" th:href="@{/admin/histories(page=0,size=${historyPage.getPageable().getPageSize()})}">
+											<button><<</button>
+										</a>
+
+										<a th:if ="${prev}" th:href="@{/admin/histories(page=${((historyPage.getPageable().getPageNumber() / basePage) - 1) * basePage},size=${historyPage.getPageable().getPageSize()})}">
+											<button><</button>
+										</a>
+
+										<a th:each="pageNum : ${#numbers.sequence(startPage, endPage)}"  th:href="@{/admin/histories(page=${pageNum}-1,size=${historyPage.getPageable().getPageSize()})}">
+											<button  th:class="${pageNum} == ${historyPage.getPageable().getPageNumber() + 1} ? 'active' : ''" th:text="${pageNum}"></button>
+										</a>
+
+										<a th:if ="${next}" th:href="@{/admin/histories(page=${((historyPage.getPageable().getPageNumber() / basePage) + 1) * basePage},size=${historyPage.getPageable().getPageSize()})}">
+											<button>></button>
+										</a>
+
+										<a th:if ="${!historyPage.isLast()}" th:href="@{/admin/histories(page=${historyPage.getTotalPages() -1},size=${historyPage.getPageable().getPageSize()})}">
+											<button>>></button>
+										</a>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<script type="text/javascript">
+				function deleteHistory(historyId) {
+					if (confirm("삭제 하시겠습니까?"))
+						$.ajax({
+							type: "DELETE",
+							url: "/admin/histories/delete",
+							// async: false,
+							// contentType: "application/json; charset=utf-8",
+							data: {
+								historyId: historyId
+							},
+							error : function(request,status,error) {
+								console.log("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+							},
+							success: function (data) {
+								alert(data);
+								location.reload();
+							}
+						});
+				}
+			</script>
+		</div>
+	</body>
+</html>

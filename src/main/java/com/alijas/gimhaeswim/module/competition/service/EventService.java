@@ -19,4 +19,8 @@ public class EventService {
     public List<Event> getEventList() {
         return eventRepository.findAllByStatus(EventStatus.ACTIVE);
     }
+
+    public List<Event> findAll() {
+        return eventRepository.findAll();
+    }
 }

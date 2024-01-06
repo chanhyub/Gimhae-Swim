@@ -2,6 +2,7 @@ package com.alijas.gimhaeswim.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -44,14 +45,17 @@ public class SecurityConfig {
                 .cors(withDefaults()) // Bean 기본 이름이 corsConfigurationSource
                 .authorizeHttpRequests((authorize) ->
                         authorize
-                                .requestMatchers(new MvcRequestMatcher(introspector,"/admin/**")).hasRole("ADMIN")
+//                                .requestMatchers(new MvcRequestMatcher(introspector,"/admin")).permitAll()
+//                                .requestMatchers(new MvcRequestMatcher(introspector,"/admin/**")).hasAnyAuthority("ADMIN")
+//                                .requestMatchers(new MvcRequestMatcher(introspector,"/user/my-ag")).hasAnyAuthority("ADMIN")
                                 .anyRequest().permitAll()
 
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
-                        .failureUrl("/login")
+                        .failureUrl("/loginError")
                         .defaultSuccessUrl("/", true)
+//                        .failureForwardUrl("/loginError")
                         .permitAll()
                 )
                 .logout(logout -> logout

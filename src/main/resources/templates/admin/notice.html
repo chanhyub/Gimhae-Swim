@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head th:replace="~{common/adminLayout::ConfigFragment}"></head>
+	
+	<body class="admin_body">	
+		<div id="admin_ui" class="d-flex">
+			<header th:replace="~{common/adminLayout::HeaderFragment}"></header>
+
+			<section class="kors_admin_content">
+				<div class="container-fluid mb_80">
+					<div class="row">
+						<div class="col">
+							<h2>공지사항</h2>
+						</div>
+					</div>
+				</div>
+
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col">
+							<div class="d-flex justify-content-end mb_20">
+								<a href="/admin/notices/save">
+									<button class="kors_btn1">공지사항 등록</button>
+								</a>
+							</div>
+
+							<div class="table_box1">
+								<table class="w-100">
+									<thead>
+										<tr>
+											<th>No</th>
+											<th>제목</th>
+											<th>날짜</th>
+											<th>작성자</th>
+											<th>비고</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr th:each="field, index : ${noticePage}">
+											<td th:text="${index.count}"></td>
+											<td th:text="${field.title}"></td>
+											<td th:text="${field.createdDate}"></td>
+											<td th:text="${field.writer}"></td>
+											<td>
+												<div>
+													<a th:href="@{/admin/notices/{id}/update(id=${field.id})}" class="kors_btn2 mr_10">수정</a>
+													<a th:onclick="|javascript:deleteNotice(${field.id})|" class="kors_btn2 type2">삭제</a>
+												</div>
+											</td>
+										</tr>
+
+									</tbody>
+								</table>
+								<div class="list_paeging">
+									<ul class="d-flex justify-content-center">
+										<a type="button" th:if ="${!noticePage.isFirst()}" th:href="@{/admin/notices(page=0,size=${noticePage.getPageable().getPageSize()})}">
+											<button><<</button>
+										</a>
+
+										<a th:if ="${prev}" th:href="@{/admin/notices(page=${((noticePage.getPageable().getPageNumber() / basePage) - 1) * basePage},size=${noticePage.getPageable().getPageSize()})}">
+											<button><</button>
+										</a>
+
+										<a th:each="pageNum : ${#numbers.sequence(startPage, endPage)}"  th:href="@{/admin/notices(page=${pageNum}-1,size=${noticePage.getPageable().getPageSize()})}">
+											<button  th:class="${pageNum} == ${noticePage.getPageable().getPageNumber() + 1} ? 'active' : ''" th:text="${pageNum}"></button>
+										</a>
+
+										<a th:if ="${next}" th:href="@{/admin/notices(page=${((noticePage.getPageable().getPageNumber() / basePage) + 1) * basePage},size=${noticePage.getPageable().getPageSize()})}">
+											<button>></button>
+										</a>
+
+										<a th:if ="${!noticePage.isLast()}" th:href="@{/admin/notices(page=${noticePage.getTotalPages() -1},size=${noticePage.getPageable().getPageSize()})}">
+											<button>>></button>
+										</a>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+			<script type="text/javascript">
+				function deleteNotice(noticeId) {
+					if (confirm("삭제 하시겠습니까?"))
+						$.ajax({
+							type: "DELETE",
+							url: "/admin/notices/delete",
+							// async: false,
+							// contentType: "application/json; charset=utf-8",
+							data: {
+								noticeId: noticeId
+							},
+							error : function(request,status,error) {
+								console.log("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+							},
+							success: function (data) {
+								alert(data);
+								location.reload();
+							}
+						});
+				}
+			</script>
+		</div>
+	</body>
+</html>

@@ -1,44 +1,10 @@
 <!DOCTYPE html>
 <html lang="ko">
-	<head>
-		<meta charset="utf-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-		<title>김해시수연영맹</title>
-		<link rel="stylesheet" href="/assets/css/normalize.css">
-		<link rel="stylesheet" href="/assets/css/bootstrap.min.css">
-		<link rel="stylesheet" href="/assets/css/bootstrap-theme.css">
-		<link rel="stylesheet" href="/assets/css/slick.css">
-		<link rel="stylesheet" href="/assets/css/slick-theme.css">
-		<link rel="stylesheet" href="/assets/css/kors_style.css">
-		<script src="/assets/js/bootstrap.bundle.min.js"></script>
-		<script src="/assets/js/jquery.min.js"></script>
-		<script src="/assets/js/slick.min.js"></script>
-		<script src="/assets/js/kors_js.js"></script>
-	</head>	
+	<head th:replace="common/adminLayout::ConfigFragment"></head>
 	
 	<body class="admin_body">	
 		<div id="admin_ui" class="d-flex">
-			<header class="kors_admin_header">
-				<div>
-					<div class="admin_nav_banner">
-						<div>
-							<p class="f_s1">관리자</p>
-							<h1 class="f_s5 fw_pb">김해시수연영맹</h1>
-						</div>
-					</div>
-					<ul class="admin_nav_list">
-						<li><a href="/admin/user/list" class="active">경기인 관리</a></li>
-						<li><a href="/admin/user/list/register">경기인 접수</a></li>
-						<li><a href="/admin/competition/list">대회 관리</a></li>
-						<li><a href="/admin/competition/request">대회 신청관리</a></li>
-						<li><a href="/admin/notice">공지사항</a></li>
-						<li><a href="/admin/photo">포토갤러리</a></li>
-						<li><a href="/admin/history">연혁</a></li>
-						<li><a href="/admin/referee">심판 관리</a></li>
-					</ul>
-				</div>
-			</header>
+			<header th:replace="common/adminLayout::HeaderFragment"></header>
 
 			<section class="kors_admin_content">
 				<div class="container-fluid mb_80">
@@ -73,27 +39,45 @@
 										</tr>
 									</thead>
 									<tbody>
-										<tr th:each="field : ${userList}">
+										<tr th:each="user : ${userPage}">
 											<td>3</td>
-											<td th:text="${field.userName}"></td>
-											<td th:text="${field.birthday}"></td>
-											<td th:text="${field.phoneNumber}"></td>
-											<td th:text="${field.email}"></td>
-											<td th:text="${field.organization}"></td>
-											<td th:text="${field.sex}"></td>
-											<td><div><a href="#" th:onclick="|javascript:deleteUser('${field.userSeq}')|" class="kors_btn2 type2">삭제</a></div></td>
+											<td th:text="${user.username}"></td>
+											<td th:text="${user.birthday}"></td>
+											<td th:text="${user.phoneNumber}"></td>
+											<td th:text="${user.email}"></td>
+											<td th:text="${user.teamName}"></td>
+											<td th:text="${user.gender}"></td>
+											<td><div><a href="#" th:onclick="|javascript:deleteUser('${user.id}')|" class="kors_btn2 type2">삭제</a></div></td>
 										</tr>
 									</tbody>
-									<tfoot class="f_s1">
-										<tr>
-											<th colspan="8">
-												<span class="prev"></span>
-												<span>1</span>
-												<span class="next"></span>
-											</th>
-										</tr>
-									</tfoot>
 								</table>
+								<!--									<div class="row">-->
+								<!--										<div class="col">-->
+								<div class="list_paeging">
+									<ul class="d-flex justify-content-center">
+										<a type="button" th:if ="${!userPage.isFirst()}" th:href="@{/admin/users(page=0,size=${userPage.getPageable().getPageSize()})}">
+											<button><<</button>
+										</a>
+
+										<a th:if ="${prev}" th:href="@{/admin/users(page=${((userPage.getPageable().getPageNumber() / basePage) - 1) * basePage},size=${userPage.getPageable().getPageSize()})}">
+											<button><</button>
+										</a>
+
+										<a th:each="pageNum : ${#numbers.sequence(startPage, endPage)}"  th:href="@{/admin/users(page=${pageNum}-1,size=${userPage.getPageable().getPageSize()})}">
+											<button  th:class="${pageNum} == ${userPage.getPageable().getPageNumber() + 1} ? 'active' : ''" th:text="${pageNum}"></button>
+										</a>
+
+										<a th:if ="${next}" th:href="@{/admin/users(page=${((userPage.getPageable().getPageNumber() / basePage) + 1) * basePage},size=${userPage.getPageable().getPageSize()})}">
+											<button>></button>
+										</a>
+
+										<a th:if ="${!userPage.isLast()}" th:href="@{/admin/users(page=${userPage.getTotalPages() -1},size=${userPage.getPageable().getPageSize()})}">
+											<button>>></button>
+										</a>
+									</ul>
+								</div>
+								<!--										</div>-->
+								<!--									</div>-->
 							</div>
 						</div>
 					</div>

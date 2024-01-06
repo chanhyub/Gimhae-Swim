@@ -59,12 +59,12 @@
 							<p class="f_s2 f_c_g1 sub_paging">전체 <span class="f_c_active fw_b">1366건</span> | 페이지 <span class="fw_b">1/137</span></p>
 							<div class="kors_list_ui2">								
 								<ul class="center list_photo_box fw_pl">
-									<li th:each="field : ${photoList}">
-										<a th:href="@{/photo/detail(photoSeq=${field.photoSeq})}">
-											<div class="img_box" th:style="'background-image:url(' + ${field.photoImageList[0].getPhotoUrl()} + ');'"></div>
+									<li th:each="field : ${photoPage}">
+										<a th:href="@{/photos/{id}(id=${field.id})}">
+											<div class="img_box" th:style="'background-image:url(' + ${field.fileUrl} + ');'"></div>
 											<div class="text_box">
-												<p class="f_s5 text-over-h list_title fw_pb" th:text="${field.photoTitle}"></p>
-												<p class="f_c_g1 f_s1" th:text="${field.registrationDate}"></p>
+												<p class="f_s5 text-over-h list_title fw_pb" th:text="${field.title}"></p>
+												<p class="f_c_g1 f_s1" th:text="${field.createdDate}"></p>
 											</div>
 										</a>
 									</li>

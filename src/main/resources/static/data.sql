@@ -9,7 +9,7 @@ VALUES
     ('user6', '마린보이', 'password6', '1990-01-01', '01012345678', 'user6@example.com', 'M', true, 'ACTIVE', 'APPROVED', 'USER', '2023-11-20 00:00:00', '2023-11-20 00:00:00'),
     ('user7', '마린보이', 'password7', '1990-01-01', '01012345678', 'user7@example.com', 'M', true, 'ACTIVE', 'APPROVED', 'USER', '2023-11-20 00:00:00', '2023-11-20 00:00:00'),
     ('user8', '마린보이', 'password8', '1990-01-01', '01012345678', 'user8@example.com', 'M', true, 'ACTIVE', 'APPROVED', 'USER', '2023-11-20 00:00:00', '2023-11-20 00:00:00'),
-    ('user9', '마린보이', 'password9', '1990-01-01', '01012345678', 'user9@example.com', 'M', true, 'ACTIVE', 'APPROVED', 'USER', '2023-11-20 00:00:00', '2023-11-20 00:00:00')
+    ('waitUser', '마린보이', 'password9', '1990-01-01', '01012345678', 'user9@example.com', 'M', true, 'ACTIVE', 'WAITING', 'USER', '2023-11-20 00:00:00', '2023-11-20 00:00:00')
 ;
 
 INSERT INTO TEAMS (team_name, created_date, modified_date)
@@ -35,10 +35,9 @@ VALUES
     (1, 5, 'MEMBER', '2023-11-20 00:00:00', '2023-11-20 00:00:00'),
     (1, 6, 'MEMBER', '2023-11-20 00:00:00', '2023-11-20 00:00:00'),
     (1, 7, 'MEMBER', '2023-11-20 00:00:00', '2023-11-20 00:00:00'),
-    (1, 7, 'MEMBER', '2023-11-20 00:00:00', '2023-11-20 00:00:00'),
-    (1, 7, 'MEMBER', '2023-11-20 00:00:00', '2023-11-20 00:00:00'),
-    (1, 7, 'MEMBER', '2023-11-20 00:00:00', '2023-11-20 00:00:00'),
-    (1, 7, 'MEMBER', '2023-11-20 00:00:00', '2023-11-20 00:00:00')
+    (1, 8, 'MEMBER', '2023-11-20 00:00:00', '2023-11-20 00:00:00'),
+    (1, 9, 'MEMBER', '2023-11-20 00:00:00', '2023-11-20 00:00:00')
+--     (1, 10, 'MEMBER', '2023-11-20 00:00:00', '2023-11-20 00:00:00')
 ;
 
 INSERT INTO DEPARTMENTS (department_age, department_gender, more_or_less, status, department_info, created_date, modified_date) VALUES
@@ -284,10 +283,24 @@ VALUES
 
 INSERT INTO FILE_INFO(file_type)
 VALUES
-    ('NOTICE'),
-    ('PHOTO')
+    ('PHOTO_GALLERY'),
+    ('PHOTO_GALLERY'),
+    ('PHOTO_GALLERY'),
+    ('PHOTO_GALLERY')
 ;
 
+INSERT INTO FILES(file_info_id, file_name, file_url, file_size, extension, status)
+VALUES
+    (1, 'test1', 'https://vvuti.s3.ap-northeast-2.amazonaws.com/gimhae/2023%EB%85%84+%EC%A0%9C11%ED%9A%8C+%EC%A0%84%EA%B5%AD%EB%A7%88%EC%8A%A4%ED%84%B0%EC%A6%88+%EC%88%98%EC%98%81%EB%8C%80%ED%9A%8C+%EC%82%AC%EC%A7%841/d12d76b6-c883-4768-ae47-da859ccf8400.jpg', 100, 'jpg', 'ACTIVE'),
+    (1, 'test2', 'https://vvuti.s3.ap-northeast-2.amazonaws.com/gimhae/2023%EB%85%84+%EC%A0%9C11%ED%9A%8C+%EC%A0%84%EA%B5%AD%EB%A7%88%EC%8A%A4%ED%84%B0%EC%A6%88+%EC%88%98%EC%98%81%EB%8C%80%ED%9A%8C+%EC%82%AC%EC%A7%841/d46a85b0-4960-4ec4-95d6-406d3b9c6886.jpg', 100, 'jpg', 'ACTIVE'),
+    (1, 'test3', 'https://vvuti.s3.ap-northeast-2.amazonaws.com/gimhae/2023%EB%85%84+%EC%A0%9C11%ED%9A%8C+%EC%A0%84%EA%B5%AD%EB%A7%88%EC%8A%A4%ED%84%B0%EC%A6%88+%EC%88%98%EC%98%81%EB%8C%80%ED%9A%8C+%EC%82%AC%EC%A7%841/df76080e-de13-4fd5-a2ab-2b1fafc0744c.jpg', 100, 'jpg', 'ACTIVE'),
+    (1, 'test4', 'https://vvuti.s3.ap-northeast-2.amazonaws.com/gimhae/2023%EB%85%84+%EC%A0%9C11%ED%9A%8C+%EC%A0%84%EA%B5%AD%EB%A7%88%EC%8A%A4%ED%84%B0%EC%A6%88+%EC%88%98%EC%98%81%EB%8C%80%ED%9A%8C+%EC%82%AC%EC%A7%841/eb6f1a1e-dca7-4766-a6d6-0502366667df.jpg', 100, 'jpg', 'ACTIVE')
+;
+
+INSERT INTO PHOTOS(title, content, file_info_id, user_id, created_date, modified_date)
+VALUES
+    ('PHOTO_GALLERY_TITLE', 'PHOTO_GALLERY_CONTENT', 1, 1, '2023-11-20 00:00:00', '2023-11-20 00:00:00')
+;
 
 INSERT INTO NOTICES (title, content, user_id, status, file_info_id, created_date, modified_date)
 VALUES

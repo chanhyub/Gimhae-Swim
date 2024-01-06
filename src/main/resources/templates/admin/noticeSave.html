@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head th:replace="~{common/adminLayout::ConfigFragment}"></head>
+	
+	<body class="admin_body">	
+		<div id="admin_ui" class="d-flex">
+			<header th:replace="~{common/adminLayout::HeaderFragment}"></header>
+
+			<section class="kors_admin_content">
+				<div class="container-fluid mb_80">
+					<div class="row">
+						<div class="col">
+							<h2>대회 등록</h2>
+						</div>
+					</div>
+				</div>
+
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col">
+							<div class="con_add_form">
+								<form name="frm">
+									<ul>
+										<li class="w_size1">
+											<div><label class="f_s5 fw_pb">제목</label></div>
+											<input id="title" type="text" name="title" class="kors_input1 w-100">
+										</li>
+
+										<li class="w_size1">
+											<div><label class="f_s5 fw_pb">내용</label></div>
+											<textarea id="content" name="content" class="w-100"></textarea>
+										</li>
+										<li class="w_size1">
+											<button type="button" th:onclick="checkForm()" class="kors_btn1 w-100"> 공지사항 등록하기</button>
+										</li>
+									</ul>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+			<script>
+				function checkForm() {
+
+					if (frm.title.value === "") {
+						frm.title.focus();
+						alert("제목을 입력해 주십시오.");
+						return false;
+					} else if (frm.content.value === "") {
+						frm.content.focus();
+						alert("내용을 입력해 주십시오.");
+						return false;
+					}
+					save();
+				}
+
+				function save() {
+					$.ajax({
+						type: 'POST',
+						url: '/admin/notices/save',
+						contentType: 'application/json; charset=utf-8',
+						data: JSON.stringify({
+							title: $('#title').val(),
+							content: $('#content').val()
+						}),
+						error: function (request, status, error) {
+							console.log("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+							alert(request.responseText);
+							return false;
+						},
+						success: function (data) {
+							alert(data);
+							location.href = '/admin/notices';
+						}
+					});
+				}
+
+			</script>
+		</div>
+	</body>
+</html>
