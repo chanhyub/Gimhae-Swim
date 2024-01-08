@@ -4,6 +4,12 @@ import com.alijas.gimhaeswim.config.security.CustomUserDetails;
 import com.alijas.gimhaeswim.exception.CustomException;
 import com.alijas.gimhaeswim.module.competition.dto.CompetitionListDTO;
 import com.alijas.gimhaeswim.module.competition.service.CompetitionService;
+import com.alijas.gimhaeswim.module.notice.dto.NoticeListDTO;
+import com.alijas.gimhaeswim.module.notice.service.NoticeService;
+import com.alijas.gimhaeswim.module.organization.entity.Organization;
+import com.alijas.gimhaeswim.module.organization.service.OrganizationService;
+import com.alijas.gimhaeswim.module.photo.dto.PhotoListDTO;
+import com.alijas.gimhaeswim.module.photo.service.PhotoService;
 import com.alijas.gimhaeswim.module.team.entity.TeamMember;
 import com.alijas.gimhaeswim.module.team.service.TeamMemberService;
 import com.alijas.gimhaeswim.module.team.service.TeamService;
@@ -21,6 +27,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -35,11 +42,20 @@ public class ViewController {
 
     private final TeamService teamService;
 
-    public ViewController(CompetitionService competitionService, UserService userService, TeamMemberService teamMemberService, TeamService teamService) {
+    private final NoticeService noticeService;
+
+    private final PhotoService photoService;
+
+    private final OrganizationService organizationService;
+
+    public ViewController(CompetitionService competitionService, UserService userService, TeamMemberService teamMemberService, TeamService teamService, NoticeService noticeService, PhotoService photoService, OrganizationService organizationService) {
         this.competitionService = competitionService;
         this.userService = userService;
         this.teamMemberService = teamMemberService;
         this.teamService = teamService;
+        this.noticeService = noticeService;
+        this.photoService = photoService;
+        this.organizationService = organizationService;
     }
 
     @GetMapping({"/", ""})
@@ -69,6 +85,13 @@ public class ViewController {
                 }
             }
         }
+
+        Page<NoticeListDTO> noticeListDTOPage = noticeService.findAll(pageable);
+        Page<PhotoListDTO> photoListDTOPage = photoService.findAll(pageable);
+
+        model.addAttribute("noticePage", noticeListDTOPage);
+        model.addAttribute("photoPage", photoListDTOPage);
+
         return "index";
     }
 
@@ -92,5 +115,15 @@ public class ViewController {
             throw new CustomException("이미 경기인으로 등록이 되어있습니다.", HttpStatus.BAD_REQUEST);
         }
         return "join";
+    }
+
+    @GetMapping("/groups")
+    public String groups(
+            Model model
+    ) {
+        List<Organization> organizationList = organizationService.findAll();
+
+        model.addAttribute("organizationList", organizationList);
+        return "group";
     }
 }

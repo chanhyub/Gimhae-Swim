@@ -51,8 +51,10 @@ public class Notice extends BaseTime {
         return new NoticeListDTO(
                 id,
                 title,
+                content,
                 createdDate.substring(0, 4),
-                createdDate.substring(5)
+                createdDate.substring(5),
+                createdDate
         );
     }
 
