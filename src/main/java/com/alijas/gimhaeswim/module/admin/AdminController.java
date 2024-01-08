@@ -52,9 +52,9 @@ public class AdminController {
             @RequestBody String userId
     ) {
 
-//        if (customUserDetails == null) {
-//            throw new CustomRestException("로그인이 필요합니다.", HttpStatus.BAD_REQUEST);
-//        }
+        if (customUserDetails == null) {
+            throw new CustomRestException("로그인이 필요합니다.", HttpStatus.BAD_REQUEST);
+        }
 
         Optional<User> optionalUser = userService.getUser(Long.parseLong(userId));
         if (optionalUser.isEmpty()) {
@@ -72,9 +72,9 @@ public class AdminController {
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
             @RequestBody String userId
     ) {
-//        if (customUserDetails == null) {
-//            throw new CustomRestException("로그인이 필요합니다.", HttpStatus.BAD_REQUEST);
-//        }
+        if (customUserDetails == null) {
+            throw new CustomRestException("로그인이 필요합니다.", HttpStatus.BAD_REQUEST);
+        }
 
         Optional<User> optionalUser = userService.getUser(Long.parseLong(userId));
         if (optionalUser.isEmpty()) {

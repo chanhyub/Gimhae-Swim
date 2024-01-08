@@ -72,9 +72,9 @@ public class AdminViewController {
             @PageableDefault(sort = "id" ,direction = Sort.Direction.DESC, size = 15) Pageable pageable,
             Model model
     ) {
-//        if (customUserDetails == null) {
-//            return "redirect:/login";
-//        }
+        if (customUserDetails == null) {
+            return "redirect:/login";
+        }
 
         Page<UserAdminDTO> userPage = userService.getUserList(pageable, ApplyStatus.APPROVED, UserStatus.ACTIVE);
         PageUtil.set(pageable, model, userPage.getTotalPages());
@@ -89,9 +89,9 @@ public class AdminViewController {
             @PageableDefault(sort = "id" ,direction = Sort.Direction.DESC, size = 15) Pageable pageable,
             Model model
     ) {
-//        if (customUserDetails == null) {
-//            return "redirect:/login";
-//        }
+        if (customUserDetails == null) {
+            return "redirect:/login";
+        }
 
         Page<UserAdminDTO> userPage = userService.getUserList(pageable, ApplyStatus.WAITING, UserStatus.ACTIVE);
         PageUtil.set(pageable, model, userPage.getTotalPages());
@@ -106,9 +106,9 @@ public class AdminViewController {
             @PageableDefault(sort = "id" ,direction = Sort.Direction.DESC, size = 15) Pageable pageable,
             Model model
     ) {
-//        if (customUserDetails == null) {
-//            return "redirect:/login";
-//        }
+        if (customUserDetails == null) {
+            return "redirect:/login";
+        }
 
         Page<CompetitionListDTO> competitionListDTOS = competitionService.findAll(pageable);
         PageUtil.set(pageable, model, competitionListDTOS.getTotalPages());
@@ -122,9 +122,9 @@ public class AdminViewController {
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
             Model model
     ) {
-//        if (customUserDetails == null) {
-//            return "redirect:/login";
-//        }
+        if (customUserDetails == null) {
+            return "redirect:/login";
+        }
 
         List<Department> departmentList = departmentService.findAll();
         List<Event> eventList = eventService.findAll();
@@ -150,9 +150,9 @@ public class AdminViewController {
             Model model,
             @PageableDefault(sort = "id" ,direction = Sort.Direction.DESC, size = 15) Pageable pageable
     ) {
-//        if (customUserDetails == null) {
-//            return "redirect:/login";
-//        }
+        if (customUserDetails == null) {
+            return "redirect:/login";
+        }
 
         Page<NoticeDTO> noticePage = noticeService.findAllAdmin(pageable);
         PageUtil.set(pageable, model, noticePage.getTotalPages());
@@ -166,9 +166,9 @@ public class AdminViewController {
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
             Model model
     ) {
-//        if (customUserDetails == null) {
-//            return "redirect:/login";
-//        }
+        if (customUserDetails == null) {
+            return "redirect:/login";
+        }
 
         return "admin/noticeSave";
     }
@@ -178,9 +178,9 @@ public class AdminViewController {
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
             Model model,
             @PathVariable Long id) {
-//        if (customUserDetails == null) {
-//            return "redirect:/login";
-//        }
+        if (customUserDetails == null) {
+            return "redirect:/login";
+        }
 
         Optional<Notice> optionalNotice = noticeService.getNotice(id);
         if (optionalNotice.isEmpty()) {
@@ -198,9 +198,9 @@ public class AdminViewController {
             Model model,
             @PageableDefault(sort = "id" ,direction = Sort.Direction.DESC, size = 15) Pageable pageable
     ) {
-//        if (customUserDetails == null) {
-//            return "redirect:/login";
-//        }
+        if (customUserDetails == null) {
+            return "redirect:/login";
+        }
 
         Page<History> historyList = historyService.getHistoryList(pageable);
         PageUtil.set(pageable, model, historyList.getTotalPages());
@@ -214,9 +214,9 @@ public class AdminViewController {
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
             Model model
     ) {
-//        if (customUserDetails == null) {
-//            return "redirect:/login";
-//        }
+        if (customUserDetails == null) {
+            return "redirect:/login";
+        }
 
         return "admin/historySave";
     }
@@ -227,9 +227,9 @@ public class AdminViewController {
             Model model,
             @PathVariable Long id
     ) {
-//        if (customUserDetails == null) {
-//            return "redirect:/login";
-//        }
+        if (customUserDetails == null) {
+            return "redirect:/login";
+        }
 
         Optional<History> optionalHistory = historyService.getHistory(id);
         if (optionalHistory.isEmpty()) {

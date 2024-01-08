@@ -335,3 +335,9 @@ VALUES
     ('제목1', '내용1', 1, 'ACTIVE', 1, '2023-11-20 00:00:00', '2023-11-20 00:00:00'),
     ('제목1', '내용1', 1, 'ACTIVE', 1, '2023-11-20 00:00:00', '2023-11-20 00:00:00')
 ;
+
+INSERT INTO ORGANIZATIONS(organization_index, position, name, job, note, status)
+VALUES
+    (1, '회장', '최성일', '( 주 ) 우림환경', '대표 이사', 'ACTIVE'),
+    (2, '부회장', '김용태', '리드팩', '대표', 'ACTIVE')
+;
