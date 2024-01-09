@@ -46,61 +46,61 @@
 
 			var add_html = `<tr data="`+tr_num+`">
 								<td>
-									<select id="competitionEventList`+(tr_num-1)+`.eventType" name="competitionEventList[`+(tr_num-1)+`].eventType" class="search_select">
-										<option value="'ORGANIZATION_MALE'">남자(단체)</option>
-										<option value="'ORGANIZATION_FEMALE'">여자(단체)</option>
-										<option value="'ORGANIZATION_MIXED'">혼성(단체)</option>
-										<option value="'INDIVIDUAL_MALE'">남자(개인)</option>
-										<option value="'INDIVIDUAL_FEMALE'">여자(개인)</option>
+									<select id="competitionEventListEventType" name="competitionEventListEventType" class="search_select">
+										<option value="ORGANIZATION_MALE">남자(단체)</option>
+										<option value="ORGANIZATION_FEMALE">여자(단체)</option>
+										<option value="ORGANIZATION_MIXED">혼성(단체)</option>
+										<option value="INDIVIDUAL_MALE">남자(개인)</option>
+										<option value="INDIVIDUAL_FEMALE">여자(개인)</option>
 									</select>
 								</td>
 								<td>
 <!--									<input type="text" id="competitionEventList`+(tr_num-1)+`.division" name="competitionEventList[`+(tr_num-1)+`].division" placeholder="부별" class="kors_input1">-->
-									<select id="competitionEventList`+(tr_num-1)+`.department" name="competitionEventList[`+(tr_num-1)+`].department" class="search_select">
+									<select id="competitionEventListDepartment" name="competitionEventListDepartment" class="search_select">
 										<option value="">선택하세요</option>
 										`+departmentHtml+`
 									</select>
 								</td>
 								<td>
 <!--									<input type="text" id="competitionEventList`+(tr_num-1)+`.eventName" name="competitionEventList[`+(tr_num-1)+`].eventName" placeholder="종목" class="kors_input1">-->
-									<select type="text" id="competitionEventList`+(tr_num-1)+`.eventName" name="competitionEventList[`+(tr_num-1)+`].eventName" class="search_select">
+									<select type="text" id="competitionEventListEventName" name="competitionEventListEventName" class="search_select">
 										<option value="">선택하세요</option>
 										`+eventHtml+`
 									</select>
 								</td>
 								<td>
 <!--									<input type="text" id="competitionEventList`+(tr_num-1)+`.meter" name="competitionEventList[`+(tr_num-1)+`].meter" placeholder="미터" class="kors_input1">-->
-									<select type="text" id="competitionEventList`+(tr_num-1)+`.meter" name="competitionEventList[`+(tr_num-1)+`].meter" class="search_select">
+									<select type="text" id="competitionEventListMeter" name="competitionEventListMeter" class="search_select">
 										<option value="">선택하세요</option>
 										`+meterHtml+`
 									</select>
 								</td>
 								<td>
-									<input type="number" id="competitionEventList`+(tr_num-1)+`.eventCapacity" name="competitionEventList[`+(tr_num-1)+`].eventCapacity" class="kors_input1">명
+									<input type="number" id="competitionEventListEventCapacity" name="competitionEventListEventCapacity" class="kors_input1">명
 								</td>
 								<td>
-									<input type="number" id="competitionEventList`+(tr_num-1)+`.firstPoint" name="competitionEventList[`+(tr_num-1)+`].firstPoint" style="width: 80px" class="kors_input1">점
+									<input type="number" id="competitionEventListFirstPoint" name="competitionEventListFirstScore" style="width: 80px" class="kors_input1">점
 								</td>
 								<td>
-									<input type="number" id="competitionEventList`+(tr_num-1)+`.secondPoint" name="competitionEventList[`+(tr_num-1)+`].secondPoint" style="width: 80px" class="kors_input1">점
+									<input type="number" id="competitionEventListSecondPoint" name="competitionEventListSecondScore" style="width: 80px" class="kors_input1">점
 								</td>
 								<td>
-									<input type="number" id="competitionEventList`+(tr_num-1)+`.thirdPoint" name="competitionEventList[`+(tr_num-1)+`].thirdPoint" style="width: 80px" class="kors_input1">점
+									<input type="number" id="competitionEventListThirdPoint" name="competitionEventListThirdScore" style="width: 80px" class="kors_input1">점
 								</td>
 								<td>
-									<input type="number" id="competitionEventList`+(tr_num-1)+`.forthPoint" name="competitionEventList[`+(tr_num-1)+`].forthPoint" style="width: 80px" class="kors_input1">점
+									<input type="number" id="competitionEventListForthPoint" name="competitionEventListFourthScore" style="width: 80px" class="kors_input1">점
 								</td>
 								<td>
-									<input type="number" id="competitionEventList`+(tr_num-1)+`.fifthPoint" name="competitionEventList[`+(tr_num-1)+`].fifthPoint" style="width: 80px" class="kors_input1">점
+									<input type="number" id="competitionEventListFifthPoint" name="competitionEventListFifthScore" style="width: 80px" class="kors_input1">점
 								</td>
 								<td>
-									<input type="number" id="competitionEventList`+(tr_num-1)+`.sixthPoint" name="competitionEventList[`+(tr_num-1)+`].sixthPoint" style="width: 80px" class="kors_input1">점
+									<input type="number" id="competitionEventListSixthPoint" name="competitionEventListSixthScore" style="width: 80px" class="kors_input1">점
 								</td>
 								<td>
-									<input type="number" id="competitionEventList`+(tr_num-1)+`.seventhPoint" name="competitionEventList[`+(tr_num-1)+`].seventhPoint" style="width: 80px" class="kors_input1">점
+									<input type="number" id="competitionEventListSeventhPoint" name="competitionEventListSeventhScore" style="width: 80px" class="kors_input1">점
 								</td>
 								<td>
-									<input type="number" id="competitionEventList`+(tr_num-1)+`.eighthPoint" name="competitionEventList[`+(tr_num-1)+`].eighthPoint" style="width: 80px" class="kors_input1">점
+									<input type="number" id="competitionEventListEighthPoint" name="competitionEventListEighthScore" style="width: 80px" class="kors_input1">점
 								</td>
 								<td>
 									<button type="button" class="delete_btn" onsubmit="return false" onclick="event_tbody_del(`+tr_num+`)"><img src="/assets/img/xclose.svg"></button>
@@ -157,7 +157,7 @@
 										<li>
 											<div><label class="f_s5 fw_pb">종목</label></div>
 											<div class="table_box1 mb_10">
-												<table>
+												<table id="competitionEventTable">
 													<thead>
 														<tr>
 															<th>유형</th>
@@ -179,61 +179,61 @@
 													<tbody id="event_tbody" data="1">
 														<tr data="1">
 															<td>
-																<select name="competitionEventList[0].eventType" class="search_select">
-																	<option th:value="'ORGANIZATION_MALE'">남자(단체)</option>
-																	<option th:value="'ORGANIZATION_FEMALE'">여자(단체)</option>
-																	<option th:value="'ORGANIZATION_MIXED'">혼성(단체)</option>
-																	<option th:value="'INDIVIDUAL_MALE'">남자(개인)</option>
-																	<option th:value="'INDIVIDUAL_FEMALE'">여자(개인)</option>
+																<select name="competitionEventListEventType" class="search_select">
+																	<option value="ORGANIZATION_MALE">남자(단체)</option>
+																	<option value="ORGANIZATION_FEMALE">여자(단체)</option>
+																	<option value="ORGANIZATION_MIXED">혼성(단체)</option>
+																	<option value="INDIVIDUAL_MALE">남자(개인)</option>
+																	<option value="INDIVIDUAL_FEMALE">여자(개인)</option>
 																</select>
 															</td>
 															<td>
 <!--																<input name="competitionEventList[0].department" type="text" placeholder="부별" class="kors_input1">-->
-																<select name="competitionEventList[0].department" class="search_select">
+																<select name="competitionEventListDepartment" class="search_select">
 																	<option value="">선택하세요</option>
 																	<option th:value="${department.id}" th:each="department : ${departmentList}" th:text="${department.getDepartmentName()}"></option>
 																</select>
 															</td>
 															<td>
 <!--																<input name="competitionEventList[0].event" type="text" placeholder="종목" class="kors_input1">-->
-																<select name="competitionEventList[0].event" class="search_select">
+																<select name="competitionEventListEventName" class="search_select">
 																	<option value="">선택하세요</option>
 																	<option th:value="${event.id}" th:each="event : ${eventList}" th:text="${event.eventName}"></option>
 																</select>
 															</td>
 															<td>
 <!--																<input name="competitionEvent[0].meter" type="text" placeholder="미터" class="kors_input1">-->
-																<select name="competitionEventList[0].meter" class="search_select">
+																<select name="competitionEventListMeter" class="search_select">
 																	<option value="">선택하세요</option>
 																	<option th:value="${meter.id}" th:each="meter : ${meterList}" th:text="${meter.meter}"></option>
 																</select>
 															</td>
 															<td>
-																<input name="competitionEventList[0].eventCapacity" type="number"  placeholder="정원" class="kors_input1">명
+																<input name="competitionEventListEventCapacity" type="number"  placeholder="정원" class="kors_input1">명
 															</td>
 															<td>
-																<input name="competitionEventList[0].firstScore" type="number" style="width: 80px" class="kors_input1">점
+																<input name="competitionEventListFirstScore" type="number" style="width: 80px" class="kors_input1">점
 															</td>
 															<td>
-																<input name="competitionEventList[0].secondScore" type="number" style="width: 80px" class="kors_input1">점
+																<input name="competitionEventListSecondScore" type="number" style="width: 80px" class="kors_input1">점
 															</td>
 															<td>
-																<input name="competitionEventList[0].thirdScore" type="number" style="width: 80px" class="kors_input1">점
+																<input name="competitionEventListThirdScore" type="number" style="width: 80px" class="kors_input1">점
 															</td>
 															<td>
-																<input name="competitionEventList[0].fourthScore" type="number" style="width: 80px" class="kors_input1">점
+																<input name="competitionEventListFourthScore" type="number" style="width: 80px" class="kors_input1">점
 															</td>
 															<td>
-																<input name="competitionEventList[0].fifthScore" type="number" style="width: 80px" class="kors_input1">점
+																<input name="competitionEventListFifthScore" type="number" style="width: 80px" class="kors_input1">점
 															</td>
 															<td>
-																<input name="competitionEventList[0].sixthScore" type="number" style="width: 80px" class="kors_input1">점
+																<input name="competitionEventListSixthScore" type="number" style="width: 80px" class="kors_input1">점
 															</td>
 															<td>
-																<input name="competitionEventList[0].seventhScore" type="number" style="width: 80px" class="kors_input1">점
+																<input name="competitionEventListSeventhScore" type="number" style="width: 80px" class="kors_input1">점
 															</td>
 															<td>
-																<input name="competitionEventList[0].eighthScore" type="number" style="width: 80px" class="kors_input1">점
+																<input name="competitionEventListEighthScore" type="number" style="width: 80px" class="kors_input1">점
 															</td>
 															<td>
 																<button class="delete_btn" type="button" onclick="event_tbody_del(1)"><img src="/assets/img/xclose.svg"></button>
@@ -291,22 +291,79 @@
 				function save(data) {
 					var frm = document.getElementById("frm");
 					var formData = new FormData(frm);
+					var rows = document.getElementById('competitionEventTable').rows.length - 1;
 
 					console.log(data);
-
-
-
-
 					var serializedData = {};
 
-					// FormData를 객체로 변환
-					formData.forEach(function(value, key) {
-						serializedData[key] = value;
-					});
+					serializedData["competitionEventList"] = [];
+
+					for (let i = 0; i < rows; i++) {
+						var competitionEventList = {};
+						// competitionEventList.eventType = document.getElementsByName("competitionEventList" + i + "eventType")[0].value;
+						// competitionEventList.department = document.getElementsByName("competitionEventList" + i + "department")[0].value;
+						// competitionEventList.eventName = document.getElementsByName("competitionEventList" + i + "eventName")[0].value;
+						// competitionEventList.meter = document.getElementsByName("competitionEventList" + i + "meter")[0].value;
+						// competitionEventList.eventCapacity = document.getElementsByName("competitionEventList" + i + "eventCapacity")[0].value;
+						// competitionEventList.firstScore = document.getElementsByName("competitionEventList" + i + "firstScore")[0].value;
+						// competitionEventList.secondScore = document.getElementsByName("competitionEventList" + i + "secondScore")[0].value;
+						// competitionEventList.thirdScore = document.getElementsByName("competitionEventList" + i + "thirdScore")[0].value;
+						// competitionEventList.fourthScore = document.getElementsByName("competitionEventList" + i + "fourthScore")[0].value;
+						// competitionEventList.fifthScore = document.getElementsByName("competitionEventList" + i + "fifthScore")[0].value;
+						// competitionEventList.sixthScore = document.getElementsByName("competitionEventList" + i + "sixthScore")[0].value;
+						// competitionEventList.seventhScore = document.getElementsByName("competitionEventList" + i + "seventhScore")[0].value;
+						// competitionEventList.eighthScore = document.getElementsByName("competitionEventList" + i + "eighthScore")[0].value;
+
+						competitionEventList.eventType = document.getElementsByName("competitionEventListEventType")[i].value;
+						competitionEventList.department = document.getElementsByName("competitionEventListDepartment")[i].value;
+						competitionEventList.eventName = document.getElementsByName("competitionEventListEventName")[i].value;
+						competitionEventList.meter = document.getElementsByName("competitionEventListMeter")[i].value;
+						competitionEventList.eventCapacity = document.getElementsByName("competitionEventListEventCapacity")[i].value;
+						competitionEventList.firstScore = document.getElementsByName("competitionEventListFirstScore")[i].value;
+						competitionEventList.secondScore = document.getElementsByName("competitionEventListSecondScore")[i].value;
+						competitionEventList.thirdScore = document.getElementsByName("competitionEventListThirdScore")[i].value;
+						competitionEventList.fourthScore = document.getElementsByName("competitionEventListFourthScore")[i].value;
+						competitionEventList.fifthScore = document.getElementsByName("competitionEventListFifthScore")[i].value;
+						competitionEventList.sixthScore = document.getElementsByName("competitionEventListSixthScore")[i].value;
+						competitionEventList.seventhScore = document.getElementsByName("competitionEventListSeventhScore")[i].value;
+						competitionEventList.eighthScore = document.getElementsByName("competitionEventListEighthScore")[i].value;
+
+						serializedData["competitionEventList"].push(competitionEventList);
+					}
 
 					// console.log(serializedData);
-					alert("경기 등록이 완료되었습니다.");
-					return false;
+
+					serializedData["competitionName"] = formData.get("competitionName");
+					serializedData["competitionDate"] = formData.get("competitionDate");
+					serializedData["competitionPlace"] = formData.get("competitionPlace");
+					serializedData["competitionApplyStartDate"] = formData.get("competitionApplyStartDate");
+					serializedData["competitionApplyEndDate"] = formData.get("competitionApplyEndDate");
+					serializedData["competitionContent"] = formData.get("competitionContent");
+					serializedData["competitionFee"] = formData.get("competitionFee");
+					serializedData["competitionStudentFee"] = formData.get("competitionStudentFee");
+					serializedData["competitionAccount"] = formData.get("competitionAccount");
+
+
+					console.log(JSON.stringify(serializedData));
+
+					$.ajax({
+						url: "/admin/competitions/save",
+						type: "POST",
+						data: JSON.stringify(serializedData),
+						contentType: "application/json; charset=utf-8",
+						// dataType: "json",
+						success: function (data) {
+							console.log(data);
+							return false;
+							alert(data);
+							location.href = "/admin/competitions";
+						},
+						error: function (request, status, error) {
+							console.log(request.responseText);
+							alert(request.responseText);
+							return false;
+						}
+					});
 				}
 
 
@@ -358,6 +415,11 @@
 						alert("계좌정보를 입력해 주십시오.");
 						return false;
 					}
+
+
+
+
+
 					save(frm);
 
 				}

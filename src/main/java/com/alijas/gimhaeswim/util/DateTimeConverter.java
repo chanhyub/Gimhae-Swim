@@ -14,6 +14,7 @@ public class DateTimeConverter {
     }
 
     public static LocalDateTime StringToLocalDateTime(String localDateTime) {
-        return LocalDateTime.parse(localDateTime, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+//        return LocalDateTime.parse(localDateTime, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"));
+        return LocalDateTime.parse(localDateTime + "T00:00:00");
     }
 }

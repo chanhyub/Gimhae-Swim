@@ -1,6 +1,10 @@
 package com.alijas.gimhaeswim.module.user.service;
 
 import com.alijas.gimhaeswim.module.common.enums.ApplyStatus;
+import com.alijas.gimhaeswim.module.competition.entity.Competition;
+import com.alijas.gimhaeswim.module.competition.repository.CompetitionEventRepository;
+import com.alijas.gimhaeswim.module.competition.repository.CompetitionRepository;
+import com.alijas.gimhaeswim.module.competition.request.CompetitionSaveRequest;
 import com.alijas.gimhaeswim.module.team.entity.TeamMember;
 import com.alijas.gimhaeswim.module.team.repository.TeamMemberRepository;
 import com.alijas.gimhaeswim.module.user.dto.UserAdminDTO;
