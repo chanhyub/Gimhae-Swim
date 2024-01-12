@@ -251,9 +251,9 @@
 										<li class="w_size1">
 											<div><label class="f_s5 fw_pb">신청기간</label></div>
 											<div class="d-flex justify-content-between align-items-center">
-												<input type="date" name="competitionApplyStartDate" class="kors_input1 w_size2" placeholder="ex) 2023.04.24">
+												<input type="date" name="competitionApplyStartDate" class="kors_input1 w_size2">
 												<span>~</span>
-												<input type="date" name="competitionApplyEndDate" class="kors_input1 w_size2" placeholder="ex) 2023.04.24">
+												<input type="date" name="competitionApplyEndDate" class="kors_input1 w_size2">
 											</div>
 										</li>
 
@@ -300,19 +300,6 @@
 
 					for (let i = 0; i < rows; i++) {
 						var competitionEventList = {};
-						// competitionEventList.eventType = document.getElementsByName("competitionEventList" + i + "eventType")[0].value;
-						// competitionEventList.department = document.getElementsByName("competitionEventList" + i + "department")[0].value;
-						// competitionEventList.eventName = document.getElementsByName("competitionEventList" + i + "eventName")[0].value;
-						// competitionEventList.meter = document.getElementsByName("competitionEventList" + i + "meter")[0].value;
-						// competitionEventList.eventCapacity = document.getElementsByName("competitionEventList" + i + "eventCapacity")[0].value;
-						// competitionEventList.firstScore = document.getElementsByName("competitionEventList" + i + "firstScore")[0].value;
-						// competitionEventList.secondScore = document.getElementsByName("competitionEventList" + i + "secondScore")[0].value;
-						// competitionEventList.thirdScore = document.getElementsByName("competitionEventList" + i + "thirdScore")[0].value;
-						// competitionEventList.fourthScore = document.getElementsByName("competitionEventList" + i + "fourthScore")[0].value;
-						// competitionEventList.fifthScore = document.getElementsByName("competitionEventList" + i + "fifthScore")[0].value;
-						// competitionEventList.sixthScore = document.getElementsByName("competitionEventList" + i + "sixthScore")[0].value;
-						// competitionEventList.seventhScore = document.getElementsByName("competitionEventList" + i + "seventhScore")[0].value;
-						// competitionEventList.eighthScore = document.getElementsByName("competitionEventList" + i + "eighthScore")[0].value;
 
 						competitionEventList.eventType = document.getElementsByName("competitionEventListEventType")[i].value;
 						competitionEventList.department = document.getElementsByName("competitionEventListDepartment")[i].value;
@@ -347,14 +334,13 @@
 					console.log(JSON.stringify(serializedData));
 
 					$.ajax({
-						url: "/admin/competitions/save",
+						url: "/admin/competitions",
 						type: "POST",
 						data: JSON.stringify(serializedData),
 						contentType: "application/json; charset=utf-8",
 						// dataType: "json",
 						success: function (data) {
 							console.log(data);
-							return false;
 							alert(data);
 							location.href = "/admin/competitions";
 						},

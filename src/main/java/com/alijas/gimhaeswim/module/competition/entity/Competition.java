@@ -4,6 +4,7 @@ import com.alijas.gimhaeswim.module.common.jpa.BaseTime;
 import com.alijas.gimhaeswim.module.competition.dto.CompetitionApplyDTO;
 import com.alijas.gimhaeswim.module.competition.dto.CompetitionDetailDTO;
 import com.alijas.gimhaeswim.module.competition.dto.CompetitionListDTO;
+import com.alijas.gimhaeswim.module.competition.dto.CompetitionUpdateDTO;
 import com.alijas.gimhaeswim.module.competition.enums.status.CompetitionStatus;
 import com.alijas.gimhaeswim.util.DateTimeConverter;
 import jakarta.persistence.*;
@@ -87,6 +88,21 @@ public class Competition extends BaseTime {
                 this.competitionName,
                 DateTimeConverter.LocalDateTimeToStringYYYYMMDD(this.competitionApplyStartDate),
                 DateTimeConverter.LocalDateTimeToStringYYYYMMDD(this.competitionApplyEndDate),
+                this.competitionFee,
+                this.competitionStudentFee,
+                this.competitionAccount
+        );
+    }
+
+    public CompetitionUpdateDTO toCompetitionUpdateDTO() {
+        return new CompetitionUpdateDTO(
+                this.id,
+                this.competitionName,
+                DateTimeConverter.LocalDateTimeToStringYYYYMMDD(this.competitionDate),
+                this.competitionPlace,
+                DateTimeConverter.LocalDateTimeToStringYYYYMMDD(this.competitionApplyStartDate),
+                DateTimeConverter.LocalDateTimeToStringYYYYMMDD(this.competitionApplyEndDate),
+                this.competitionContent,
                 this.competitionFee,
                 this.competitionStudentFee,
                 this.competitionAccount

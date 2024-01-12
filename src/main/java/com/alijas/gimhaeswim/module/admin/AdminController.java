@@ -4,11 +4,10 @@ import com.alijas.gimhaeswim.config.security.CustomUserDetails;
 import com.alijas.gimhaeswim.exception.CustomException;
 import com.alijas.gimhaeswim.exception.CustomRestException;
 import com.alijas.gimhaeswim.module.common.request.LoginRequest;
+import com.alijas.gimhaeswim.module.competition.entity.Competition;
 import com.alijas.gimhaeswim.module.competition.request.CompetitionSaveRequest;
-import com.alijas.gimhaeswim.module.competition.service.CompetitionService;
-import com.alijas.gimhaeswim.module.competition.service.DepartmentService;
-import com.alijas.gimhaeswim.module.competition.service.EventService;
-import com.alijas.gimhaeswim.module.competition.service.MeterService;
+import com.alijas.gimhaeswim.module.competition.request.CompetitionUpdateRequest;
+import com.alijas.gimhaeswim.module.competition.service.*;
 import com.alijas.gimhaeswim.module.history.entity.History;
 import com.alijas.gimhaeswim.module.history.request.HistorySaveRequest;
 import com.alijas.gimhaeswim.module.history.request.HistoryUpdateRequest;
@@ -46,18 +45,21 @@ public class AdminController {
 
     private final CompetitionService competitionService;
 
+    private final CompetitionEventService competitionEventService;
+
     private final DepartmentService departmentService;
 
     private final MeterService meterService;
 
     private final EventService eventService;
 
-    public AdminController(UserService userService, NoticeService noticeService, HistoryService historyService, PhotoService photoService, CompetitionService competitionService, DepartmentService departmentService, MeterService meterService, EventService eventService) {
+    public AdminController(UserService userService, NoticeService noticeService, HistoryService historyService, PhotoService photoService, CompetitionService competitionService, CompetitionEventService competitionEventService, DepartmentService departmentService, MeterService meterService, EventService eventService) {
         this.userService = userService;
         this.noticeService = noticeService;
         this.historyService = historyService;
         this.photoService = photoService;
         this.competitionService = competitionService;
+        this.competitionEventService = competitionEventService;
         this.departmentService = departmentService;
         this.meterService = meterService;
         this.eventService = eventService;
@@ -104,8 +106,8 @@ public class AdminController {
         return ResponseEntity.ok().body("삭제되었습니다.");
     }
 
-    @PostMapping("/competitions/save")
-    public ResponseEntity<?> saveCompetition(
+    @PostMapping("/competitions")
+    public ResponseEntity<String> saveCompetition(
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
             @RequestBody @Valid CompetitionSaveRequest competitionSaveRequest,
             Errors errors
@@ -120,7 +122,27 @@ public class AdminController {
 
         competitionService.saveCompetitionAndCompetitionEvent(competitionSaveRequest);
 
-        return ResponseEntity.ok(competitionSaveRequest);
+        return ResponseEntity.ok("대회가 등록되었습니다.");
+    }
+
+    @PutMapping("/competitions")
+    public ResponseEntity<String> updateCompetition(
+            @AuthenticationPrincipal CustomUserDetails customUserDetails,
+            @RequestBody @Valid CompetitionUpdateRequest competitionUpdateRequest,
+            Errors errors
+    ) {
+        if (customUserDetails == null) {
+            throw new CustomRestException("로그인이 필요합니다.", HttpStatus.BAD_REQUEST);
+        }
+        if (errors.hasErrors()) {
+            throw new CustomRestException(errors.getAllErrors().get(0).getDefaultMessage(), HttpStatus.BAD_REQUEST);
+        }
+
+        competitionService.updateCompetitionAndCompetitionEvent(competitionUpdateRequest);
+
+
+
+        return ResponseEntity.ok("대회가 수정되었습니다.");
     }
 
     @PostMapping("/notices/save")

@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head th:replace="~{common/adminLayout::ConfigFragment}"></head>
+
+<body class="admin_body">
+<script th:inline="javascript">
+  function event_tbody_add(){
+
+      var departmentList = [[${departmentList}]];
+      console.log(departmentList);
+      var eventList = [[${eventList}]];
+      var meterList = [[${meterList}]];
+
+      var departmentHtml = ``;
+      var eventHtml = ``;
+      var meterHtml = ``;
+
+      departmentList.forEach(function (item, index, array) {
+          departmentHtml += `<option value="` + item.id + `" name="">` + item.departmentAge + '세 '
+              + (item.moreOrLess = 'LESS' ? '이하' : '이상')
+              + (item.departmentInfo != null ? '(' + item.departmentInfo + ')' : '') + `</option>`
+          // console.log(departmentHtml);
+      });
+
+      eventList.forEach(function (item, index, array) {
+          eventHtml += `<option value="` + item.id + `" name="">` + item.eventName + `</option>`
+          // console.log(eventHtml);
+      });
+
+      meterList.forEach(function (item, index, array) {
+          meterHtml += `<option value="` + item.id + `" name="">` + item.meter + `</option>`
+          // console.log(meterHtml);
+      });
+
+
+    var event_num = Number($('#event_tbody').attr('data')) + 1;
+    $('#event_tbody').attr('data', event_num);
+    var tr_num;
+    if(sessionStorage.getItem("num") != null && event_num !== 1){
+      tr_num = sessionStorage.getItem("num");
+    }else{
+      tr_num = event_num;
+    }
+
+    var add_html = `<tr data="`+tr_num+`">
+								<td>
+									<select id="competitionEventListEventType" name="competitionEventListEventType" class="search_select">
+										<option value="ORGANIZATION_MALE">남자(단체)</option>
+										<option value="ORGANIZATION_FEMALE">여자(단체)</option>
+										<option value="ORGANIZATION_MIXED">혼성(단체)</option>
+										<option value="INDIVIDUAL_MALE">남자(개인)</option>
+										<option value="INDIVIDUAL_FEMALE">여자(개인)</option>
+									</select>
+								</td>
+								<td>
+									<select id="competitionEventListDepartment" name="competitionEventListDepartment" class="search_select">
+										<option value="">선택하세요</option>
+										`+departmentHtml+`
+									</select>
+								</td>
+								<td>
+									<select type="text" id="competitionEventListEventName" name="competitionEventListEventName" class="search_select">
+										<option value="">선택하세요</option>
+										`+eventHtml+`
+									</select>
+								</td>
+								<td>
+									<select type="text" id="competitionEventListMeter" name="competitionEventListMeter" class="search_select">
+										<option value="">선택하세요</option>
+										`+meterHtml+`
+									</select>
+								</td>
+								<td>
+									<input type="number" id="competitionEventListEventCapacity" name="competitionEventListEventCapacity" class="kors_input1">명
+								</td>
+								<td>
+									<input type="number" id="competitionEventListFirstPoint" name="competitionEventListFirstScore" style="width: 80px" class="kors_input1">점
+								</td>
+								<td>
+									<input type="number" id="competitionEventListSecondPoint" name="competitionEventListSecondScore" style="width: 80px" class="kors_input1">점
+								</td>
+								<td>
+									<input type="number" id="competitionEventListThirdPoint" name="competitionEventListThirdScore" style="width: 80px" class="kors_input1">점
+								</td>
+								<td>
+									<input type="number" id="competitionEventListForthPoint" name="competitionEventListFourthScore" style="width: 80px" class="kors_input1">점
+								</td>
+								<td>
+									<input type="number" id="competitionEventListFifthPoint" name="competitionEventListFifthScore" style="width: 80px" class="kors_input1">점
+								</td>
+								<td>
+									<input type="number" id="competitionEventListSixthPoint" name="competitionEventListSixthScore" style="width: 80px" class="kors_input1">점
+								</td>
+								<td>
+									<input type="number" id="competitionEventListSeventhPoint" name="competitionEventListSeventhScore" style="width: 80px" class="kors_input1">점
+								</td>
+								<td>
+									<input type="number" id="competitionEventListEighthPoint" name="competitionEventListEighthScore" style="width: 80px" class="kors_input1">점
+									<input type="hidden" id="competitionEventListId" name="competitionEventListId" style="width: 80px" class="kors_input1">
+								</td>
+								<td>
+									<button type="button" class="delete_btn" onsubmit="return false" onclick="event_tbody_del(`+tr_num+`)"><img src="/assets/img/xclose.svg"></button>
+								</td>
+							</tr>`
+
+    $(`#event_tbody`).append(add_html);
+    if(sessionStorage.getItem('num') != null){
+      sessionStorage.removeItem('num');
+    }
+  }
+
+  function event_tbody_del(event_num){
+    var event_num_change = Number($('#event_tbody').attr('data')) - 1;
+    $(`#event_tbody tr[data=${event_num}]`).remove();
+    sessionStorage.setItem("num", event_num);
+    $('#event_tbody').attr('data', event_num_change);
+  }
+
+  function event_tbody_del2(event_num, competitionEventId) {
+    var event_num_change = Number($('#event_tbody').attr('data')) - 1;
+    $(`#event_tbody tr[data=${event_num}]`).remove();
+    sessionStorage.setItem("num", event_num);
+    $('#event_tbody').attr('data', event_num_change);
+
+    let elementById = document.getElementById('deleteCompetitionEventIds');
+    elementById.value += competitionEventId + ',';
+  }
+
+</script>
+<div id="admin_ui" class="d-flex">
+  <header th:replace="~{common/adminLayout::HeaderFragment}"></header>
+
+
+  <section class="kors_admin_content">
+    <div class="container-fluid mb_80">
+      <div class="row">
+        <div class="col">
+          <h2>대회 수정</h2>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col">
+          <div class="con_add_form">
+            <form id="frm">
+              <ul>
+                <li class="w_size1">
+                  <div><label class="f_s5 fw_pb">대회명</label></div>
+                  <input type="text" id="name" th:value="${competition.competitionName}" name="competitionName" class="kors_input1 w-100">
+                </li>
+
+                <li class="w_size1">
+                  <div><label class="f_s5 fw_pb">대회 일시</label></div>
+                  <input type="date" th:value="${competition.competitionDate}" name="competitionDate" class="kors_input1 w-100">
+                </li>
+
+                <li class="w_size1">
+                  <div><label class="f_s5 fw_pb">장소</label></div>
+                  <input type="text" th:value="${competition.competitionPlace}" name="competitionPlace" class="kors_input1 w-100">
+                </li>
+
+                <li>
+                  <div><label class="f_s5 fw_pb">종목</label></div>
+                  <div class="table_box1 mb_10">
+                    <table id="competitionEventTable">
+                      <thead>
+                      <tr>
+                          <th>유형</th>
+                          <th>부별</th>
+                          <th>종목</th>
+                          <th>미터</th>
+                          <th>정원</th>
+                          <th>1등</th>
+                          <th>2등</th>
+                          <th>3등</th>
+                          <th>4등</th>
+                          <th>5등</th>
+                          <th>6등</th>
+                          <th>7등</th>
+                          <th>8등</th>
+                          <th></th>
+                      </tr>
+                      </thead>
+                      <tbody id="event_tbody" data="0"></tbody>
+                    </table>
+                  </div>
+                  <div>
+                    <button class="kors_btn2" type="button" onclick="event_tbody_add()">종목추가</button>
+                  </div>
+
+                </li>
+
+                <li class="w_size1">
+                  <div><label class="f_s5 fw_pb">신청기간</label></div>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <input type="date" th:value="${competition.competitionApplyStartDate}" name="competitionApplyStartDate" class="kors_input1 w_size2">
+                    <span>~</span>
+                    <input type="date" th:value="${competition.competitionApplyEndDate}" name="competitionApplyEndDate" class="kors_input1 w_size2">
+                  </div>
+                </li>
+
+                <li class="w_size1">
+                  <div><label class="f_s5 fw_pb">내용</label></div>
+                  <textarea id="detail" name="competitionContent" th:text="${competition.competitionContent}" class="w-100"></textarea>
+                </li>
+
+                <li class="w_size1">
+                  <div><label class="f_s5 fw_pb">성인 참가비</label></div>
+                  <input type="number" th:value="${competition.competitionFee}" name="competitionFee" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" class="kors_input1 w-75"> 원
+                </li>
+
+                <li class="w_size1">
+                  <div><label class="f_s5 fw_pb">학생(만 18세) 참가비</label></div>
+                  <input type="number" th:value="${competition.competitionStudentFee}" name="competitionStudentFee" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" class="kors_input1 w-75"> 원
+                </li>
+
+                <li class="w_size1">
+                  <div><label class="f_s5 fw_pb">참가비 입금 계좌 정보(은행, 계좌번호, 예금주)</label></div>
+                  <input type="text" th:value="${competition.competitionAccount}" name="competitionAccount" class="kors_input1 w-75" placeholder="참가비 입금 계좌 정보(은행, 계좌번호, 예금주)">
+                </li>
+
+                <li class="w_size1">
+                  <input type="hidden" id="deleteCompetitionEventIds" name="deleteCompetitionEventIds">
+                  <input type="hidden" name="competitionId" th:value="${competition.id}">
+                  <button th:type="button" th:onclick="checkForm()" class="kors_btn1 w-100"> 대회 등록하기</button>
+                </li>
+              </ul>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <script>
+    function save(data) {
+      var frm = document.getElementById("frm");
+      var formData = new FormData(frm);
+      var rows = document.getElementById('competitionEventTable').rows.length - 1;
+
+      console.log(data);
+      var serializedData = {};
+
+      serializedData["competitionEventList"] = [];
+
+      for (let i = 0; i < rows; i++) {
+        var competitionEventList = {};
+
+        competitionEventList.eventType = document.getElementsByName("competitionEventListEventType")[i].value;
+        competitionEventList.department = document.getElementsByName("competitionEventListDepartment")[i].value;
+        competitionEventList.eventName = document.getElementsByName("competitionEventListEventName")[i].value;
+        competitionEventList.meter = document.getElementsByName("competitionEventListMeter")[i].value;
+        competitionEventList.eventCapacity = document.getElementsByName("competitionEventListEventCapacity")[i].value;
+        competitionEventList.firstScore = document.getElementsByName("competitionEventListFirstScore")[i].value;
+        competitionEventList.secondScore = document.getElementsByName("competitionEventListSecondScore")[i].value;
+        competitionEventList.thirdScore = document.getElementsByName("competitionEventListThirdScore")[i].value;
+        competitionEventList.fourthScore = document.getElementsByName("competitionEventListFourthScore")[i].value;
+        competitionEventList.fifthScore = document.getElementsByName("competitionEventListFifthScore")[i].value;
+        competitionEventList.sixthScore = document.getElementsByName("competitionEventListSixthScore")[i].value;
+        competitionEventList.seventhScore = document.getElementsByName("competitionEventListSeventhScore")[i].value;
+        competitionEventList.eighthScore = document.getElementsByName("competitionEventListEighthScore")[i].value;
+        competitionEventList.competitionEventId = document.getElementsByName("competitionEventListId")[i].value;
+
+        serializedData["competitionEventList"].push(competitionEventList);
+      }
+
+      // console.log(serializedData);
+
+      serializedData["competitionName"] = formData.get("competitionName");
+      serializedData["competitionDate"] = formData.get("competitionDate");
+      serializedData["competitionPlace"] = formData.get("competitionPlace");
+      serializedData["competitionApplyStartDate"] = formData.get("competitionApplyStartDate");
+      serializedData["competitionApplyEndDate"] = formData.get("competitionApplyEndDate");
+      serializedData["competitionContent"] = formData.get("competitionContent");
+      serializedData["competitionFee"] = formData.get("competitionFee");
+      serializedData["competitionStudentFee"] = formData.get("competitionStudentFee");
+      serializedData["competitionAccount"] = formData.get("competitionAccount");
+      serializedData["deleteCompetitionEventIds"] = formData.get("deleteCompetitionEventIds");
+      serializedData["competitionId"] = formData.get("competitionId");
+
+
+      console.log(JSON.stringify(serializedData));
+      // return false;
+
+      $.ajax({
+        url: "/admin/competitions",
+        type: "PUT",
+        data: JSON.stringify(serializedData),
+        contentType: "application/json; charset=utf-8",
+        // dataType: "json",
+        success: function (data) {
+          console.log(data);
+          alert(data);
+          location.href = "/admin/competitions";
+        },
+        error: function (request, status, error) {
+          console.log(request.responseText);
+          alert(request.responseText);
+          return false;
+        }
+      });
+    }
+
+
+
+    function checkForm() {
+
+      if (frm.competitionName.value === "") {
+        frm.competitionName.focus();
+        alert("대회명을 입력해 주십시오.");
+        return false;
+
+      }else if (frm.competitionDate.value === "") {
+        frm.competitionDate.focus();
+        alert("년도를 입력해 주십시오.");
+        return false;
+
+      }else if (frm.competitionPlace.value === "") {
+        frm.competitionPlace.focus();
+        alert("장소를 입력해 주십시오.");
+        return false;
+
+      }else if (frm.competitionApplyStartDate.value === "") {
+        frm.competitionApplyStartDate.focus();
+        alert("신청기간을 입력해 주십시오.");
+        return false;
+
+      }else if (frm.competitionApplyEndDate.value === "") {
+        frm.competitionApplyEndDate.focus();
+        alert("신청기간을 입력해 주십시오.");
+        return false;
+
+      }else if (frm.competitionContent.value === "") {
+        frm.competitionContent.focus();
+        alert("내용을 입력해 주십시오.");
+        return false;
+
+      }else if (frm.competitionFee.value === "") {
+        frm.competitionFee.focus();
+        alert("참가비를 입력해 주십시오.");
+        return false;
+
+      } else if (frm.competitionStudentFee === "") {
+        frm.competitionStudentFee.focus();
+        alert("참가비를 입력해 주십시오.");
+        return false;
+
+      } else if (frm.competitionAccount === "") {
+        frm.competitionAccount.focus();
+        alert("계좌정보를 입력해 주십시오.");
+        return false;
+      }
+      save(frm);
+
+    }
+  </script>
+  <script th:inline="javascript">
+
+    $(function(){
+      var competition = [[${competition}]];
+      var competitionEventList = [[${competitionEventList}]];
+      var competitionEventListSize = [[${competitionEventList.size}]];
+      $('#event_tbody').attr('data', competitionEventListSize);
+
+        var departmentList = [[${departmentList}]];
+        var eventList = [[${eventList}]];
+        var meterList = [[${meterList}]];
+
+
+
+        for (let i = 0; i < competitionEventListSize; i++) {
+            var departmentHtml = ``;
+            var eventHtml = ``;
+            var meterHtml = ``;
+
+            departmentList.forEach(function (item, index, array) {
+                departmentHtml += `<option value="` + item.id + `" name="" ` + (item.id === competitionEventList[i].department.id ? 'selected' : '') + ` >` + item.departmentAge + '세 '
+                    + (item.moreOrLess = 'LESS' ? '이하' : '이상')
+                    + (item.departmentInfo != null ? '(' + item.departmentInfo + ')' : '') + `</option>`
+                // console.log(departmentHtml);
+            });
+
+            eventList.forEach(function (item, index, array) {
+                eventHtml += `<option value="` + item.id + `" name=""` + (item.id === competitionEventList[i].event.id ? 'selected' : '') + ` >` + item.eventName + `</option>`
+                // console.log(eventHtml);
+            });
+
+            meterList.forEach(function (item, index, array) {
+                meterHtml += `<option value="` + item.id + `" name=""` + (item.id === competitionEventList[i].meter.id ? 'selected' : '') + `> ` + item.meter + `</option>`
+                // console.log(meterHtml);
+            });
+
+        var add_html = `<tr data="`+i+`">
+								<td>
+									<select id="competitionEventListEventType" name="competitionEventListEventType" class="search_select">
+										<option value="ORGANIZATION_MALE" `+(competitionEventList[i].eventType === 'ORGANIZATION_MALE' ? 'selected' : '')+`>남자(단체)</option>
+										<option value="ORGANIZATION_FEMALE" `+(competitionEventList[i].eventType === 'ORGANIZATION_FEMALE' ? 'selected' : '')+`>여자(단체)</option>
+										<option value="ORGANIZATION_MIXED" `+(competitionEventList[i].eventType === 'ORGANIZATION_MIXED' ? 'selected' : '')+`>혼성(단체)</option>
+										<option value="INDIVIDUAL_MALE" `+(competitionEventList[i].eventType === 'INDIVIDUAL_MALE' ? 'selected' : '')+`>남자(개인)</option>
+										<option value="INDIVIDUAL_FEMALE" `+(competitionEventList[i].eventType === 'INDIVIDUAL_FEMALE' ? 'selected' : '')+`>여자(개인)</option>
+									</select>
+								</td>
+								<td>
+									<select id="competitionEventListDepartment" name="competitionEventListDepartment" class="search_select">
+										<option value="">선택하세요</option>
+										`+departmentHtml+`
+									</select>
+								</td>
+								<td>
+									<select type="text" id="competitionEventListEventName" name="competitionEventListEventName" class="search_select">
+										<option value="">선택하세요</option>
+										`+eventHtml+`
+									</select>
+								</td>
+								<td>
+									<select type="text" id="competitionEventListMeter" name="competitionEventListMeter" class="search_select">
+										<option value="">선택하세요</option>
+										`+meterHtml+`
+									</select>
+								</td>
+								<td>
+									<input type="number" value="`+ competitionEventList[i].eventCapacity +`" id="competitionEventListEventCapacity" name="competitionEventListEventCapacity" class="kors_input1">명
+								</td>
+								<td>
+									<input type="number" value="`+ competitionEventList[i].firstScore +`" id="competitionEventListFirstPoint" name="competitionEventListFirstScore" style="width: 80px" class="kors_input1">점
+								</td>
+								<td>
+									<input type="number" value="`+ competitionEventList[i].secondScore +`" id="competitionEventListSecondPoint" name="competitionEventListSecondScore" style="width: 80px" class="kors_input1">점
+								</td>
+								<td>
+									<input type="number" value="`+ competitionEventList[i].thirdScore +`" id="competitionEventListThirdPoint" name="competitionEventListThirdScore" style="width: 80px" class="kors_input1">점
+								</td>
+								<td>
+									<input type="number" value="`+ competitionEventList[i].fourthScore +`" id="competitionEventListForthPoint" name="competitionEventListFourthScore" style="width: 80px" class="kors_input1">점
+								</td>
+								<td>
+									<input type="number" value="`+ competitionEventList[i].fifthScore +`" id="competitionEventListFifthPoint" name="competitionEventListFifthScore" style="width: 80px" class="kors_input1">점
+								</td>
+								<td>
+									<input type="number" value="`+ competitionEventList[i].sixthScore +`" id="competitionEventListSixthPoint" name="competitionEventListSixthScore" style="width: 80px" class="kors_input1">점
+								</td>
+								<td>
+									<input type="number" value="`+ competitionEventList[i].seventhScore +`" id="competitionEventListSeventhPoint" name="competitionEventListSeventhScore" style="width: 80px" class="kors_input1">점
+								</td>
+								<td>
+									<input type="number" value="`+ competitionEventList[i].eighthScore +`" id="competitionEventListEighthPoint" name="competitionEventListEighthScore" style="width: 80px" class="kors_input1">점
+								</td>
+								<td>
+									<button type="button" class="delete_btn" onsubmit="return false" onclick="event_tbody_del2(`+i+`, `+competitionEventList[i].id+`)"><img src="/assets/img/xclose.svg"></button>
+								</td>
+								<input type="hidden" name="competitionEventListId" value="` + competitionEventList[i].id + `">
+							</tr>`
+
+
+                $(`#event_tbody`).append(add_html);
+        }
+
+    });
+  </script>
+</div>
+</body>
+</html>

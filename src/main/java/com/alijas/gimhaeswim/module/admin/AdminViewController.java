@@ -2,15 +2,12 @@ package com.alijas.gimhaeswim.module.admin;
 
 import com.alijas.gimhaeswim.config.security.CustomUserDetails;
 import com.alijas.gimhaeswim.exception.CustomException;
+import com.alijas.gimhaeswim.exception.CustomRestException;
 import com.alijas.gimhaeswim.module.common.enums.ApplyStatus;
 import com.alijas.gimhaeswim.module.competition.dto.CompetitionListDTO;
-import com.alijas.gimhaeswim.module.competition.entity.Department;
-import com.alijas.gimhaeswim.module.competition.entity.Event;
-import com.alijas.gimhaeswim.module.competition.entity.Meter;
-import com.alijas.gimhaeswim.module.competition.service.CompetitionService;
-import com.alijas.gimhaeswim.module.competition.service.DepartmentService;
-import com.alijas.gimhaeswim.module.competition.service.EventService;
-import com.alijas.gimhaeswim.module.competition.service.MeterService;
+import com.alijas.gimhaeswim.module.competition.entity.*;
+import com.alijas.gimhaeswim.module.competition.request.CompetitionSaveRequest;
+import com.alijas.gimhaeswim.module.competition.service.*;
 import com.alijas.gimhaeswim.module.history.entity.History;
 import com.alijas.gimhaeswim.module.history.service.HistoryService;
 import com.alijas.gimhaeswim.module.notice.dto.NoticeDTO;
@@ -26,6 +23,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -45,6 +43,8 @@ public class AdminViewController {
 
     private final CompetitionService competitionService;
 
+    private final CompetitionEventService competitionEventService;
+
     private final DepartmentService departmentService;
 
     private final EventService eventService;
@@ -56,9 +56,10 @@ public class AdminViewController {
     private final HistoryService historyService;
 
 
-    public AdminViewController(UserService userService, CompetitionService competitionService, DepartmentService departmentService, EventService eventService, MeterService meterService, NoticeService noticeService, HistoryService historyService) {
+    public AdminViewController(UserService userService, CompetitionService competitionService, CompetitionEventService competitionEventService, DepartmentService departmentService, EventService eventService, MeterService meterService, NoticeService noticeService, HistoryService historyService) {
         this.userService = userService;
         this.competitionService = competitionService;
+        this.competitionEventService = competitionEventService;
         this.departmentService = departmentService;
         this.eventService = eventService;
         this.meterService = meterService;
@@ -142,6 +143,41 @@ public class AdminViewController {
         model.addAttribute("meterList", meterList);
 
         return "admin/competitionSave";
+    }
+
+    @GetMapping("/competitions/{id}/update")
+    public String getCompetition(
+            @AuthenticationPrincipal CustomUserDetails customUserDetails,
+            @PathVariable Long id,
+            Model model
+    ) {
+        if (customUserDetails == null) {
+            throw new CustomException("로그인이 필요합니다.", HttpStatus.BAD_REQUEST);
+        }
+
+        Optional<Competition> optionalCompetition = competitionService.getCompetition(id);
+        if (optionalCompetition.isEmpty()) {
+            throw new CustomException("존재하지 않는 대회입니다.", HttpStatus.BAD_REQUEST);
+        }
+
+        List<Department> departmentList = departmentService.findAll();
+        List<Event> eventList = eventService.findAll();
+        List<Meter> meterList = meterService.findAll();
+
+//        Integer count = competitionEventService.getCompetitionEventCount(id);
+
+        Competition competition = optionalCompetition.get();
+
+        List<CompetitionEvent> competitionEventList = competitionEventService.getCompetitionEventByCompetition(competition.getId());
+
+        model.addAttribute("competition", competition.toCompetitionUpdateDTO());
+        model.addAttribute("competitionEventList", competitionEventList);
+        model.addAttribute("departmentList", departmentList);
+        model.addAttribute("eventList", eventList);
+        model.addAttribute("meterList", meterList);
+//        model.addAttribute("count", count);
+
+        return "admin/competitionUpdate";
     }
 
     @GetMapping("/notices")
