@@ -23,4 +23,6 @@ public interface ApplyCompetitionEventRepository extends JpaRepository<ApplyComp
     void deleteByApplyCompetition(ApplyCompetition applyCompetition);
 
     Optional<ApplyCompetitionEvent> findByTeamAndCompetitionEvent(Team team, CompetitionEvent competitionEvent);
+
+    List<ApplyCompetitionEvent> findByApplyCompetition(ApplyCompetition applyCompetition);
 }

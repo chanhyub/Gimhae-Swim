@@ -1,10 +1,14 @@
 package com.alijas.gimhaeswim.module.applycompetition.entity;
 
 import com.alijas.gimhaeswim.module.applycompetition.dto.ApplyCompetitionListDTO;
+import com.alijas.gimhaeswim.module.applycompetition.dto.ApplyCompetitionManagementIndividualDTO;
+import com.alijas.gimhaeswim.module.applycompetition.dto.ApplyCompetitionManagementOrganizationDTO;
 import com.alijas.gimhaeswim.module.applycompetition.enums.DepositStatus;
 import com.alijas.gimhaeswim.module.common.enums.ApplyStatus;
+import com.alijas.gimhaeswim.module.common.jpa.BaseTime;
 import com.alijas.gimhaeswim.module.competition.entity.Competition;
 import com.alijas.gimhaeswim.module.team.entity.Team;
+import com.alijas.gimhaeswim.module.team.entity.TeamMember;
 import com.alijas.gimhaeswim.module.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -20,7 +24,7 @@ import org.hibernate.annotations.Comment;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ApplyCompetition {
+public class ApplyCompetition extends BaseTime {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -55,6 +59,29 @@ public class ApplyCompetition {
                 this.getCompetition().getId().toString(),
                 this.competition.getCompetitionName(),
                 this.depositStatus.name(),
+                null
+        );
+    }
+
+    public ApplyCompetitionManagementIndividualDTO toApplyCompetitionManagementIndividualDTO() {
+        return new ApplyCompetitionManagementIndividualDTO(
+                this.id,
+                this.competition.getCompetitionName(),
+                this.user.getFullName(),
+                this.user.getPhoneNumber(),
+                this.depositStatus.name(),
+                null
+        );
+    }
+
+    public ApplyCompetitionManagementOrganizationDTO toApplyCompetitionManagementOrganizationDTO(TeamMember teamMember) {
+        return new ApplyCompetitionManagementOrganizationDTO(
+                this.id,
+                this.competition.getCompetitionName(),
+                this.team.getTeamName(),
+                teamMember.getUser().getFullName(),
+                teamMember.getUser().getPhoneNumber(),
+                depositStatus.name(),
                 null
         );
     }

@@ -3,6 +3,9 @@ package com.alijas.gimhaeswim.module.admin;
 import com.alijas.gimhaeswim.config.security.CustomUserDetails;
 import com.alijas.gimhaeswim.exception.CustomException;
 import com.alijas.gimhaeswim.exception.CustomRestException;
+import com.alijas.gimhaeswim.module.applycompetition.entity.ApplyCompetition;
+import com.alijas.gimhaeswim.module.applycompetition.service.ApplyCompetitionEventService;
+import com.alijas.gimhaeswim.module.applycompetition.service.ApplyCompetitionService;
 import com.alijas.gimhaeswim.module.common.request.LoginRequest;
 import com.alijas.gimhaeswim.module.competition.entity.Competition;
 import com.alijas.gimhaeswim.module.competition.request.CompetitionSaveRequest;
@@ -29,6 +32,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -45,24 +49,18 @@ public class AdminController {
 
     private final CompetitionService competitionService;
 
-    private final CompetitionEventService competitionEventService;
+    private final ApplyCompetitionService applyCompetitionService;
 
-    private final DepartmentService departmentService;
+    private final ApplyCompetitionEventService applyCompetitionEventService;
 
-    private final MeterService meterService;
-
-    private final EventService eventService;
-
-    public AdminController(UserService userService, NoticeService noticeService, HistoryService historyService, PhotoService photoService, CompetitionService competitionService, CompetitionEventService competitionEventService, DepartmentService departmentService, MeterService meterService, EventService eventService) {
+    public AdminController(UserService userService, NoticeService noticeService, HistoryService historyService, PhotoService photoService, CompetitionService competitionService, ApplyCompetitionService applyCompetitionService, ApplyCompetitionEventService applyCompetitionEventService) {
         this.userService = userService;
         this.noticeService = noticeService;
         this.historyService = historyService;
         this.photoService = photoService;
         this.competitionService = competitionService;
-        this.competitionEventService = competitionEventService;
-        this.departmentService = departmentService;
-        this.meterService = meterService;
-        this.eventService = eventService;
+        this.applyCompetitionService = applyCompetitionService;
+        this.applyCompetitionEventService = applyCompetitionEventService;
     }
 
     @PutMapping("/users/accept")
@@ -144,6 +142,26 @@ public class AdminController {
 
         return ResponseEntity.ok("대회가 수정되었습니다.");
     }
+
+    @DeleteMapping("/competitions")
+    public ResponseEntity<String> deleteCompetition(
+            @AuthenticationPrincipal CustomUserDetails customUserDetails,
+            @RequestBody Map<String, Long> competitionId
+    ) {
+        if (customUserDetails == null) {
+            throw new CustomRestException("로그인이 필요합니다.", HttpStatus.BAD_REQUEST);
+        }
+        Optional<Competition> optionalCompetition = competitionService.getCompetition(competitionId.get("competitionId"));
+        if (optionalCompetition.isEmpty()) {
+            throw new CustomRestException("존재하지 않는 대회입니다.", HttpStatus.BAD_REQUEST);
+        }
+
+        competitionService.deleteCompetition(optionalCompetition.get());
+
+        return ResponseEntity.ok("대회가 삭제되었습니다.");
+    }
+
+
 
     @PostMapping("/notices/save")
     public ResponseEntity<String> saveNotice(
@@ -278,5 +296,42 @@ public class AdminController {
 
 
         return ResponseEntity.ok("포토갤러리 등록되었습니다.");
+    }
+
+    @PostMapping("/apply-competitions")
+    public ResponseEntity<String> saveApplyCompetition(
+            @AuthenticationPrincipal CustomUserDetails customUserDetails,
+            @RequestBody Map<String, Long> applyCompetitionId
+    ) {
+        if (customUserDetails == null) {
+            throw new CustomRestException("로그인이 필요합니다.", HttpStatus.BAD_REQUEST);
+        }
+        Optional<ApplyCompetition> optionalApplyCompetition = applyCompetitionService.getApplyCompetition(applyCompetitionId.get("applyCompetitionId"));
+        if (optionalApplyCompetition.isEmpty()) {
+            throw new CustomRestException("존재하지 않는 신청입니다.", HttpStatus.BAD_REQUEST);
+        }
+
+        applyCompetitionService.apply(optionalApplyCompetition.get());
+
+        return ResponseEntity.ok("대회 신청이 완료되었습니다.");
+    }
+
+    @DeleteMapping("/apply-competitions")
+    public ResponseEntity<String> deleteApplyCompetition(
+            @AuthenticationPrincipal CustomUserDetails customUserDetails,
+            String applyCompetitionId
+    ) {
+        if (customUserDetails == null) {
+            throw new CustomRestException("로그인이 필요합니다.", HttpStatus.BAD_REQUEST);
+        }
+        Optional<ApplyCompetition> optionalApplyCompetition = applyCompetitionService.getApplyCompetition(Long.parseLong(applyCompetitionId));
+        if (optionalApplyCompetition.isEmpty()) {
+            throw new CustomRestException("존재하지 않는 신청입니다.", HttpStatus.BAD_REQUEST);
+        }
+
+        applyCompetitionEventService.deleteApplyCompetitionEvent(optionalApplyCompetition.get());
+        applyCompetitionService.deleteApplyCompetition(optionalApplyCompetition.get());
+
+        return ResponseEntity.ok("대회 신청이 취소되었습니다.");
     }
 }

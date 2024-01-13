@@ -50,7 +50,7 @@
 													<a th:href="@{/admin/competitions/{id}/update(id=${field.id})}" class="kors_btn2 mr_10">수정</a>
 <!--													<a th:href="@{/admin/competition/set/lane(competitionSeq=${field.id}, competitionEventSeq=${field.getCompetitionEventList[0].competitionEventSeq})}" class="kors_btn2 mr_10">레인관리</a>-->
 <!--													<a th:href="@{/admin/competition/set/rank(competitionSeq=${field.id}, competitionEventSeq=${field.getCompetitionEventList[0].competitionEventSeq})}" class="kors_btn2">순위관리</a>-->
-													<a href="#" th:onclick="|javascript:deleteUser(${field.id})|" class="kors_btn2 type2">삭제</a>
+													<a href="#" th:onclick="|javascript:deleteCompetition(${field.id})|" class="kors_btn2 type2">삭제</a>
 												</div>
 											</td>
 										</tr>
@@ -85,13 +85,17 @@
 				</div>
 			</section>
 			<script type="text/javascript">
-				function deleteUser(competitionSeq) {
+				function deleteCompetition(competitionId) {
+					let data = {
+						competitionId: competitionId
+					};
 					if (confirm("삭제 하시겠습니까?"))
 						$.ajax({
-							type: "POST",
-							url: "/admin/competition/delete/" + competitionSeq,
+							type: "DELETE",
+							url: "/admin/competitions",
 							// async: false,
-							data: competitionSeq,
+							contentType: "application/json; charset=utf-8",
+							data: JSON.stringify(data),
 							error : function(request,status,error) {
 								console.log("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
 							},

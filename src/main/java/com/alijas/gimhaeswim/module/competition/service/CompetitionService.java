@@ -123,4 +123,10 @@ public class CompetitionService {
         }
 
     }
+
+    @Transactional
+    public void deleteCompetition(Competition competition) {
+        competition.setStatus(CompetitionStatus.DELETED);
+        competitionRepository.save(competition);
+    }
 }

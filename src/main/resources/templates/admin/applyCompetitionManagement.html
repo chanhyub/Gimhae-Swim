@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head th:replace="common/adminLayout::ConfigFragment"></head>
+
+
+<body class="admin_body">
+		<div id="admin_ui" class="d-flex">
+			<header th:replace="common/adminLayout::HeaderFragment"></header>
+
+
+			<section class="kors_admin_content">
+				<div class="container-fluid mb_80">
+					<div class="row">
+						<div class="col">
+							<h2>대회 신청관리</h2>
+						</div>
+					</div>
+				</div>
+
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col">
+							<div class="table_box1">
+								<p class="ft_s0 mb_20">개인 경기 신청 목록<span class="f_s2 f_c_active"></span></p>
+								<table class="w-100">
+									<thead>
+										<tr>
+											<th>대회명</th>
+											<th>경기인이름</th>
+											<th>전화번호</th>
+											<th>신청종목</th>
+											<th>비고</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr th:each="applyCompetitionIndividual : ${applyCompetitionIndividualPage}">
+											<td th:text="${applyCompetitionIndividual.competitionName}"></td>
+											<td th:text="${applyCompetitionIndividual.fullName}"></td>
+											<td th:text="${applyCompetitionIndividual.phoneNumber}"></td>
+											<td>
+												<ul class="table_ul">
+													<li th:each="department : ${applyCompetitionIndividual.departmentList}" th:text="${department}"></li>
+												</ul>
+											</td>
+											<td>
+												<div>
+													<div th:if="${applyCompetitionIndividual.depositStatus.equals('NOT_DEPOSITED')}">
+														<a href="#" th:onclick="|javascript:accept('${applyCompetitionIndividual.id}')|" class="kors_btn2 mr_10">승인</a>
+														<a href="#" th:onclick="|javascript:deleteApplication('${applyCompetitionIndividual.id}')|" class="kors_btn2 type2">미승인</a>
+													</div>
+
+													<div th:if="${applyCompetitionIndividual.depositStatus.equals('DEPOSITED')}">
+														<a class="kors_btn2 mr_10">승인됨</a> <a href="#" th:onclick="|javascript:deleteApplication(${applyCompetitionIndividual.id})|" class="kors_btn2 type2">삭제</a>
+													</div>
+
+												</div>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="container-fluid mt-5">
+					<div class="row">
+						<div class="col">
+							<div class="table_box1">
+								<p class="ft_s0 mb_20">팀 경기 신청 목록<span class="f_s2 f_c_active"></span></p>
+								<table class="w-100">
+									<thead>
+									<tr>
+										<th>대회명</th>
+										<th>팀 이름(팀장명)</th>
+										<th>전화번호</th>
+										<th>신청종목</th>
+										<th>비고</th>
+									</tr>
+									</thead>
+									<tbody>
+									<tr th:each="applyCompetitionOrganization : ${applyCompetitionOrganizationPage}">
+										<td th:text="${applyCompetitionOrganization.competitionName}"></td>
+										<td>
+											<th:block th:text="${applyCompetitionOrganization.teamName}"></th:block>
+											<br/>
+											<th:block th:text="${'(' + applyCompetitionOrganization.leaderName + ')'}"></th:block>
+										</td>
+										<td th:text="${applyCompetitionOrganization.phoneNumber}"></td>
+										<td>
+											<ul class="table_ul">
+												<li th:each="department : ${applyCompetitionOrganization.departmentList}" th:text="${department}"></li>
+											</ul>
+										</td>
+										<td>
+											<div>
+												<div th:if="${applyCompetitionOrganization.depositStatus.equals('NOT_DEPOSITED')}">
+													<a href="#" th:onclick="|javascript:accept('${applyCompetitionOrganization.id}')|" class="kors_btn2 mr_10">승인</a>
+													<a href="#" th:onclick="|javascript:deleteApplication('${applyCompetitionOrganization.id}')|" class="kors_btn2 type2">미승인</a>
+												</div>
+
+												<div th:if="${applyCompetitionOrganization.depositStatus.equals('DEPOSITED')}">
+													<a class="kors_btn2 mr_10">승인됨</a> <a href="#" th:onclick="|javascript:deleteApplication('${applyCompetitionOrganization.id}')|" class="kors_btn2 type2">삭제</a>
+												</div>
+
+											</div>
+										</td>
+									</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</section>
+			<script type="text/javascript">
+				function accept(applyCompetitionId) {
+					if (confirm("승인하시겠습니까?"))
+						$.ajax({
+							type: "POST",
+							url: "/admin/apply-competitions",
+							// async: false,
+							contentType: "application/json; charset=utf-8",
+							data: JSON.stringify({
+								applyCompetitionId: applyCompetitionId
+							}),
+							error : function(request,status,error) {
+								alert(request.responseText);
+								console.log("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+								return false;
+							},
+							success: function (data) {
+								alert("승인되었습니다.");
+								location.reload();
+							}
+						});
+				}
+
+				function deleteApplication(applyCompetitionId) {
+					if (confirm("미승인 처리 하시겠습니까?"))
+						$.ajax({
+							type: "DELETE",
+							url: "/admin/apply-competitions",
+							// async: false,
+							// dataType: "application/json; charset=utf-8",
+							data: {
+								applyCompetitionId: applyCompetitionId
+							},
+							error : function(request,status,error) {
+								alert(request.responseText);
+								console.log("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+								return false;
+							},
+							success: function (data) {
+								alert("미승인 처리 되었습니다.");
+								location.reload();
+							}
+						});
+				}
+			</script>
+		</div>
+	</body>
+</html>

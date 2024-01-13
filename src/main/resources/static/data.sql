@@ -341,3 +341,24 @@ VALUES
     (1, '회장', '최성일', '( 주 ) 우림환경', '대표 이사', 'ACTIVE'),
     (2, '부회장', '김용태', '리드팩', '대표', 'ACTIVE')
 ;
+
+INSERT INTO APPLY_COMPETITIONS(competition_id, user_id, team_id, deposit_status, apply_status, created_date, modified_date)
+VALUES
+    (1, null, 1, 'NOT_DEPOSITED', 'WAITING', '2023-11-20 00:00:00', '2023-11-20 00:00:00')
+;
+
+INSERT INTO APPLY_COMPETITIONS_EVENTS(competition_event_id, user_id, team_id, apply_competition_id, apply_status, created_date, modified_date)
+VALUES
+    (27, null, 1, 1, 'WAITING', '2023-11-20 00:00:00', '2023-11-20 00:00:00'),
+    (28, null, 1, 1, 'WAITING', '2023-11-20 00:00:00', '2023-11-20 00:00:00'),
+    (29, null, 1, 1, 'WAITING', '2023-11-20 00:00:00', '2023-11-20 00:00:00'),
+    (30, null, 1, 1, 'WAITING', '2023-11-20 00:00:00', '2023-11-20 00:00:00'),
+    (19, null, 1, 1, 'WAITING', '2023-11-20 00:00:00', '2023-11-20 00:00:00'),
+    (20, null, 1, 1, 'WAITING', '2023-11-20 00:00:00', '2023-11-20 00:00:00'),
+    (21, null, 1, 1, 'WAITING', '2023-11-20 00:00:00', '2023-11-20 00:00:00'),
+    (22, null, 1, 1, 'WAITING', '2023-11-20 00:00:00', '2023-11-20 00:00:00'),
+    (15, null, 1, 1, 'WAITING', '2023-11-20 00:00:00', '2023-11-20 00:00:00'),
+    (16, null, 1, 1, 'WAITING', '2023-11-20 00:00:00', '2023-11-20 00:00:00'),
+    (17, null, 1, 1, 'WAITING', '2023-11-20 00:00:00', '2023-11-20 00:00:00'),
+    (18, null, 1, 1, 'WAITING', '2023-11-20 00:00:00', '2023-11-20 00:00:00')
+;

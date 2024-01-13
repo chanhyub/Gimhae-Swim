@@ -3,6 +3,8 @@ package com.alijas.gimhaeswim.module.admin;
 import com.alijas.gimhaeswim.config.security.CustomUserDetails;
 import com.alijas.gimhaeswim.exception.CustomException;
 import com.alijas.gimhaeswim.exception.CustomRestException;
+import com.alijas.gimhaeswim.module.applycompetition.service.ApplyCompetitionEventService;
+import com.alijas.gimhaeswim.module.applycompetition.service.ApplyCompetitionService;
 import com.alijas.gimhaeswim.module.common.enums.ApplyStatus;
 import com.alijas.gimhaeswim.module.competition.dto.CompetitionListDTO;
 import com.alijas.gimhaeswim.module.competition.entity.*;
@@ -45,6 +47,10 @@ public class AdminViewController {
 
     private final CompetitionEventService competitionEventService;
 
+    private final ApplyCompetitionService applyCompetitionService;
+
+    private final ApplyCompetitionEventService applyCompetitionEventService;
+
     private final DepartmentService departmentService;
 
     private final EventService eventService;
@@ -56,10 +62,12 @@ public class AdminViewController {
     private final HistoryService historyService;
 
 
-    public AdminViewController(UserService userService, CompetitionService competitionService, CompetitionEventService competitionEventService, DepartmentService departmentService, EventService eventService, MeterService meterService, NoticeService noticeService, HistoryService historyService) {
+    public AdminViewController(UserService userService, CompetitionService competitionService, CompetitionEventService competitionEventService, ApplyCompetitionService applyCompetitionService, ApplyCompetitionEventService applyCompetitionEventService, DepartmentService departmentService, EventService eventService, MeterService meterService, NoticeService noticeService, HistoryService historyService) {
         this.userService = userService;
         this.competitionService = competitionService;
         this.competitionEventService = competitionEventService;
+        this.applyCompetitionService = applyCompetitionService;
+        this.applyCompetitionEventService = applyCompetitionEventService;
         this.departmentService = departmentService;
         this.eventService = eventService;
         this.meterService = meterService;
@@ -178,6 +186,22 @@ public class AdminViewController {
 //        model.addAttribute("count", count);
 
         return "admin/competitionUpdate";
+    }
+
+    @GetMapping("/apply-competitions")
+    public String getApplyCompetitionList(
+            @AuthenticationPrincipal CustomUserDetails customUserDetails,
+            @PageableDefault(sort = "id" ,direction = Sort.Direction.DESC, size = 15) Pageable pageable,
+            Model model
+    ) {
+        if (customUserDetails == null) {
+            throw new CustomException("로그인이 필요합니다.", HttpStatus.BAD_REQUEST);
+        }
+
+        model.addAttribute("applyCompetitionIndividualPage", applyCompetitionService.findAllByApplyStatusAndUserNotNull(pageable));
+        model.addAttribute("applyCompetitionOrganizationPage", applyCompetitionService.findAllByApplyStatusAndTeamNotNull(pageable));
+
+        return "admin/applyCompetitionManagement";
     }
 
     @GetMapping("/notices")
