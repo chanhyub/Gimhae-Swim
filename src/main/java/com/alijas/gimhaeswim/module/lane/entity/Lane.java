@@ -34,7 +34,7 @@ public class Lane extends BaseTime {
 
     @Comment("레인 참가 팀")
     @ManyToOne
-    private TeamMember team;
+    private TeamMember teamMember;
 
     @Comment("레인 담당 심판")
     @ManyToOne

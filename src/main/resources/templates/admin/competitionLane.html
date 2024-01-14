@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head th:replace="~{common/adminLayout::ConfigFragment}"></head>
+
+
+<body class="admin_body">
+	<div id="admin_ui" class="d-flex">
+		<header th:replace="~{common/adminLayout::HeaderFragment}"></header>
+
+			<section class="kors_admin_content">
+				<div class="container-fluid mb_80">
+					<div class="row">
+						<div class="col">
+							<h2>레인 관리</h2>
+						</div>
+					</div>
+				</div>
+					<div class="container-fluid">
+						<div class="row">
+							<div class="col">
+								<p class="mb_10" th:text="${competition.competitionName}"></p>
+							</div>
+						</div>
+						<div class="row row-cols-auto justify-content-between mb_40">
+							<div class="col sub_tab_area">
+								<div class="row row-cols-auto">
+									<div  class="col" th:each="field, index : ${competitionEventList}">
+										<a th:href="@{/admin/competitions/{competitionId}/lanes/set(competitionEventId=${field.id}, competitionId = ${competition.id}, isTeam = ${#strings.substringBefore(field.eventType, '_').equals('INDIVIDUAL') ? false : true})}" th:id="'btn_' + ${field.id}" th:text="${(#strings.substringAfter(field.eventType, '_').equals('MALE') ? '남자' : (#strings.substringAfter(field.eventType, '_').equals('FEMALE') ? '여자' : '혼성')) + ' ' + field.department.departmentName + ' ' + (#strings.substringBefore(field.eventType, '_').equals('INDIVIDUAL') ? '개인' : '단체')}"></a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+			</section>
+		</div>
+	</body>
+
+
+</html>

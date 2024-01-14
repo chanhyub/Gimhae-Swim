@@ -15,12 +15,15 @@ import com.alijas.gimhaeswim.module.history.entity.History;
 import com.alijas.gimhaeswim.module.history.request.HistorySaveRequest;
 import com.alijas.gimhaeswim.module.history.request.HistoryUpdateRequest;
 import com.alijas.gimhaeswim.module.history.service.HistoryService;
+import com.alijas.gimhaeswim.module.lane.service.LaneService;
 import com.alijas.gimhaeswim.module.notice.entity.Notice;
 import com.alijas.gimhaeswim.module.notice.request.NoticeSaveRequest;
 import com.alijas.gimhaeswim.module.notice.request.NoticeUpdateRequest;
 import com.alijas.gimhaeswim.module.notice.service.NoticeService;
 import com.alijas.gimhaeswim.module.photo.request.PhotoSaveRequest;
 import com.alijas.gimhaeswim.module.photo.service.PhotoService;
+import com.alijas.gimhaeswim.module.section.request.SectionSaveRequest;
+import com.alijas.gimhaeswim.module.section.service.SectionService;
 import com.alijas.gimhaeswim.module.user.entity.User;
 import com.alijas.gimhaeswim.module.user.service.UserService;
 import jakarta.servlet.http.HttpSession;
@@ -53,7 +56,11 @@ public class AdminController {
 
     private final ApplyCompetitionEventService applyCompetitionEventService;
 
-    public AdminController(UserService userService, NoticeService noticeService, HistoryService historyService, PhotoService photoService, CompetitionService competitionService, ApplyCompetitionService applyCompetitionService, ApplyCompetitionEventService applyCompetitionEventService) {
+    private final SectionService sectionService;
+
+    private final LaneService laneService;
+
+    public AdminController(UserService userService, NoticeService noticeService, HistoryService historyService, PhotoService photoService, CompetitionService competitionService, ApplyCompetitionService applyCompetitionService, ApplyCompetitionEventService applyCompetitionEventService, SectionService sectionService, LaneService laneService) {
         this.userService = userService;
         this.noticeService = noticeService;
         this.historyService = historyService;
@@ -61,6 +68,8 @@ public class AdminController {
         this.competitionService = competitionService;
         this.applyCompetitionService = applyCompetitionService;
         this.applyCompetitionEventService = applyCompetitionEventService;
+        this.sectionService = sectionService;
+        this.laneService = laneService;
     }
 
     @PutMapping("/users/accept")
@@ -333,5 +342,18 @@ public class AdminController {
         applyCompetitionService.deleteApplyCompetition(optionalApplyCompetition.get());
 
         return ResponseEntity.ok("대회 신청이 취소되었습니다.");
+    }
+
+    @PostMapping("/competitions/lanes")
+    public ResponseEntity<String> saveCompetitionLane(
+            @AuthenticationPrincipal CustomUserDetails customUserDetails,
+            @RequestBody SectionSaveRequest sectionSaveRequest
+    ) {
+        if (customUserDetails == null) {
+            throw new CustomRestException("로그인이 필요합니다.", HttpStatus.BAD_REQUEST);
+        }
+        sectionService.save(sectionSaveRequest);
+
+        return ResponseEntity.ok("대회 레인이 등록되었습니다.");
     }
 }

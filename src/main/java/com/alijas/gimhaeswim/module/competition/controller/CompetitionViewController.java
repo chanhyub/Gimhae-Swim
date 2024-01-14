@@ -2,8 +2,11 @@ package com.alijas.gimhaeswim.module.competition.controller;
 
 import com.alijas.gimhaeswim.config.security.CustomUserDetails;
 import com.alijas.gimhaeswim.exception.CustomException;
+import com.alijas.gimhaeswim.module.applycompetition.entity.ApplyCompetition;
+import com.alijas.gimhaeswim.module.applycompetition.entity.ApplyCompetitionEvent;
 import com.alijas.gimhaeswim.module.applycompetition.request.ApplyCompetitionIndividualSaveRequest;
 import com.alijas.gimhaeswim.module.applycompetition.service.ApplyCompetitionEventService;
+import com.alijas.gimhaeswim.module.applycompetition.service.ApplyCompetitionService;
 import com.alijas.gimhaeswim.module.competition.dto.CompetitionEventListApplyDTO;
 import com.alijas.gimhaeswim.module.competition.dto.CompetitionListDTO;
 import com.alijas.gimhaeswim.module.competition.dto.EventListApplyDTO;
@@ -50,16 +53,19 @@ public class CompetitionViewController {
 
     private final UserService userService;
 
-    private final ApplyCompetitionEventService applyCompetitionService;
+    private final ApplyCompetitionService applyCompetitionService;
+
+    private final ApplyCompetitionEventService applyCompetitionEventService;
 
     private final TeamMemberService teamMemberService;
 
-    public CompetitionViewController(CompetitionService competitionService, CompetitionEventService competitionEventService, EventService eventService, UserService userService, ApplyCompetitionEventService applyCompetitionService, TeamMemberService teamMemberService) {
+    public CompetitionViewController(CompetitionService competitionService, CompetitionEventService competitionEventService, EventService eventService, UserService userService, ApplyCompetitionService applyCompetitionService, ApplyCompetitionEventService applyCompetitionEventService, TeamMemberService teamMemberService) {
         this.competitionService = competitionService;
         this.competitionEventService = competitionEventService;
         this.eventService = eventService;
         this.userService = userService;
         this.applyCompetitionService = applyCompetitionService;
+        this.applyCompetitionEventService = applyCompetitionEventService;
         this.teamMemberService = teamMemberService;
     }
 
@@ -110,15 +116,10 @@ public class CompetitionViewController {
         }
         Competition competition = optionalCompetition.get();
 
-
-        competitionEventService.getCompetitionEventByCompetitionId(competition.getId(), INDIVIDUAL).forEach(competitionEvent -> {
-            applyCompetitionService.getApplyCompetitionByUserAndCompetitionEvent(user, competitionEvent)
-                .ifPresent(applyCompetition -> {
-                    if (applyCompetition.getCompetitionEvent().getId().equals(competitionEvent.getId())) {
-                        throw new CustomException("이미 신청한 대회입니다.", HttpStatus.BAD_REQUEST);
-                    }
-                });
-            });
+        List<ApplyCompetition> applyCompetition = applyCompetitionService.getApplyCompetitionAndCompetition(user, competition);
+        if (!applyCompetition.isEmpty()) {
+            throw new CustomException("이미 신청한 대회입니다.", HttpStatus.BAD_REQUEST);
+        }
 
         List<CompetitionEvent> competitionEventList = competitionEventService.getCompetitionEventByCompetitionIdAndType(competition.getId(), INDIVIDUAL);
 
@@ -211,15 +212,11 @@ public class CompetitionViewController {
         }
         Competition competition = optionalCompetition.get();
 
+        List<ApplyCompetition> applyCompetitionByTeam = applyCompetitionService.getApplyCompetitionByTeamAndCompetition(teamMember.getTeam(), competition);
+        if (!applyCompetitionByTeam.isEmpty()) {
+            throw new CustomException("이미 신청한 대회입니다.", HttpStatus.BAD_REQUEST);
+        }
 
-        competitionEventService.getCompetitionEventByCompetitionId(competition.getId(), ORGANIZATION).forEach(competitionEvent -> {
-            applyCompetitionService.getApplyCompetitionByTeamAndCompetitionEvent(teamMember.getTeam(), competitionEvent)
-                    .ifPresent(applyCompetition -> {
-                        if (applyCompetition.getCompetitionEvent().getId().equals(competitionEvent.getId())) {
-                            throw new CustomException("이미 신청한 대회입니다.", HttpStatus.BAD_REQUEST);
-                        }
-                    });
-        });
 
         List<CompetitionEvent> competitionEventList = competitionEventService.getCompetitionEventByCompetitionIdAndType(competition.getId(), ORGANIZATION);
         List<CompetitionEventListApplyDTO> competitionEventApplyDTOList = new ArrayList<>();

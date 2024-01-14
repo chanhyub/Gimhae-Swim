@@ -39,6 +39,7 @@ public class TeamMember extends BaseTime {
     public TeamMemberDTO toDTO() {
         return new TeamMemberDTO(
             this.id,
+            this.team.getId(),
             this.team.getTeamName(),
             this.position.name()
         );

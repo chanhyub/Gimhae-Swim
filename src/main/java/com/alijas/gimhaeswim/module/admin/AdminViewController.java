@@ -3,6 +3,8 @@ package com.alijas.gimhaeswim.module.admin;
 import com.alijas.gimhaeswim.config.security.CustomUserDetails;
 import com.alijas.gimhaeswim.exception.CustomException;
 import com.alijas.gimhaeswim.exception.CustomRestException;
+import com.alijas.gimhaeswim.module.applycompetition.entity.ApplyCompetition;
+import com.alijas.gimhaeswim.module.applycompetition.entity.ApplyCompetitionEvent;
 import com.alijas.gimhaeswim.module.applycompetition.service.ApplyCompetitionEventService;
 import com.alijas.gimhaeswim.module.applycompetition.service.ApplyCompetitionService;
 import com.alijas.gimhaeswim.module.common.enums.ApplyStatus;
@@ -16,7 +18,13 @@ import com.alijas.gimhaeswim.module.notice.dto.NoticeDTO;
 import com.alijas.gimhaeswim.module.notice.dto.NoticeListDTO;
 import com.alijas.gimhaeswim.module.notice.entity.Notice;
 import com.alijas.gimhaeswim.module.notice.service.NoticeService;
+import com.alijas.gimhaeswim.module.referee.entity.Referee;
+import com.alijas.gimhaeswim.module.referee.service.RefereeService;
+import com.alijas.gimhaeswim.module.team.entity.Team;
+import com.alijas.gimhaeswim.module.team.entity.TeamMember;
+import com.alijas.gimhaeswim.module.team.service.TeamMemberService;
 import com.alijas.gimhaeswim.module.user.dto.UserAdminDTO;
+import com.alijas.gimhaeswim.module.user.entity.User;
 import com.alijas.gimhaeswim.module.user.enums.UserStatus;
 import com.alijas.gimhaeswim.module.user.service.UserService;
 import com.alijas.gimhaeswim.util.PageUtil;
@@ -32,6 +40,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,8 +70,11 @@ public class AdminViewController {
 
     private final HistoryService historyService;
 
+    private final RefereeService refereeService;
 
-    public AdminViewController(UserService userService, CompetitionService competitionService, CompetitionEventService competitionEventService, ApplyCompetitionService applyCompetitionService, ApplyCompetitionEventService applyCompetitionEventService, DepartmentService departmentService, EventService eventService, MeterService meterService, NoticeService noticeService, HistoryService historyService) {
+    private final TeamMemberService teamMemberService;
+
+    public AdminViewController(UserService userService, CompetitionService competitionService, CompetitionEventService competitionEventService, ApplyCompetitionService applyCompetitionService, ApplyCompetitionEventService applyCompetitionEventService, DepartmentService departmentService, EventService eventService, MeterService meterService, NoticeService noticeService, HistoryService historyService, RefereeService refereeService, TeamMemberService teamMemberService) {
         this.userService = userService;
         this.competitionService = competitionService;
         this.competitionEventService = competitionEventService;
@@ -73,6 +85,8 @@ public class AdminViewController {
         this.meterService = meterService;
         this.noticeService = noticeService;
         this.historyService = historyService;
+        this.refereeService = refereeService;
+        this.teamMemberService = teamMemberService;
     }
 
     @GetMapping({"/", "", "/users"})
@@ -82,7 +96,7 @@ public class AdminViewController {
             Model model
     ) {
         if (customUserDetails == null) {
-            return "redirect:/login";
+            throw new CustomException("로그인이 필요합니다.", HttpStatus.BAD_REQUEST);
         }
 
         Page<UserAdminDTO> userPage = userService.getUserList(pageable, ApplyStatus.APPROVED, UserStatus.ACTIVE);
@@ -99,7 +113,7 @@ public class AdminViewController {
             Model model
     ) {
         if (customUserDetails == null) {
-            return "redirect:/login";
+            throw new CustomException("로그인이 필요합니다.", HttpStatus.BAD_REQUEST);
         }
 
         Page<UserAdminDTO> userPage = userService.getUserList(pageable, ApplyStatus.WAITING, UserStatus.ACTIVE);
@@ -116,7 +130,7 @@ public class AdminViewController {
             Model model
     ) {
         if (customUserDetails == null) {
-            return "redirect:/login";
+            throw new CustomException("로그인이 필요합니다.", HttpStatus.BAD_REQUEST);
         }
 
         Page<CompetitionListDTO> competitionListDTOS = competitionService.findAll(pageable);
@@ -309,6 +323,97 @@ public class AdminViewController {
     @GetMapping("/photos/save")
     public String save() {
         return "admin/photoSave";
+    }
+
+    @GetMapping("/competitions/{id}/lanes")
+    public String getLanes(
+            @AuthenticationPrincipal CustomUserDetails customUserDetails,
+            @PathVariable Long id,
+            Model model
+    ) {
+//        if (customUserDetails == null) {
+//            throw new CustomException("로그인이 필요합니다.", HttpStatus.BAD_REQUEST);
+//        }
+
+        Optional<Competition> optionalCompetition = competitionService.getCompetition(id);
+        if (optionalCompetition.isEmpty()) {
+            throw new CustomException("존재하지 않는 대회입니다.", HttpStatus.BAD_REQUEST);
+        }
+
+        Competition competition = optionalCompetition.get();
+        List<CompetitionEvent> competitionEventList = competitionEventService.getCompetitionEventByCompetition(competition.getId());
+        List<Referee> refereeList = refereeService.getRefereeList();
+
+        model.addAttribute("competition", competition);
+        model.addAttribute("competitionEventList", competitionEventList);
+        model.addAttribute("refereeList", refereeList);
+
+        return "admin/competitionLane";
+    }
+
+    @GetMapping("/competitions/{id}/lanes/set")
+    public String getLanesSet(
+            @AuthenticationPrincipal CustomUserDetails customUserDetails,
+            @PathVariable Long id,
+            @RequestParam(value = "competitionEventId", required = true) Long competitionEventId,
+            @RequestParam(value = "isTeam", required = true) Boolean isTeam,
+            Model model
+    ) {
+//        if (customUserDetails == null) {
+//            throw new CustomException("로그인이 필요합니다.", HttpStatus.BAD_REQUEST);
+//        }
+
+        Optional<Competition> optionalCompetition = competitionService.getCompetition(id);
+        if (optionalCompetition.isEmpty()) {
+            throw new CustomException("존재하지 않는 대회입니다.", HttpStatus.BAD_REQUEST);
+        }
+
+        Competition competition = optionalCompetition.get();
+        List<CompetitionEvent> competitionEventList = competitionEventService.getCompetitionEventByCompetition(competition.getId());
+        List<Referee> refereeList = refereeService.getRefereeList();
+        List<Team> teamList = new ArrayList<>();
+        List<TeamMember> teamMemberList = new ArrayList<>();
+        List<User> userList = new ArrayList<>();
+
+        if(isTeam) {
+//            List<ApplyCompetition> applyCompetitionList = applyCompetitionService.getApplyCompetitionByCompetition(competition);
+            List<ApplyCompetitionEvent> applyCompetitionByCompetitionEvent = applyCompetitionEventService.getApplyCompetitionByCompetitionEvent(competitionEventId);
+
+            applyCompetitionByCompetitionEvent.forEach(applyCompetition -> {
+                if(applyCompetition.getApplyCompetition().getApplyStatus().name().equals("APPROVED")) {
+                    if(applyCompetition.getTeam() != null) {
+                        teamList.add(applyCompetition.getTeam());
+                    }
+                }
+            });
+
+            for (int i = 0; i < teamList.size(); i++) {
+                teamMemberList.addAll(teamMemberService.getTeamMemberList(teamList.get(i)));
+            }
+
+            model.addAttribute("teamList", teamList);
+            model.addAttribute("teamMemberList", teamMemberList);
+        } else {
+            List<ApplyCompetitionEvent> applyCompetitionByCompetitionEvent = applyCompetitionEventService.getApplyCompetitionByCompetitionEvent(competitionEventId);
+
+            applyCompetitionByCompetitionEvent.forEach(applyCompetition -> {
+                if(applyCompetition.getApplyCompetition().getApplyStatus().name().equals("APPROVED")) {
+                    if(applyCompetition.getUser() != null) {
+                        userList.add(applyCompetition.getUser());
+                    }
+                }
+            });
+
+            model.addAttribute("userList", userList);
+        }
+
+        model.addAttribute("isTeam", isTeam);
+        model.addAttribute("competition", competition);
+        model.addAttribute("competitionEventList", competitionEventList);
+        model.addAttribute("competitionEventId", competitionEventId);
+        model.addAttribute("refereeList", refereeList);
+
+        return "admin/competitionLaneSet";
     }
 
 }

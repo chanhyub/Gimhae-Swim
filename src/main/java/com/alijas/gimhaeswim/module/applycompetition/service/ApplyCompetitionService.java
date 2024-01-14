@@ -78,12 +78,20 @@ public class ApplyCompetitionService {
         return applyCompetitionRepository.findByUser(user);
     }
 
+    public List<ApplyCompetition> getApplyCompetitionAndCompetition(User user, Competition competition) {
+        return applyCompetitionRepository.findByUserAndCompetition(user, competition);
+    }
+
     public List<ApplyCompetition> getApplyCompetition(User user, Team team) {
         return applyCompetitionRepository.findByUserOrTeam(user, team);
     }
 
     public List<ApplyCompetition> getApplyCompetitionByTeam(Team team) {
         return applyCompetitionRepository.findByTeam(team);
+    }
+
+    public List<ApplyCompetition> getApplyCompetitionByTeamAndCompetition(Team team, Competition competition) {
+        return applyCompetitionRepository.findByTeamAndCompetition(team, competition);
     }
 
     @Transactional
@@ -153,9 +161,14 @@ public class ApplyCompetitionService {
         return new PageImpl<>(applyCompetitionManagementOrganizationDTOPage, pageable, applyCompetitionPage.getTotalElements());
     }
 
+    @Transactional
     public void apply(ApplyCompetition applyCompetition) {
         applyCompetition.setApplyStatus(ApplyStatus.APPROVED);
         applyCompetition.setDepositStatus(DepositStatus.DEPOSITED);
         applyCompetitionRepository.save(applyCompetition);
+    }
+
+    public List<ApplyCompetition> getApplyCompetitionByCompetition(Competition competition) {
+        return applyCompetitionRepository.findByCompetition(competition);
     }
 }

@@ -2,6 +2,7 @@ package com.alijas.gimhaeswim.module.applycompetition.repository;
 
 import com.alijas.gimhaeswim.module.applycompetition.entity.ApplyCompetition;
 import com.alijas.gimhaeswim.module.common.enums.ApplyStatus;
+import com.alijas.gimhaeswim.module.competition.entity.Competition;
 import com.alijas.gimhaeswim.module.team.entity.Team;
 import com.alijas.gimhaeswim.module.user.entity.User;
 import org.springframework.data.domain.Page;
@@ -20,4 +21,10 @@ public interface ApplyCompetitionRepository extends JpaRepository<ApplyCompetiti
     Page<ApplyCompetition> findAllByApplyStatusAndUserNotNull(Pageable pageable, ApplyStatus applyStatus);
 
     Page<ApplyCompetition> findAllByApplyStatusAndTeamNotNull(Pageable pageable, ApplyStatus applyStatus);
+
+    List<ApplyCompetition> findByCompetition(Competition competition);
+
+    List<ApplyCompetition> findByUserAndCompetition(User user, Competition competition);
+
+    List<ApplyCompetition> findByTeamAndCompetition(Team team, Competition competition);
 }

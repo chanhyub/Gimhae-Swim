@@ -16,7 +16,7 @@
 		<script src="/assets/js/slick.min.js"></script>
 		<script src="/assets/js/kors_js.js"></script>
 		<script th:inline="javascript">
-			var seq = [[${competitionEvent.competitionEventSeq}]]
+			var seq = [[${competitionEvent.id}]]
 			$(function(){
 				$("#btn_" + seq).addClass("active");
 			});
@@ -98,46 +98,27 @@
 
 	<body class="admin_body">
 	<div id="admin_ui" class="d-flex">
-		<header class="kors_admin_header">
-			<div>
-				<div class="admin_nav_banner">
-					<div>
-						<p class="f_s1">관리자</p>
-						<h1 class="f_s5 fw_pb">김해시수연영맹</h1>
-					</div>
-				</div>
-				<ul class="admin_nav_list">
-					<li><a href="/admin/user/list">경기인 관리</a></li>
-					<li><a href="/admin/user/list/register">경기인 접수</a></li>
-					<li><a href="/admin/competition/list" class="active">대회 관리</a></li>
-					<li><a href="/admin/competition/request">대회 신청관리</a></li>
-					<li><a href="/admin/notice">공지사항</a></li>
-					<li><a href="/admin/photo">포토갤러리</a></li>
-					<li><a href="/admin/history">연혁</a></li>
-					<li><a href="/admin/referee">심판 관리</a></li>
-				</ul>
-			</div>
-		</header>
+		<header th:replace="common/adminLayout::HeaderFragment"></header>
 
 			<section class="kors_admin_content">
 				<div class="container-fluid mb_80">
 					<div class="row">
 						<div class="col">
-							<h2>레인관리</h2>
+							<h2>레인 관리</h2>
 						</div>
 					</div>
 				</div>
 					<div class="container-fluid">
 						<div class="row">
 							<div class="col">
-								<p class="mb_10" th:text="${competitionName}"></p>
+								<p class="mb_10" th:text="${competition.competitionName}"></p>
 							</div>
 						</div>
 						<div class="row row-cols-auto justify-content-between mb_40">
 							<div class="col sub_tab_area">
 								<div class="row row-cols-auto">
 									<div  class="col" th:each="field, index : ${competitionEventList}">
-										<a th:href="@{/admin/competition/set/lane(competitionSeq=${competitionSeq}, competitionEventSeq=${field.competitionEventSeq})}" th:id="'btn_' + ${field.competitionEventSeq}" th:text="${field.sex}+' '+${field.division}+' '+${field.eventName}+' '+${field.meter}+'m'"></a>
+										<a th:href="@{/admin/competition/set/lane(competitionId=${field.id})}" th:id="'btn_' + ${field.id}" th:text="${(#strings.substringAfter(field.eventType, '_').equals('MALE') ? '남자' : (#strings.substringAfter(field.eventType, '_').equals('FEMALE') ? '여자' : '혼성')) + field.department.departmentName + (#strings.substringBefore(field.eventType, '_').equals('INDIVIDUAL') ? '개인' : '단체')}"></a>
 									</div>
 								</div>
 							</div>

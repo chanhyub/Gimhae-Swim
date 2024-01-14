@@ -206,7 +206,7 @@ body {font-size:13px;}
 .lh_25  {line-height:25px;}
 
 .search_select {width:110px; line-height:45px; padding:0 15px; background:url(../img/select_bg.png) right 15px center no-repeat; border:1px solid #dbdbdb;}
-
+.w_33 {width: 33%;}
 
 #kors_header {overflow-x: hidden;}
 #kors_top_box {height: 100px; background: #fff; padding-left:60px;}

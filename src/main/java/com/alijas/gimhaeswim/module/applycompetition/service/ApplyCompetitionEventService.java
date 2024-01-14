@@ -75,4 +75,8 @@ public class ApplyCompetitionEventService {
     public void deleteApplyCompetitionEvent(ApplyCompetition applyCompetition) {
         applyCompetitionEventRepository.deleteByApplyCompetition(applyCompetition);
     }
+
+    public List<ApplyCompetitionEvent> getApplyCompetitionByCompetitionEvent(Long competitionEventId) {
+        return applyCompetitionEventRepository.findByCompetitionEventId(competitionEventId);
+    }
 }
