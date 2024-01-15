@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head th:replace="~{common/adminLayout::ConfigFragment}"></head>
+
+<script th:inline="javascript">
+	let seq = [[${competitionEventId}]]
+	$(function(){
+		$("#btn_" + seq).addClass("active");
+	});
+
+	if([[${sectionList.size()}]] > 0){
+		$(function(){
+			$('.no_text').hide();
+			/*[# th:each="field, index : ${laneSectionList}"]*/
+			var event_num = [[${index.count}]];
+			$('#kors_zone_edit').attr('data', event_num);
+			var tr_num = event_num;
+
+
+			var userList = `<option value="">경기인 선택</option>`;
+			var refereeList = `<option value="">심판 선택</option>`;
+			/*[# th:each="applicationDetail : ${applicationDetailList}" th:if="${isTeam} == 'N'"]*/
+			userList += `<option value="`+[[${applicationDetail.user.userSeq}]]+`">`+[[${applicationDetail.user.userName}]]+`</option>`
+			/*[/]*/
+
+			/*[# th:each="applicationDetail : ${applicationDetailList}" th:if="${isTeam} == 'Y'"]*/
+			userList += `<option value="`+[[${applicationDetail.team.teamSeq}]]+`">`+[[${applicationDetail.team.teamName}]]+`</option>`
+			/*[/]*/
+
+			/*[# th:each="referee : ${refereeList}"]*/
+			refereeList += `<option value="`+[[${referee.refereeSeq}]]+`">`+[[${referee.refereeName}]]+`</option>`
+			/*[/]*/
+
+			$(`#kors_zone_edit`).append(add_html);
+			$('.userList').empty();
+			$('.refereeList').empty();
+			$('.userList').append(userList);
+			$('.refereeList').append(refereeList);
+			/*[/]*/
+			/*[# th:each="field, index : ${laneSectionList}" th:if="${isTeam} == 'N'"]*/
+			var laneList = [[${field.laneList}]];
+			for(var j=0; j<[[${field.laneList.size()}]]; j++){
+				$('#user_'+[[${index.index}]]+"_"+j).val(laneList[j].user.userSeq).prop("selected",true);
+				$('#referee_'+[[${index.index}]]+"_"+j).val(laneList[j].referee.refereeSeq).prop("selected",true);
+			}
+			/*[/]*/
+			/*[# th:each="field, index : ${laneSectionList}" th:if="${isTeam} == 'Y'"]*/
+			var teamLaneList = [[${field.laneList}]];
+			for(var j=0; j<[[${field.laneList.size()}]]; j++){
+				$('#user_'+[[${index.index}]]+"_"+j).val(teamLaneList[j].team.teamSeq).prop("selected",true);
+				$('#referee_'+[[${index.index}]]+"_"+j).val(teamLaneList[j].referee.refereeSeq).prop("selected",true);
+			}
+			/*[/]*/
+		});
+	}
+
+
+</script>
+<body class="admin_body">
+<div id="admin_ui" class="d-flex">
+	<header th:replace="~{common/adminLayout::HeaderFragment}"></header>
+	<script th:inline="javascript"></script>
+
+	<section class="kors_admin_content">
+		<div class="container-fluid mb_80">
+			<div class="row">
+				<div class="col">
+					<h2>레인 관리</h2>
+				</div>
+			</div>
+		</div>
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col">
+					<p class="mb_10" th:text="${competition.competitionName}"></p>
+				</div>
+			</div>
+			<div class="row row-cols-auto justify-content-between mb_40">
+				<div class="col sub_tab_area">
+					<div class="row row-cols-auto">
+						<div  class="col" th:each="field, index : ${competitionEventList}">
+							<a th:href="@{/admin/competitions/{competitionId}/lanes/set(competitionEventId=${field.id}, competitionId = ${competition.id}, isTeam = ${#strings.substringBefore(field.eventType, '_').equals('INDIVIDUAL') ? false : true})}" th:id="'btn_' + ${field.id}" th:text="${(#strings.substringAfter(field.eventType, '_').equals('MALE') ? '남자' : (#strings.substringAfter(field.eventType, '_').equals('FEMALE') ? '여자' : '혼성')) + ' ' + field.department.departmentName + ' ' + (#strings.substringBefore(field.eventType, '_').equals('INDIVIDUAL') ? '개인' : '단체')}"></a>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="row mb_30">
+				<div class="col">
+					<div class="table_box1">
+						<form id="frm">
+							<table class="w-100" id="print_table">
+								<thead>
+								<tr>
+									<th style="width: 20%">조</th>
+									<th style="width: 20%">레인</th>
+									<th style="width: 40%">경기인/심판</th>
+									<th style="width: 20%">비고</th>
+								</tr>
+								</thead>
+								<tbody id="kors_zone_edit" data="0">
+								<tr class="no_text">
+									<td colspan="4">조를 추가해주세요.</td>
+								</tr>
+								</tbody>
+								<tfoot class="add_footer">
+								<tr>
+									<td colspan="4">
+										<input id="zone_name" type="number" placeholder="조" class="kors_input1">
+										<input id="zone_num" type="number" placeholder="레인개수" value="6" readonly class="kors_input1">
+										<button type="button" th:onclick="|javascript:kors_zone_add(${isTeam})|"><img src="/assets/img/add.png"></button>
+									</td>
+								</tr>
+								</tfoot>
+							</table>
+						</form>
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col">
+					<button type="button" onclick="save();" class="kors_btn2 mr_10"> 저장하기</button>
+					<a href="/admin/competitions" class="kors_btn2 type2"> 대회목록</a>
+				</div>
+			</div>
+		</div>
+	</section>
+</div>
+</body>
+
+<!-- 팀 -->
+<script th:inline="javascript">
+	function kors_zone_add(isTeam){
+
+		let zoneName = $('#zone_name').val();
+		let zoneNum = $('#zone_num').val();
+		let zoneEdit = $('#kors_zone_edit');
+
+		if(zoneName === ''){
+			alert('조를 입력해주세요.');
+		}else if(zoneNum === ''){
+			alert('레인개수를 입력해주세요.');
+		}else{
+			var event_num = Number(zoneEdit.attr('data')) + 1;
+			zoneEdit.attr('data', event_num);
+			var tr_num = event_num;
+
+			let userList = `<option value="">경기인 선택</option>`;
+			let teamList = `<option value="">팀 선택</option>`;
+			let refereeList = `<option value="">심판 선택</option>`;
+
+			if(isTeam) {
+				var add_html = `<tr name="test" data="${tr_num}">
+										<td name="section" id="section_` + (tr_num - 1) + `" rowspan="${zoneNum}">
+											${zoneName + '조'}
+											<input type="hidden" name="sectionId" value="">
+										</td>
+										<input name="laneId" type="hidden" value="">
+										<td id="lane_name_` + (tr_num - 1) + `_0">1번 레인</td>
+										<td>
+											<select onchange="teamChange(${tr_num - 1}, 0, this.value)" id="team_` + (tr_num - 1) + `_0" class="search_select w_33 teamList required"></select>
+											<select name="teamMember" id="user_` + (tr_num - 1) + `_0" class="search_select w_33 userList required"></select>
+											<select name="referee" id="referee_` + (tr_num - 1) + `_0" class="search_select w_33 refereeList required"></select>
+										</td>
+										<td rowspan="${zoneNum}">
+											<button type="button" class="match_state type3" onclick="event_tbody_del(${tr_num})">삭제</button>
+										</td>
+									</tr>`
+				for (var i = 1; i < zoneNum; i++) {
+					add_html += `<tr name="test" data="${tr_num}">
+										<td id="lane_name_` + (tr_num - 1) + `_` + i + `" class="left_line">${(i + 1)}번 레인</td>
+										<td>
+											<select onchange="teamChange(${tr_num - 1}, ${i}, this.value)" id="team_` + (tr_num - 1) + `_` + i + `" class="search_select w_33 teamList required">
+											</select>
+											<select name="teamMember" id="user_` + (tr_num - 1) + `_` + i + `" class="search_select w_33 userList required">
+											</select>
+											<select name="referee" id="referee_` + (tr_num - 1) + `_` + i + `" class="search_select w_33 refereeList required">
+											</select>
+										</td>
+									</tr>`
+				}
+
+				/*[# th:each="team : ${teamList}"]*/
+				teamList += `<option value="` + [[${team.id}]] + `">` + [[${team.teamName}]] + `</option>`
+				/*[/]*/
+
+				/*[# th:each="referee : ${refereeList}"]*/
+				refereeList += `<option value="` + [[${referee.id}]] + `">` + [[${referee.user.fullName}]] + `</option>`
+				/*[/]*/
+			} else {
+				var add_html = `<tr name="test" data="${tr_num}">
+										<td name="section" id="section_` + (tr_num - 1) + `" rowspan="${zoneNum}">
+											${zoneName + '조'}
+											<input type="hidden" name="sectionId" value="">
+										</td>
+										<input name="laneId" type="hidden" value="">
+										<td id="lane_name_` + (tr_num - 1) + `_0">1번 레인</td>
+										<td>
+											<select name="user" id="user_` + (tr_num - 1) + `_0" class="search_select w_33 userList required"></select>
+											<select name="referee" id="referee_` + (tr_num - 1) + `_0" class="search_select w_33 refereeList required"></select>
+										</td>
+										<td rowspan="${zoneNum}">
+											<button type="button" class="match_state type3" onclick="event_tbody_del(${tr_num})">삭제</button>
+										</td>
+									</tr>`
+				for (var i = 1; i < zoneNum; i++) {
+					add_html += `<tr name="test" data="${tr_num}">
+										<td id="lane_name_` + (tr_num - 1) + `_` + i + `" class="left_line">${(i + 1)}번 레인</td>
+										<td>
+											</select>
+											<select name="user" id="user_` + (tr_num - 1) + `_` + i + `" class="search_select w_33 userList required">
+											</select>
+											<select name="referee" id="referee_` + (tr_num - 1) + `_` + i + `" class="search_select w_33 refereeList required">
+											</select>
+										</td>
+									</tr>`
+				}
+
+				/*[# th:each="user : ${userList}"]*/
+				userList += `<option value="` + [[${user.id}]] + `">` + [[${user.fullName}]] + `</option>`
+				/*[/]*/
+
+				/*[# th:each="referee : ${refereeList}"]*/
+				refereeList += `<option value="` + [[${referee.id}]] + `">` + [[${referee.user.fullName}]] + `</option>`
+				/*[/]*/
+			}
+
+			$(`#kors_zone_edit`).append(add_html);
+
+			$('.teamList').empty();
+			$('.userList').empty();
+			$('.refereeList').empty();
+
+			$('.teamList').append(teamList);
+			$('.userList').append(userList);
+			$('.refereeList').append(refereeList);
+
+			$('.no_text').hide();
+
+		}
+	}
+
+	function teamChange(trNum, i, teamId) {
+		let userEmpty = $(`#user_${trNum}_${i}`);
+		let userList = `<option value="">경기인 선택</option>`;
+
+		/*[# th:each="teamMember : ${teamMemberList}"]*/
+		if ([[${teamMember.team.id}]] == teamId){
+			userList += `<option value="`+[[${teamMember.id}]]+`">`+[[${teamMember.user.fullName}]]+`</option>`
+		}
+		/*[/]*/
+
+		userEmpty.empty();
+
+		userEmpty.append(userList);
+	}
+
+	function save() {
+		let formData = new FormData(document.getElementById('frm'));
+		let data = {};
+		const NUM = 6;
+
+		data["saveRequest"] = [];
+
+		let teamMember = formData.getAll('teamMember');
+		let user = formData.getAll('user');
+		let referee = formData.getAll('referee');
+		let sectionId = formData.getAll('sectionId');
+		let laneId = formData.getAll('laneId');
+
+
+		let laneCount = teamMember.length;
+		let loopCount = laneCount / NUM;
+
+		for (let i = 0; i < (loopCount === 0 ? '1' : loopCount); i++) {
+			let sectionData = [];
+			let tempData = {};
+			let k = 0;
+			for (let j = i * 6; j < 6 * (i + 1); j++) {
+				let laneData = {};
+
+				laneData["laneNumber"] = k + 1;
+				laneData["laneId"] = laneId[j];
+				laneData["teamMemberId"] = teamMember[j];
+				laneData["userId"] = user[j];
+				laneData["refereeId"] = referee[j];
+
+				sectionData.push(laneData);
+				k++;
+			}
+			tempData.sectionData = sectionData;
+			tempData.sectionId = sectionId[i];
+			data["saveRequest"].push(tempData);
+		}
+		data["competitionEventId"] = [[${competitionEventId}]];
+		console.log(JSON.stringify(data));
+
+		$.ajax({
+			type: 'POST',
+			url: '/admin/competitions/lanes',
+			contentType: 'application/json; charset=utf-8',
+			data: JSON.stringify(data),
+			success: function (data) {
+				alert(data);
+				location.reload();
+			},
+			error: function (error) {
+				alert(error.responseText);
+			}
+		});
+	}
+</script>
+</html>

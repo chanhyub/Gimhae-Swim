@@ -2,6 +2,7 @@ package com.alijas.gimhaeswim.module.referee.entity;
 
 import com.alijas.gimhaeswim.module.common.enums.ApplyStatus;
 import com.alijas.gimhaeswim.module.common.jpa.BaseTime;
+import com.alijas.gimhaeswim.module.referee.dto.RefereeDTO;
 import com.alijas.gimhaeswim.module.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -30,4 +31,12 @@ public class Referee extends BaseTime {
     @Comment("심판 상태")
     @Enumerated(EnumType.STRING)
     private ApplyStatus status;
+
+    public RefereeDTO toDTO() {
+        return new RefereeDTO(
+                this.id,
+                this.user.toUserDTO(),
+                this.status
+        );
+    }
 }

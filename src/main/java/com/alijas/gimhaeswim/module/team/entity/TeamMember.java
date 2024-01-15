@@ -41,6 +41,7 @@ public class TeamMember extends BaseTime {
             this.id,
             this.team.getId(),
             this.team.getTeamName(),
+            this.user.getFullName(),
             this.position.name()
         );
     }

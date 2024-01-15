@@ -14,12 +14,18 @@ import com.alijas.gimhaeswim.module.competition.request.CompetitionSaveRequest;
 import com.alijas.gimhaeswim.module.competition.service.*;
 import com.alijas.gimhaeswim.module.history.entity.History;
 import com.alijas.gimhaeswim.module.history.service.HistoryService;
+import com.alijas.gimhaeswim.module.lane.entity.Lane;
+import com.alijas.gimhaeswim.module.lane.response.LaneResponse;
+import com.alijas.gimhaeswim.module.lane.service.LaneService;
 import com.alijas.gimhaeswim.module.notice.dto.NoticeDTO;
 import com.alijas.gimhaeswim.module.notice.dto.NoticeListDTO;
 import com.alijas.gimhaeswim.module.notice.entity.Notice;
 import com.alijas.gimhaeswim.module.notice.service.NoticeService;
 import com.alijas.gimhaeswim.module.referee.entity.Referee;
 import com.alijas.gimhaeswim.module.referee.service.RefereeService;
+import com.alijas.gimhaeswim.module.section.entity.Section;
+import com.alijas.gimhaeswim.module.section.response.SectionResponse;
+import com.alijas.gimhaeswim.module.section.service.SectionService;
 import com.alijas.gimhaeswim.module.team.entity.Team;
 import com.alijas.gimhaeswim.module.team.entity.TeamMember;
 import com.alijas.gimhaeswim.module.team.service.TeamMemberService;
@@ -74,7 +80,11 @@ public class AdminViewController {
 
     private final TeamMemberService teamMemberService;
 
-    public AdminViewController(UserService userService, CompetitionService competitionService, CompetitionEventService competitionEventService, ApplyCompetitionService applyCompetitionService, ApplyCompetitionEventService applyCompetitionEventService, DepartmentService departmentService, EventService eventService, MeterService meterService, NoticeService noticeService, HistoryService historyService, RefereeService refereeService, TeamMemberService teamMemberService) {
+    private final SectionService sectionService;
+
+    private final LaneService laneService;
+
+    public AdminViewController(UserService userService, CompetitionService competitionService, CompetitionEventService competitionEventService, ApplyCompetitionService applyCompetitionService, ApplyCompetitionEventService applyCompetitionEventService, DepartmentService departmentService, EventService eventService, MeterService meterService, NoticeService noticeService, HistoryService historyService, RefereeService refereeService, TeamMemberService teamMemberService, SectionService sectionService, LaneService laneService) {
         this.userService = userService;
         this.competitionService = competitionService;
         this.competitionEventService = competitionEventService;
@@ -87,6 +97,8 @@ public class AdminViewController {
         this.historyService = historyService;
         this.refereeService = refereeService;
         this.teamMemberService = teamMemberService;
+        this.sectionService = sectionService;
+        this.laneService = laneService;
     }
 
     @GetMapping({"/", "", "/users"})
@@ -331,9 +343,9 @@ public class AdminViewController {
             @PathVariable Long id,
             Model model
     ) {
-//        if (customUserDetails == null) {
-//            throw new CustomException("로그인이 필요합니다.", HttpStatus.BAD_REQUEST);
-//        }
+        if (customUserDetails == null) {
+            throw new CustomException("로그인이 필요합니다.", HttpStatus.BAD_REQUEST);
+        }
 
         Optional<Competition> optionalCompetition = competitionService.getCompetition(id);
         if (optionalCompetition.isEmpty()) {
@@ -359,9 +371,9 @@ public class AdminViewController {
             @RequestParam(value = "isTeam", required = true) Boolean isTeam,
             Model model
     ) {
-//        if (customUserDetails == null) {
-//            throw new CustomException("로그인이 필요합니다.", HttpStatus.BAD_REQUEST);
-//        }
+        if (customUserDetails == null) {
+            throw new CustomException("로그인이 필요합니다.", HttpStatus.BAD_REQUEST);
+        }
 
         Optional<Competition> optionalCompetition = competitionService.getCompetition(id);
         if (optionalCompetition.isEmpty()) {
@@ -376,13 +388,12 @@ public class AdminViewController {
         List<User> userList = new ArrayList<>();
 
         if(isTeam) {
-//            List<ApplyCompetition> applyCompetitionList = applyCompetitionService.getApplyCompetitionByCompetition(competition);
             List<ApplyCompetitionEvent> applyCompetitionByCompetitionEvent = applyCompetitionEventService.getApplyCompetitionByCompetitionEvent(competitionEventId);
 
-            applyCompetitionByCompetitionEvent.forEach(applyCompetition -> {
-                if(applyCompetition.getApplyCompetition().getApplyStatus().name().equals("APPROVED")) {
-                    if(applyCompetition.getTeam() != null) {
-                        teamList.add(applyCompetition.getTeam());
+            applyCompetitionByCompetitionEvent.forEach(applyCompetitionEvent -> {
+                if(applyCompetitionEvent.getApplyCompetition().getApplyStatus().name().equals("APPROVED")) {
+                    if(applyCompetitionEvent.getTeam() != null) {
+                        teamList.add(applyCompetitionEvent.getTeam());
                     }
                 }
             });
@@ -396,16 +407,37 @@ public class AdminViewController {
         } else {
             List<ApplyCompetitionEvent> applyCompetitionByCompetitionEvent = applyCompetitionEventService.getApplyCompetitionByCompetitionEvent(competitionEventId);
 
-            applyCompetitionByCompetitionEvent.forEach(applyCompetition -> {
-                if(applyCompetition.getApplyCompetition().getApplyStatus().name().equals("APPROVED")) {
-                    if(applyCompetition.getUser() != null) {
-                        userList.add(applyCompetition.getUser());
+            applyCompetitionByCompetitionEvent.forEach(applyCompetitionEvent -> {
+                if(applyCompetitionEvent.getApplyCompetition().getApplyStatus().name().equals("APPROVED")) {
+                    if(applyCompetitionEvent.getUser() != null) {
+                        userList.add(applyCompetitionEvent.getUser());
                     }
                 }
             });
 
             model.addAttribute("userList", userList);
         }
+
+        List<SectionResponse> sectionResponseList = new ArrayList<>();
+
+        List<Section> sectionList = sectionService.getSectionList(competitionEventId);
+        sectionList.forEach(section -> {
+            SectionResponse sectionResponse = new SectionResponse();
+            sectionResponse.setId(section.getId());
+            sectionResponse.setSectionNumber(section.getSectionNumber());
+
+            List<Lane> laneList =  laneService.findBySection(section);
+            List<LaneResponse> laneResponseList = new ArrayList<>();
+            laneList.forEach(lane -> {
+                laneResponseList.add(lane.toResponse());
+            });
+
+            sectionResponse.setLaneResponseList(laneResponseList);
+            sectionResponseList.add(sectionResponse);
+        });
+
+        model.addAttribute("sectionResponseList", sectionResponseList);
+
 
         model.addAttribute("isTeam", isTeam);
         model.addAttribute("competition", competition);

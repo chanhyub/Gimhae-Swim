@@ -66,7 +66,7 @@ public class SectionService {
                 );
                 sectionDTO.getSectionData().forEach(laneDTO -> {
                     if (laneDTO.getUserId() == null) {
-                        /* 팀 경기  */
+                        /* 신규 저장 - 팀 경기  */
                         if (laneDTO.getTeamMemberId() == null) {
                             laneRepository.save(new Lane(null, laneDTO.getLaneNumber(), null, null, null, saveSection));
                         } else {
@@ -74,27 +74,35 @@ public class SectionService {
                             if (optionalTeamMember.isEmpty()) {
                                 throw new CustomRestException("팀원이 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
                             }
+                            if (laneDTO.getRefereeId() == null) {
+                                throw new CustomRestException("심판을 선택해주세요", HttpStatus.BAD_REQUEST);
+                            } else {
+                                Optional<Referee> optionalReferee = refereeRepository.findById(laneDTO.getRefereeId());
+                                if (optionalReferee.isEmpty()) {
+                                    throw new CustomRestException("심판이 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
+                                }
+                                laneRepository.save(
+                                        laneDTO.toEntity(optionalTeamMember.get(), optionalReferee.get(), saveSection)
+                                );
+                            }
+                        }
+                    } else {
+                        /* 신규 저장 - 개인 경기 */
+                        Optional<User> optionalUser = userRepository.findById(laneDTO.getUserId());
+                        if (optionalUser.isEmpty()) {
+                            throw new CustomRestException("개인이 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
+                        }
+                        if (laneDTO.getRefereeId() == null) {
+                            throw new CustomRestException("심판을 선택해주세요", HttpStatus.BAD_REQUEST);
+                        } else {
                             Optional<Referee> optionalReferee = refereeRepository.findById(laneDTO.getRefereeId());
                             if (optionalReferee.isEmpty()) {
                                 throw new CustomRestException("심판이 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
                             }
                             laneRepository.save(
-                                    laneDTO.toEntity(optionalTeamMember.get(), optionalReferee.get(), saveSection)
+                                    laneDTO.toEntity(optionalUser.get(), optionalReferee.get(), saveSection)
                             );
                         }
-                    } else {
-                        /* 개인 경기 */
-                        Optional<User> optionalUser = userRepository.findById(laneDTO.getUserId());
-                        if (optionalUser.isEmpty()) {
-                            throw new CustomRestException("개인이 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
-                        }
-                        Optional<Referee> optionalReferee = refereeRepository.findById(laneDTO.getRefereeId());
-                        if (optionalReferee.isEmpty()) {
-                            throw new CustomRestException("심판이 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
-                        }
-                        laneRepository.save(
-                                laneDTO.toEntity(optionalUser.get(), optionalReferee.get(), saveSection)
-                        );
                     }
                 });
             } else {
@@ -112,34 +120,52 @@ public class SectionService {
                     }
                     Lane lane = optionalLane.get();
                     if (laneDTO.getUserId() == null) {
-                        /* 팀 경기 */
-                        Optional<TeamMember> optionalTeamMember = teamMemberRepository.findById(laneDTO.getTeamMemberId());
-                        if (optionalTeamMember.isEmpty()) {
-                            throw new CustomRestException("팀원이 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
+                        /* 수정 - 팀 경기 */
+                        if (laneDTO.getTeamMemberId() == null) {
+                            lane.setTeamMember(null);
+                            lane.setReferee(null);
+                            laneRepository.save(lane);
+                        } else {
+                            Optional<TeamMember> optionalTeamMember = teamMemberRepository.findById(laneDTO.getTeamMemberId());
+                            if (optionalTeamMember.isEmpty()) {
+                                throw new CustomRestException("팀원이 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
+                            }
+                            if (laneDTO.getRefereeId() == null) {
+                                throw new CustomRestException("심판을 선택해주세요", HttpStatus.BAD_REQUEST);
+                            } else {
+                                Optional<Referee> optionalReferee = refereeRepository.findById(laneDTO.getRefereeId());
+                                if (optionalReferee.isEmpty()) {
+                                    throw new CustomRestException("심판이 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
+                                }
+                                lane.setTeamMember(optionalTeamMember.get());
+                                lane.setReferee(optionalReferee.get());
+                                laneRepository.save(lane);
+                            }
                         }
-                        Optional<Referee> optionalReferee = refereeRepository.findById(laneDTO.getRefereeId());
-                        if (optionalReferee.isEmpty()) {
-                            throw new CustomRestException("심판이 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
-                        }
-                        lane.setTeamMember(optionalTeamMember.get());
-                        lane.setReferee(optionalReferee.get());
-                        laneRepository.save(lane);
                     } else {
-                        /* 개인 경기 */
+                        /* 수정 - 개인 경기 */
                         Optional<User> optionalUser = userRepository.findById(laneDTO.getUserId());
                         if (optionalUser.isEmpty()) {
                             throw new CustomRestException("개인이 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
                         }
-                        Optional<Referee> optionalReferee = refereeRepository.findById(laneDTO.getRefereeId());
-                        if (optionalReferee.isEmpty()) {
-                            throw new CustomRestException("심판이 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
+                        if(laneDTO.getRefereeId() == null) {
+                            throw new CustomRestException("심판을 선택해주세요", HttpStatus.BAD_REQUEST);
+                        } else {
+                            Optional<Referee> optionalReferee = refereeRepository.findById(laneDTO.getRefereeId());
+                            if (optionalReferee.isEmpty()) {
+                                throw new CustomRestException("심판이 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
+                            }
+                            lane.setUser(optionalUser.get());
+                            lane.setReferee(optionalReferee.get());
+                            laneRepository.save(lane);
                         }
-                        lane.setUser(optionalUser.get());
-                        lane.setReferee(optionalReferee.get());
-                        laneRepository.save(lane);
                     }
                 });
             }
         });
+    }
+
+    public List<Section> getSectionList(Long competitionEventId) {
+        return sectionRepository.findByCompetitionEventId(competitionEventId);
     }
 }

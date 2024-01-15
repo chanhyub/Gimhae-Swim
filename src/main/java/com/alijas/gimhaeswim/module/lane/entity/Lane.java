@@ -1,6 +1,8 @@
 package com.alijas.gimhaeswim.module.lane.entity;
 
 import com.alijas.gimhaeswim.module.common.jpa.BaseTime;
+import com.alijas.gimhaeswim.module.lane.dto.LaneDTO;
+import com.alijas.gimhaeswim.module.lane.response.LaneResponse;
 import com.alijas.gimhaeswim.module.referee.entity.Referee;
 import com.alijas.gimhaeswim.module.section.entity.Section;
 import com.alijas.gimhaeswim.module.team.entity.TeamMember;
@@ -32,7 +34,7 @@ public class Lane extends BaseTime {
     @ManyToOne
     private User user;
 
-    @Comment("레인 참가 팀")
+    @Comment("레인 참가 팀 경기인")
     @ManyToOne
     private TeamMember teamMember;
 
@@ -44,4 +46,13 @@ public class Lane extends BaseTime {
     @ManyToOne
     private Section section;
 
+    public LaneResponse toResponse() {
+        return new LaneResponse(
+                this.id,
+                this.laneNumber,
+                this.user != null ? this.user.toUserDTO() : null,
+                this.teamMember != null ? this.teamMember.toDTO() : null,
+                this.referee != null ? this.referee.toDTO() : null
+        );
+    }
 }

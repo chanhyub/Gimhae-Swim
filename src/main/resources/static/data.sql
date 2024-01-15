@@ -370,8 +370,11 @@ VALUES
     (56, null, 1, 'NOT_DEPOSITED', 'WAITING', '2023-11-20 00:00:00', '2023-11-20 00:00:00'),
     (56, null, 2, 'NOT_DEPOSITED', 'WAITING', '2023-11-20 00:00:00', '2023-11-20 00:00:00'),
     (56, null, 3, 'NOT_DEPOSITED', 'WAITING', '2023-11-20 00:00:00', '2023-11-20 00:00:00'),
-    (56, null, 4, 'NOT_DEPOSITED', 'WAITING', '2023-11-20 00:00:00', '2023-11-20 00:00:00')
-
+    (56, null, 4, 'NOT_DEPOSITED', 'WAITING', '2023-11-20 00:00:00', '2023-11-20 00:00:00'),
+    (56, 1, null, 'DEPOSITED', 'APPROVED', '2023-11-20 00:00:00', '2023-11-20 00:00:00'),
+    (56, 2, null, 'DEPOSITED', 'APPROVED', '2023-11-20 00:00:00', '2023-11-20 00:00:00'),
+    (56, 3, null, 'DEPOSITED', 'APPROVED', '2023-11-20 00:00:00', '2023-11-20 00:00:00'),
+    (56, 4, null, 'DEPOSITED', 'APPROVED', '2023-11-20 00:00:00', '2023-11-20 00:00:00')
 ;
 
 INSERT INTO APPLY_COMPETITIONS_EVENTS(competition_event_id, user_id, team_id, apply_competition_id, apply_status, created_date, modified_date)
@@ -401,7 +404,11 @@ VALUES
     (22, null, 2, 2, 'WAITING', '2023-11-20 00:00:00', '2023-11-20 00:00:00'),
     (15, null, 2, 2, 'WAITING', '2023-11-20 00:00:00', '2023-11-20 00:00:00'),
     (16, null, 2, 2, 'WAITING', '2023-11-20 00:00:00', '2023-11-20 00:00:00'),
-    (17, null, 2, 2, 'WAITING', '2023-11-20 00:00:00', '2023-11-20 00:00:00')
+    (17, null, 2, 2, 'WAITING', '2023-11-20 00:00:00', '2023-11-20 00:00:00'),
+    (52, 1, null, 5, 'WAITING', '2023-11-20 00:00:00', '2023-11-20 00:00:00'),
+    (52, 2, null, 6, 'WAITING', '2023-11-20 00:00:00', '2023-11-20 00:00:00'),
+    (52, 3, null, 7, 'WAITING', '2023-11-20 00:00:00', '2023-11-20 00:00:00'),
+    (52, 4, null, 8, 'WAITING', '2023-11-20 00:00:00', '2023-11-20 00:00:00')
 ;
 
 INSERT INTO REFEREES(user_id, status, created_date, modified_date)

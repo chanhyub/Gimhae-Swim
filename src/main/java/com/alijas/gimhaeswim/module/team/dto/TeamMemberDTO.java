@@ -4,6 +4,7 @@ public record TeamMemberDTO(
     Long id,
     Long teamId,
     String teamName,
+    String fullName,
     String position
 ) {
 }
