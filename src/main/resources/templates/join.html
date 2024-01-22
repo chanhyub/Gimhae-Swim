@@ -3,10 +3,10 @@
 	  xmlns:th="http://www.thymeleaf.org"
 	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
-<head th:replace="common/layout::ConfigFragment"></head>
+<head th:replace="~{common/layout::ConfigFragment}"></head>
 
 <body>
-<header th:replace="common/layout::HeaderFragment"></header>
+<header th:replace="~{common/layout::HeaderFragment}"></header>
 		
 		<section class="sub_content">
 
@@ -25,7 +25,7 @@
 				<div class="container">
 					<div class="row">
 						<div class="col">
-							<p class="f_s1"><span><img src="/assets/img/home.png"></span> 경기인등록</p>
+							<p class="f_s1"><span><img src="/img/home.png"></span> 경기인등록</p>
 						</div>
 					</div>
 				</div>

@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="ko">
 
-	<head th:replace="common/adminLayout::ConfigFragment"></head>
+	<head th:replace="~{common/adminLayout::ConfigFragment}"></head>
 
 	
 	<body class="admin_body">	
 		<div id="admin_ui" class="d-flex">
-			<header th:replace="common/adminLayout::HeaderFragment"></header>
+			<header th:replace="~{common/adminLayout::HeaderFragment}"></header>
 
 
 			<section class="kors_admin_content">
@@ -48,11 +48,8 @@
 												<div>
 <!--													<a th:href="@{/excel/download(competitionSeq=${field.competitionSeq})}" class="kors_btn2 mr_10">엑셀다운</a>-->
 													<a th:href="@{/admin/competitions/{id}/update(id=${field.id})}" class="kors_btn2 mr_10">수정</a>
-
-<!--													<a th:href="@{/admin/competitions/{id}/lanes(id=${field.id}, competitionEventSeq=${field.getCompetitionEventList[0].competitionEventSeq})}" class="kors_btn2 mr_10">레인관리</a>-->
 													<a th:href="@{/admin/competitions/{id}/lanes(id=${field.id})}" class="kors_btn2 mr_10">레인관리</a>
-
-<!--													<a th:href="@{/admin/competition/set/rank(competitionSeq=${field.id}, competitionEventSeq=${field.getCompetitionEventList[0].competitionEventSeq})}" class="kors_btn2">순위관리</a>-->
+													<a th:href="@{/admin/competition/set/rank(competitionSeq=${field.id}, competitionEventSeq=${field.getCompetitionEventList[0].competitionEventSeq})}" class="kors_btn2">순위관리</a>
 													<a href="#" th:onclick="|javascript:deleteCompetition(${field.id})|" class="kors_btn2 type2">삭제</a>
 												</div>
 											</td>
