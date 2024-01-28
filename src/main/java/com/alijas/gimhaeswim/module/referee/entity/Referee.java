@@ -3,6 +3,7 @@ package com.alijas.gimhaeswim.module.referee.entity;
 import com.alijas.gimhaeswim.module.common.enums.ApplyStatus;
 import com.alijas.gimhaeswim.module.common.jpa.BaseTime;
 import com.alijas.gimhaeswim.module.referee.dto.RefereeDTO;
+import com.alijas.gimhaeswim.module.referee.dto.RefereeListDTO;
 import com.alijas.gimhaeswim.module.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -37,6 +38,15 @@ public class Referee extends BaseTime {
                 this.id,
                 this.user.toUserDTO(),
                 this.status
+        );
+    }
+
+    public RefereeListDTO toRefereeListDTO() {
+        return new RefereeListDTO(
+                this.id,
+                this.user.getFullName(),
+                this.user.getEmail(),
+                this.user.getPhoneNumber()
         );
     }
 }

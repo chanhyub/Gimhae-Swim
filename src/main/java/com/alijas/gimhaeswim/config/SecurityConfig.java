@@ -1,5 +1,6 @@
 package com.alijas.gimhaeswim.config;
 
+import com.alijas.gimhaeswim.config.security.LoginSuccessHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -45,8 +46,8 @@ public class SecurityConfig {
                 .cors(withDefaults()) // Bean 기본 이름이 corsConfigurationSource
                 .authorizeHttpRequests((authorize) ->
                         authorize
+                                .requestMatchers(new MvcRequestMatcher(introspector,"/admin/**")).hasAuthority("ADMIN")
 //                                .requestMatchers(new MvcRequestMatcher(introspector,"/admin")).permitAll()
-//                                .requestMatchers(new MvcRequestMatcher(introspector,"/admin/**")).hasAnyAuthority("ADMIN")
 //                                .requestMatchers(new MvcRequestMatcher(introspector,"/user/my-ag")).hasAnyAuthority("ADMIN")
                                 .anyRequest().permitAll()
 
@@ -55,6 +56,7 @@ public class SecurityConfig {
                         .loginPage("/login")
                         .failureUrl("/loginError")
                         .defaultSuccessUrl("/", true)
+                        .successHandler(new LoginSuccessHandler())
 //                        .failureForwardUrl("/loginError")
                         .permitAll()
                 )

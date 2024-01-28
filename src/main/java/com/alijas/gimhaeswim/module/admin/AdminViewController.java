@@ -21,6 +21,10 @@ import com.alijas.gimhaeswim.module.notice.dto.NoticeDTO;
 import com.alijas.gimhaeswim.module.notice.dto.NoticeListDTO;
 import com.alijas.gimhaeswim.module.notice.entity.Notice;
 import com.alijas.gimhaeswim.module.notice.service.NoticeService;
+import com.alijas.gimhaeswim.module.photo.dto.PhotoListDTO;
+import com.alijas.gimhaeswim.module.photo.entity.Photo;
+import com.alijas.gimhaeswim.module.photo.service.PhotoService;
+import com.alijas.gimhaeswim.module.referee.dto.RefereeListDTO;
 import com.alijas.gimhaeswim.module.referee.entity.Referee;
 import com.alijas.gimhaeswim.module.referee.service.RefereeService;
 import com.alijas.gimhaeswim.module.section.entity.Section;
@@ -84,7 +88,9 @@ public class AdminViewController {
 
     private final LaneService laneService;
 
-    public AdminViewController(UserService userService, CompetitionService competitionService, CompetitionEventService competitionEventService, ApplyCompetitionService applyCompetitionService, ApplyCompetitionEventService applyCompetitionEventService, DepartmentService departmentService, EventService eventService, MeterService meterService, NoticeService noticeService, HistoryService historyService, RefereeService refereeService, TeamMemberService teamMemberService, SectionService sectionService, LaneService laneService) {
+    private final PhotoService photoService;
+
+    public AdminViewController(UserService userService, CompetitionService competitionService, CompetitionEventService competitionEventService, ApplyCompetitionService applyCompetitionService, ApplyCompetitionEventService applyCompetitionEventService, DepartmentService departmentService, EventService eventService, MeterService meterService, NoticeService noticeService, HistoryService historyService, RefereeService refereeService, TeamMemberService teamMemberService, SectionService sectionService, LaneService laneService, PhotoService photoService) {
         this.userService = userService;
         this.competitionService = competitionService;
         this.competitionEventService = competitionEventService;
@@ -99,18 +105,14 @@ public class AdminViewController {
         this.teamMemberService = teamMemberService;
         this.sectionService = sectionService;
         this.laneService = laneService;
+        this.photoService = photoService;
     }
 
     @GetMapping({"/", "", "/users"})
     public String getUserList(
-            @AuthenticationPrincipal CustomUserDetails customUserDetails,
             @PageableDefault(sort = "id" ,direction = Sort.Direction.DESC, size = 15) Pageable pageable,
             Model model
     ) {
-        if (customUserDetails == null) {
-            throw new CustomException("로그인이 필요합니다.", HttpStatus.BAD_REQUEST);
-        }
-
         Page<UserAdminDTO> userPage = userService.getUserList(pageable, ApplyStatus.APPROVED, UserStatus.ACTIVE);
         PageUtil.set(pageable, model, userPage.getTotalPages());
         model.addAttribute("userPage", userPage);
@@ -120,14 +122,9 @@ public class AdminViewController {
 
     @GetMapping("/users/apply")
     public String getApproveUserList(
-            @AuthenticationPrincipal CustomUserDetails customUserDetails,
             @PageableDefault(sort = "id" ,direction = Sort.Direction.DESC, size = 15) Pageable pageable,
             Model model
     ) {
-        if (customUserDetails == null) {
-            throw new CustomException("로그인이 필요합니다.", HttpStatus.BAD_REQUEST);
-        }
-
         Page<UserAdminDTO> userPage = userService.getUserList(pageable, ApplyStatus.WAITING, UserStatus.ACTIVE);
         PageUtil.set(pageable, model, userPage.getTotalPages());
         model.addAttribute("userPage", userPage);
@@ -137,14 +134,9 @@ public class AdminViewController {
 
     @GetMapping("/competitions")
     public String getCompetitionList(
-            @AuthenticationPrincipal CustomUserDetails customUserDetails,
             @PageableDefault(sort = "id" ,direction = Sort.Direction.DESC, size = 15) Pageable pageable,
             Model model
     ) {
-        if (customUserDetails == null) {
-            throw new CustomException("로그인이 필요합니다.", HttpStatus.BAD_REQUEST);
-        }
-
         Page<CompetitionListDTO> competitionListDTOS = competitionService.findAll(pageable);
         PageUtil.set(pageable, model, competitionListDTOS.getTotalPages());
         model.addAttribute("competitionListDTOS", competitionListDTOS);
@@ -154,13 +146,8 @@ public class AdminViewController {
 
     @GetMapping("/competitions/save")
     public String getCompetitionSave(
-            @AuthenticationPrincipal CustomUserDetails customUserDetails,
             Model model
     ) {
-        if (customUserDetails == null) {
-            return "redirect:/login";
-        }
-
         List<Department> departmentList = departmentService.findAll();
         List<Event> eventList = eventService.findAll();
         List<Meter> meterList = meterService.findAll();
@@ -181,14 +168,9 @@ public class AdminViewController {
 
     @GetMapping("/competitions/{id}/update")
     public String getCompetition(
-            @AuthenticationPrincipal CustomUserDetails customUserDetails,
             @PathVariable Long id,
             Model model
     ) {
-        if (customUserDetails == null) {
-            throw new CustomException("로그인이 필요합니다.", HttpStatus.BAD_REQUEST);
-        }
-
         Optional<Competition> optionalCompetition = competitionService.getCompetition(id);
         if (optionalCompetition.isEmpty()) {
             throw new CustomException("존재하지 않는 대회입니다.", HttpStatus.BAD_REQUEST);
@@ -216,14 +198,9 @@ public class AdminViewController {
 
     @GetMapping("/apply-competitions")
     public String getApplyCompetitionList(
-            @AuthenticationPrincipal CustomUserDetails customUserDetails,
             @PageableDefault(sort = "id" ,direction = Sort.Direction.DESC, size = 15) Pageable pageable,
             Model model
     ) {
-        if (customUserDetails == null) {
-            throw new CustomException("로그인이 필요합니다.", HttpStatus.BAD_REQUEST);
-        }
-
         model.addAttribute("applyCompetitionIndividualPage", applyCompetitionService.findAllByApplyStatusAndUserNotNull(pageable));
         model.addAttribute("applyCompetitionOrganizationPage", applyCompetitionService.findAllByApplyStatusAndTeamNotNull(pageable));
 
@@ -232,14 +209,9 @@ public class AdminViewController {
 
     @GetMapping("/notices")
     public String getNoticeList(
-            @AuthenticationPrincipal CustomUserDetails customUserDetails,
             Model model,
             @PageableDefault(sort = "id" ,direction = Sort.Direction.DESC, size = 15) Pageable pageable
     ) {
-        if (customUserDetails == null) {
-            return "redirect:/login";
-        }
-
         Page<NoticeDTO> noticePage = noticeService.findAllAdmin(pageable);
         PageUtil.set(pageable, model, noticePage.getTotalPages());
         model.addAttribute("noticePage", noticePage);
@@ -249,25 +221,16 @@ public class AdminViewController {
 
     @GetMapping("/notices/save")
     public String getNoticeSave(
-            @AuthenticationPrincipal CustomUserDetails customUserDetails,
             Model model
     ) {
-        if (customUserDetails == null) {
-            return "redirect:/login";
-        }
-
         return "admin/noticeSave";
     }
 
     @GetMapping("/notices/{id}/update")
     public String getNoticeUpdate(
-            @AuthenticationPrincipal CustomUserDetails customUserDetails,
             Model model,
-            @PathVariable Long id) {
-        if (customUserDetails == null) {
-            return "redirect:/login";
-        }
-
+            @PathVariable Long id)
+    {
         Optional<Notice> optionalNotice = noticeService.getNotice(id);
         if (optionalNotice.isEmpty()) {
             throw new CustomException("존재하지 않는 공지사항입니다.", HttpStatus.BAD_REQUEST);
@@ -280,14 +243,9 @@ public class AdminViewController {
 
     @GetMapping("/histories")
     public String getHistoryList(
-            @AuthenticationPrincipal CustomUserDetails customUserDetails,
             Model model,
             @PageableDefault(sort = "id" ,direction = Sort.Direction.DESC, size = 15) Pageable pageable
     ) {
-        if (customUserDetails == null) {
-            return "redirect:/login";
-        }
-
         Page<History> historyList = historyService.getHistoryList(pageable);
         PageUtil.set(pageable, model, historyList.getTotalPages());
         model.addAttribute("historyPage", historyList);
@@ -297,25 +255,16 @@ public class AdminViewController {
 
     @GetMapping("/histories/save")
     public String getHistorySave(
-            @AuthenticationPrincipal CustomUserDetails customUserDetails,
             Model model
     ) {
-        if (customUserDetails == null) {
-            return "redirect:/login";
-        }
-
         return "admin/historySave";
     }
 
     @GetMapping("/histories/{id}/update")
     public String getHistoryUpdate(
-            @AuthenticationPrincipal CustomUserDetails customUserDetails,
             Model model,
             @PathVariable Long id
     ) {
-        if (customUserDetails == null) {
-            return "redirect:/login";
-        }
 
         Optional<History> optionalHistory = historyService.getHistory(id);
         if (optionalHistory.isEmpty()) {
@@ -328,7 +277,16 @@ public class AdminViewController {
     }
 
     @GetMapping("/photos")
-    public String getPhotoList() {
+    public String getPhotoList(
+            Model model,
+            @PageableDefault(sort = "id" ,direction = Sort.Direction.DESC, size = 15) Pageable pageable
+    ) {
+
+        Page<PhotoListDTO> photoPage = photoService.getPhotoPage(pageable);
+
+        PageUtil.set(pageable, model, photoPage.getTotalPages());
+        model.addAttribute("photoPage", photoPage);
+
         return "admin/photo";
     }
 
@@ -339,13 +297,9 @@ public class AdminViewController {
 
     @GetMapping("/competitions/{id}/lanes")
     public String getLanes(
-            @AuthenticationPrincipal CustomUserDetails customUserDetails,
             @PathVariable Long id,
             Model model
     ) {
-        if (customUserDetails == null) {
-            throw new CustomException("로그인이 필요합니다.", HttpStatus.BAD_REQUEST);
-        }
 
         Optional<Competition> optionalCompetition = competitionService.getCompetition(id);
         if (optionalCompetition.isEmpty()) {
@@ -365,15 +319,11 @@ public class AdminViewController {
 
     @GetMapping("/competitions/{id}/lanes/set")
     public String getLanesSet(
-            @AuthenticationPrincipal CustomUserDetails customUserDetails,
             @PathVariable Long id,
             @RequestParam(value = "competitionEventId", required = true) Long competitionEventId,
             @RequestParam(value = "isTeam", required = true) Boolean isTeam,
             Model model
     ) {
-        if (customUserDetails == null) {
-            throw new CustomException("로그인이 필요합니다.", HttpStatus.BAD_REQUEST);
-        }
 
         Optional<Competition> optionalCompetition = competitionService.getCompetition(id);
         if (optionalCompetition.isEmpty()) {
@@ -446,6 +396,24 @@ public class AdminViewController {
         model.addAttribute("refereeList", refereeList);
 
         return "admin/competitionLaneSet";
+    }
+
+    @GetMapping("/referees")
+    public String getRefereeList(
+            Model model,
+            @PageableDefault(sort = "id" ,direction = Sort.Direction.DESC, size = 15) Pageable pageable
+    ) {
+
+        Page<RefereeListDTO> refereePage = refereeService.getRefereePage(pageable);
+        PageUtil.set(pageable, model, refereePage.getTotalPages());
+        model.addAttribute("refereePage", refereePage);
+
+        return "admin/referee";
+    }
+
+    @GetMapping("/referees/save")
+    public String getRefereeSave() {
+        return "admin/refereeSave";
     }
 
 }

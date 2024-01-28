@@ -20,8 +20,11 @@ import com.alijas.gimhaeswim.module.notice.entity.Notice;
 import com.alijas.gimhaeswim.module.notice.request.NoticeSaveRequest;
 import com.alijas.gimhaeswim.module.notice.request.NoticeUpdateRequest;
 import com.alijas.gimhaeswim.module.notice.service.NoticeService;
+import com.alijas.gimhaeswim.module.photo.entity.Photo;
 import com.alijas.gimhaeswim.module.photo.request.PhotoSaveRequest;
 import com.alijas.gimhaeswim.module.photo.service.PhotoService;
+import com.alijas.gimhaeswim.module.referee.entity.Referee;
+import com.alijas.gimhaeswim.module.referee.service.RefereeService;
 import com.alijas.gimhaeswim.module.section.request.SectionSaveRequest;
 import com.alijas.gimhaeswim.module.section.service.SectionService;
 import com.alijas.gimhaeswim.module.user.entity.User;
@@ -60,7 +63,9 @@ public class AdminController {
 
     private final LaneService laneService;
 
-    public AdminController(UserService userService, NoticeService noticeService, HistoryService historyService, PhotoService photoService, CompetitionService competitionService, ApplyCompetitionService applyCompetitionService, ApplyCompetitionEventService applyCompetitionEventService, SectionService sectionService, LaneService laneService) {
+    private final RefereeService refereeService;
+
+    public AdminController(UserService userService, NoticeService noticeService, HistoryService historyService, PhotoService photoService, CompetitionService competitionService, ApplyCompetitionService applyCompetitionService, ApplyCompetitionEventService applyCompetitionEventService, SectionService sectionService, LaneService laneService, RefereeService refereeService) {
         this.userService = userService;
         this.noticeService = noticeService;
         this.historyService = historyService;
@@ -70,18 +75,13 @@ public class AdminController {
         this.applyCompetitionEventService = applyCompetitionEventService;
         this.sectionService = sectionService;
         this.laneService = laneService;
+        this.refereeService = refereeService;
     }
 
     @PutMapping("/users/accept")
     public ResponseEntity<String> updateUser(
-            @AuthenticationPrincipal CustomUserDetails customUserDetails,
             @RequestBody String userId
     ) {
-
-        if (customUserDetails == null) {
-            throw new CustomRestException("로그인이 필요합니다.", HttpStatus.BAD_REQUEST);
-        }
-
         Optional<User> optionalUser = userService.getUser(Long.parseLong(userId));
         if (optionalUser.isEmpty()) {
             throw new CustomRestException("존재하지 않는 회원입니다.", HttpStatus.BAD_REQUEST);
@@ -95,13 +95,8 @@ public class AdminController {
 
     @DeleteMapping("/users/delete")
     public ResponseEntity<String> deleteUser(
-            @AuthenticationPrincipal CustomUserDetails customUserDetails,
             @RequestBody String userId
     ) {
-        if (customUserDetails == null) {
-            throw new CustomRestException("로그인이 필요합니다.", HttpStatus.BAD_REQUEST);
-        }
-
         Optional<User> optionalUser = userService.getUser(Long.parseLong(userId));
         if (optionalUser.isEmpty()) {
             throw new CustomRestException("존재하지 않는 회원입니다.", HttpStatus.BAD_REQUEST);
@@ -115,14 +110,9 @@ public class AdminController {
 
     @PostMapping("/competitions")
     public ResponseEntity<String> saveCompetition(
-            @AuthenticationPrincipal CustomUserDetails customUserDetails,
             @RequestBody @Valid CompetitionSaveRequest competitionSaveRequest,
             Errors errors
     ) {
-        if (customUserDetails == null) {
-            throw new CustomRestException("로그인이 필요합니다.", HttpStatus.BAD_REQUEST);
-        }
-
         if (errors.hasErrors()) {
             throw new CustomRestException(errors.getAllErrors().get(0).getDefaultMessage(), HttpStatus.BAD_REQUEST);
         }
@@ -134,13 +124,9 @@ public class AdminController {
 
     @PutMapping("/competitions")
     public ResponseEntity<String> updateCompetition(
-            @AuthenticationPrincipal CustomUserDetails customUserDetails,
             @RequestBody @Valid CompetitionUpdateRequest competitionUpdateRequest,
             Errors errors
     ) {
-        if (customUserDetails == null) {
-            throw new CustomRestException("로그인이 필요합니다.", HttpStatus.BAD_REQUEST);
-        }
         if (errors.hasErrors()) {
             throw new CustomRestException(errors.getAllErrors().get(0).getDefaultMessage(), HttpStatus.BAD_REQUEST);
         }
@@ -154,12 +140,8 @@ public class AdminController {
 
     @DeleteMapping("/competitions")
     public ResponseEntity<String> deleteCompetition(
-            @AuthenticationPrincipal CustomUserDetails customUserDetails,
             @RequestBody Map<String, Long> competitionId
     ) {
-        if (customUserDetails == null) {
-            throw new CustomRestException("로그인이 필요합니다.", HttpStatus.BAD_REQUEST);
-        }
         Optional<Competition> optionalCompetition = competitionService.getCompetition(competitionId.get("competitionId"));
         if (optionalCompetition.isEmpty()) {
             throw new CustomRestException("존재하지 않는 대회입니다.", HttpStatus.BAD_REQUEST);
@@ -192,14 +174,9 @@ public class AdminController {
 
     @PutMapping("/notices/update")
     public ResponseEntity<String> updateNotice(
-            @AuthenticationPrincipal CustomUserDetails customUserDetails,
             @Valid @RequestBody NoticeUpdateRequest noticeUpdateRequest,
             Errors errors
     ) {
-        if (customUserDetails == null) {
-            throw new CustomRestException("로그인이 필요합니다.", HttpStatus.BAD_REQUEST);
-        }
-
         if (errors.hasErrors()) {
             throw new CustomRestException(errors.getAllErrors().get(0).getDefaultMessage(), HttpStatus.BAD_REQUEST);
         }
@@ -215,13 +192,8 @@ public class AdminController {
 
     @DeleteMapping("/notices/delete")
     public ResponseEntity<String> deleteNotice(
-            @AuthenticationPrincipal CustomUserDetails customUserDetails,
             String noticeId
     ) {
-        if (customUserDetails == null) {
-            throw new CustomRestException("로그인이 필요합니다.", HttpStatus.BAD_REQUEST);
-        }
-
         Optional<Notice> notice = noticeService.getNotice(Long.parseLong(noticeId));
         if (notice.isEmpty()) {
             throw new CustomRestException("존재하지 않는 공지사항입니다.", HttpStatus.BAD_REQUEST);
@@ -233,14 +205,9 @@ public class AdminController {
 
     @PostMapping("/histories/save")
     public ResponseEntity<String> saveHistory(
-            @AuthenticationPrincipal CustomUserDetails customUserDetails,
             @RequestBody @Valid  HistorySaveRequest historySaveRequest,
             Errors errors
     ) {
-        if (customUserDetails == null) {
-            throw new CustomRestException("로그인이 필요합니다.", HttpStatus.BAD_REQUEST);
-        }
-
         if (errors.hasErrors()) {
             throw new CustomRestException(errors.getAllErrors().get(0).getDefaultMessage(), HttpStatus.BAD_REQUEST);
         }
@@ -252,14 +219,9 @@ public class AdminController {
 
     @PutMapping("/histories/update")
     public ResponseEntity<String> updateHistory(
-            @AuthenticationPrincipal CustomUserDetails customUserDetails,
             @RequestBody @Valid HistoryUpdateRequest historyUpdateRequest,
             Errors errors
     ) {
-        if (customUserDetails == null) {
-            throw new CustomRestException("로그인이 필요합니다.", HttpStatus.BAD_REQUEST);
-        }
-
         if (errors.hasErrors()) {
             throw new CustomRestException(errors.getAllErrors().get(0).getDefaultMessage(), HttpStatus.BAD_REQUEST);
         }
@@ -276,13 +238,8 @@ public class AdminController {
 
     @DeleteMapping("/histories/delete")
     public ResponseEntity<String> deleteHistory(
-            @AuthenticationPrincipal CustomUserDetails customUserDetails,
             String historyId
     ) {
-        if (customUserDetails == null) {
-            throw new CustomRestException("로그인이 필요합니다.", HttpStatus.BAD_REQUEST);
-        }
-
         Optional<History> optionalHistory = historyService.getHistory(Long.parseLong(historyId));
         if (optionalHistory.isEmpty()) {
             throw new CustomRestException("존재하지 않는 연혁입니다.", HttpStatus.BAD_REQUEST);
@@ -307,14 +264,23 @@ public class AdminController {
         return ResponseEntity.ok("포토갤러리 등록되었습니다.");
     }
 
+    @DeleteMapping("/photo/{id}")
+    public ResponseEntity<String> deletePhoto(
+            @PathVariable Long id
+    ) {
+        Optional<Photo> optionalPhoto = photoService.getPhoto(id);
+        if (optionalPhoto.isEmpty()) {
+            throw new CustomRestException("존재하지 않는 포토갤러리입니다.", HttpStatus.BAD_REQUEST);
+        }
+
+        photoService.delete(optionalPhoto.get());
+        return ResponseEntity.ok("포토갤러리가 삭제되었습니다.");
+    }
+
     @PostMapping("/apply-competitions")
     public ResponseEntity<String> saveApplyCompetition(
-            @AuthenticationPrincipal CustomUserDetails customUserDetails,
             @RequestBody Map<String, Long> applyCompetitionId
     ) {
-        if (customUserDetails == null) {
-            throw new CustomRestException("로그인이 필요합니다.", HttpStatus.BAD_REQUEST);
-        }
         Optional<ApplyCompetition> optionalApplyCompetition = applyCompetitionService.getApplyCompetition(applyCompetitionId.get("applyCompetitionId"));
         if (optionalApplyCompetition.isEmpty()) {
             throw new CustomRestException("존재하지 않는 신청입니다.", HttpStatus.BAD_REQUEST);
@@ -327,12 +293,8 @@ public class AdminController {
 
     @DeleteMapping("/apply-competitions")
     public ResponseEntity<String> deleteApplyCompetition(
-            @AuthenticationPrincipal CustomUserDetails customUserDetails,
             String applyCompetitionId
     ) {
-        if (customUserDetails == null) {
-            throw new CustomRestException("로그인이 필요합니다.", HttpStatus.BAD_REQUEST);
-        }
         Optional<ApplyCompetition> optionalApplyCompetition = applyCompetitionService.getApplyCompetition(Long.parseLong(applyCompetitionId));
         if (optionalApplyCompetition.isEmpty()) {
             throw new CustomRestException("존재하지 않는 신청입니다.", HttpStatus.BAD_REQUEST);
@@ -346,14 +308,22 @@ public class AdminController {
 
     @PostMapping("/competitions/lanes")
     public ResponseEntity<String> saveCompetitionLane(
-            @AuthenticationPrincipal CustomUserDetails customUserDetails,
             @RequestBody SectionSaveRequest sectionSaveRequest
     ) {
-        if (customUserDetails == null) {
-            throw new CustomRestException("로그인이 필요합니다.", HttpStatus.BAD_REQUEST);
-        }
         sectionService.save(sectionSaveRequest);
-
         return ResponseEntity.ok("대회 레인이 등록되었습니다.");
+    }
+
+    @DeleteMapping("/referees/{id}")
+    public ResponseEntity<String> deleteReferee(
+            @PathVariable Long id
+    ) {
+        Optional<Referee> optionalReferee = refereeService.getReferee(id);
+        if (optionalReferee.isEmpty()) {
+            throw new CustomRestException("존재하지 않는 심판입니다.", HttpStatus.BAD_REQUEST);
+        }
+
+        refereeService.delete(optionalReferee.get());
+        return ResponseEntity.ok("심판이 삭제되었습니다.");
     }
 }

@@ -15,5 +15,6 @@ public class PhotoListDTO {
     private String title;
     private String content;
     private String fileUrl;
+    private String writer;
     private String createdDate;
 }

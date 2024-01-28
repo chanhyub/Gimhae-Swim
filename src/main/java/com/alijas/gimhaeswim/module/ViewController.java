@@ -96,7 +96,8 @@ public class ViewController {
     }
 
     @GetMapping("/login")
-    public String login() {
+    public String login(HttpSession session) {
+        session.invalidate();
         return "login";
     }
 

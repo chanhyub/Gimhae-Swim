@@ -43,7 +43,7 @@ public class Photo extends BaseTime {
     private User user;
 
     public PhotoListDTO toPhotoListDTO() {
-        return new PhotoListDTO(this.id, this.title, this.content, null, DateTimeConverter.LocalDateTimeToStringYYYYMMDD(this.getCreatedDate()));
+        return new PhotoListDTO(this.id, this.title, this.content, null, user.getFullName(), DateTimeConverter.LocalDateTimeToStringYYYYMMDD(this.getCreatedDate()));
     }
 
     public PhotoDTO toPhotoDTO() {

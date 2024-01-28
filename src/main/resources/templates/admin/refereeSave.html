@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head th:replace="~{common/adminLayout::ConfigFragment}"></head>
+	
+	<body class="admin_body">	
+		<div id="admin_ui" class="d-flex">
+			<header th:replace="~{common/adminLayout::HeaderFragment}"></header>
+
+			<section class="kors_admin_content">
+				<div class="container-fluid mb_80">
+					<div class="row">
+						<div class="col">
+							<h2>심판 등록</h2>
+						</div>
+					</div>
+				</div>
+
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col">
+							<div class="con_add_form">
+								<form name="frm" th:action="@{/admin/referee/add}" method="post" onSubmit="return Checkform()">
+									<ul>
+										<li class="w_size1">
+											<div><label class="f_s5 fw_pb">이름</label></div>
+											<input id="name" type="text" class="kors_input1 w-100">
+										</li>
+
+										<li class="w_size1">
+											<div><label class="f_s5 fw_pb">패스워드</label></div>
+											<input id="password" type="text" class="kors_input1 w-100">
+										</li>
+										<li class="w_size1">
+											<button type="submit" class="kors_btn1 w-100"> 심판 등록하기</button>
+										</li>
+									</ul>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+			<script>
+				function Checkform() {
+
+					if (frm.name.value == "") {
+						frm.name.focus();
+						alert("이름을 입력해 주십시오.");
+						return false;
+
+					}else if (frm.password.value == "") {
+						frm.password.focus();
+						alert("패스워드를 입력해 주십시오.");
+						return false;
+
+					}
+					alert("심판 등록이 완료되었습니다.");
+				}
+
+			</script>
+		</div>
+	</body>
+</html>

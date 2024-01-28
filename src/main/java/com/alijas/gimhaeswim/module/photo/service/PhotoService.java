@@ -99,4 +99,17 @@ public class PhotoService {
         }
         return photoDTO;
     }
+
+    public Page<PhotoListDTO> getPhotoPage(Pageable pageable) {
+        Page<Photo> photoPage = photoRepository.findAll(pageable);
+        List<PhotoListDTO> list = photoPage.stream()
+                .map(Photo::toPhotoListDTO)
+                .toList();
+        return new PageImpl<>(list, pageable, photoPage.getTotalElements());
+    }
+
+    @Transactional
+    public void delete(Photo photo) {
+        photoRepository.delete(photo);
+    }
 }
