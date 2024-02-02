@@ -1,16 +1,12 @@
 package com.alijas.gimhaeswim.module.admin;
 
-import com.alijas.gimhaeswim.config.security.CustomUserDetails;
 import com.alijas.gimhaeswim.exception.CustomException;
-import com.alijas.gimhaeswim.exception.CustomRestException;
-import com.alijas.gimhaeswim.module.applycompetition.entity.ApplyCompetition;
 import com.alijas.gimhaeswim.module.applycompetition.entity.ApplyCompetitionEvent;
 import com.alijas.gimhaeswim.module.applycompetition.service.ApplyCompetitionEventService;
 import com.alijas.gimhaeswim.module.applycompetition.service.ApplyCompetitionService;
 import com.alijas.gimhaeswim.module.common.enums.ApplyStatus;
 import com.alijas.gimhaeswim.module.competition.dto.CompetitionListDTO;
 import com.alijas.gimhaeswim.module.competition.entity.*;
-import com.alijas.gimhaeswim.module.competition.request.CompetitionSaveRequest;
 import com.alijas.gimhaeswim.module.competition.service.*;
 import com.alijas.gimhaeswim.module.history.entity.History;
 import com.alijas.gimhaeswim.module.history.service.HistoryService;
@@ -18,14 +14,13 @@ import com.alijas.gimhaeswim.module.lane.entity.Lane;
 import com.alijas.gimhaeswim.module.lane.response.LaneResponse;
 import com.alijas.gimhaeswim.module.lane.service.LaneService;
 import com.alijas.gimhaeswim.module.notice.dto.NoticeDTO;
-import com.alijas.gimhaeswim.module.notice.dto.NoticeListDTO;
 import com.alijas.gimhaeswim.module.notice.entity.Notice;
 import com.alijas.gimhaeswim.module.notice.service.NoticeService;
 import com.alijas.gimhaeswim.module.photo.dto.PhotoListDTO;
-import com.alijas.gimhaeswim.module.photo.entity.Photo;
 import com.alijas.gimhaeswim.module.photo.service.PhotoService;
 import com.alijas.gimhaeswim.module.referee.dto.RefereeListDTO;
 import com.alijas.gimhaeswim.module.referee.entity.Referee;
+import com.alijas.gimhaeswim.module.referee.request.RefereeSaveRequest;
 import com.alijas.gimhaeswim.module.referee.service.RefereeService;
 import com.alijas.gimhaeswim.module.section.entity.Section;
 import com.alijas.gimhaeswim.module.section.response.SectionResponse;
@@ -38,19 +33,16 @@ import com.alijas.gimhaeswim.module.user.entity.User;
 import com.alijas.gimhaeswim.module.user.enums.UserStatus;
 import com.alijas.gimhaeswim.module.user.service.UserService;
 import com.alijas.gimhaeswim.util.PageUtil;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.validation.Errors;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -414,6 +406,21 @@ public class AdminViewController {
     @GetMapping("/referees/save")
     public String getRefereeSave() {
         return "admin/refereeSave";
+    }
+
+    @PostMapping("/referees/add")
+    public String addReferee(
+            @Valid RefereeSaveRequest refereeSaveRequest, Errors errors
+    ) {
+        if (errors.hasErrors()){
+            throw new CustomException(errors.getAllErrors().get(0).getDefaultMessage(), HttpStatus.BAD_REQUEST);
+        }
+        if(!refereeSaveRequest.password().equals(refereeSaveRequest.confirmPassword())){
+            throw new CustomException("비밀번호가 일치하지 않습니다.", HttpStatus.BAD_REQUEST);
+        }
+        refereeService.addReferee(refereeSaveRequest);
+
+        return "redirect:/admin/referees";
     }
 
 }

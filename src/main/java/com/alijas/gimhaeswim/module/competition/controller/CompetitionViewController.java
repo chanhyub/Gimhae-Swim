@@ -20,6 +20,7 @@ import com.alijas.gimhaeswim.module.team.entity.TeamMember;
 import com.alijas.gimhaeswim.module.team.service.TeamMemberService;
 import com.alijas.gimhaeswim.module.user.entity.User;
 import com.alijas.gimhaeswim.module.user.service.UserService;
+import com.alijas.gimhaeswim.util.DateTimeConverter;
 import com.alijas.gimhaeswim.util.PageUtil;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -33,6 +34,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -75,6 +77,7 @@ public class CompetitionViewController {
     ) {
         Page<CompetitionListDTO> competitionPage = competitionService.findAll(pageable);
         PageUtil.set(pageable, model, competitionPage.getTotalPages());
+
         model.addAttribute("competitionPage", competitionPage);
         return "competitions/competitionList";
     }

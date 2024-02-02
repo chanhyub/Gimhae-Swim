@@ -25,7 +25,7 @@
                         <h1 class="ft_s2">김해시수영연맹</h1>
                     </a>
 
-                    <ul class="kors_top_menu d-flex align-items-center">
+                    <ul class="kors_top_menu d-flex align-items-center mr_150">
                         <li>
                             <a th:href="@{/histories}" class="f_s3">연혁</a>
                         </li>
@@ -41,9 +41,6 @@
                         <li>
                             <a th:href="@{/photos}" class="f_s3">포토갤러리</a>
                         </li>
-                        <li th:if="${session.isEmpty()}">
-                            <a th:href="@{/join}" class="f_s3">경기인등록</a>
-                        </li>
                         <li th:if="${!session.isEmpty()}">
                             <a th:href="@{/users/my-page}" class="f_s3">마이페이지</a>
                         </li>
@@ -54,6 +51,7 @@
             <div class="d-flex align-items-center">
                 <a class="f_s3 mr_10" th:if="${!session.isEmpty()}" th:href="@{/user/{id}(id=${session.user.id})}" th:text="${session.user.fullName} + '님'"></a>
                 					<a class="f_s3" th:if="${!session.isEmpty()}" th:href="@{/logout}"><span th:text="로그아웃"></span></a>
+                <a th:if="${session.isEmpty()}" th:href="@{/join}" class="f_s3 mr_30"><span th:text="회원가입"></span></a>
                 <a class="f_s3" th:if="${session.isEmpty()}" th:href="@{/login}"><span th:text="로그인"></span></a>
             </div>
 
@@ -78,26 +76,29 @@
                 </div>
                 <div class="md_menu_bottom">
                     <ul>
-                        <li>
-                            <p><a th:href="@{/history}">연혁</a></p>
+                        <li th:if="${!session.isEmpty()}">
+                            <p><a th:href="@{/users/my-page}">마이페이지</a></p>
+                        </li>
+                        <li th:if="${session.isEmpty()}">
+                            <p><a th:href="@{/join}">회원가입</a></p>
+                        </li>
+                        <li th:if="${session.isEmpty()}">
+                            <p><a th:href="@{/login}">로그인</a></p>
                         </li>
                         <li>
-                            <p><a th:href="@{/group}">조직도</a></p>
+                            <p><a th:href="@{/histories}">연혁</a></p>
                         </li>
                         <li>
-                            <p><a th:href="@{/templates/competitions}">대회정보</a></p>
+                            <p><a th:href="@{/groups}">조직도</a></p>
                         </li>
                         <li>
-                            <p><a th:href="@{/templates/competitions/confirm}">대회신청확인</a></p>
+                            <p><a th:href="@{/competitions}">대회정보</a></p>
                         </li>
                         <li>
-                            <p><a th:href="@{/register}">경기인등록</a></p>
+                            <p><a th:href="@{/notices}">공지사항</a></p>
                         </li>
                         <li>
-                            <p><a th:href="@{/notice}">공지사항</a></p>
-                        </li>
-                        <li>
-                            <p><a th:href="@{/photo}">포토갤러리</a></p>
+                            <p><a th:href="@{/photos}">포토갤러리</a></p>
                         </li>
                     </ul>
                 </div>

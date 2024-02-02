@@ -59,7 +59,7 @@
 				<div class="container">
 					<div class="row">
 						<div class="col">
-							<p class="f_s2 f_c_g1 sub_paging">전체 <span class="f_c_active fw_b">1366건</span> | 페이지 <span class="fw_b">1/137</span></p>
+							<p class="f_s2 f_c_g1 sub_paging">전체 <span class="f_c_active fw_b" th:text="${competitionPage.getTotalElements()} + '건'">1366건</span> | 페이지 <span class="fw_b" th:text="${competitionPage.getNumber() + 1} + '/' + ${competitionPage.getTotalPages()}">1/137</span></p>
 							<div class="kors_list_ui2">
 								<ul class="top d-none d-lg-block list_box type1 text-center">
 									<li>
@@ -79,9 +79,8 @@
 										<div><a class="f_s5 text-over-h list_title fw_pb" th:href="@{/competitions/{id}(id=${competition.id})}" th:text="${competition.competitionName}"></a></div>
 										<div class="text-center f_c_g1" th:text="${competition.competitionApplyStartDate + ' ~ ' + competition.competitionApplyEndDate}"></div>
 										<div class="text-center" th:text="${competition.competitionPlace}"></div>
-										<!-- TODO :: ㅡㅡ display:flex 때문에 그런 듯 ;; -->
 										<div class="text-center apply-btn-box">
-											<div class="text-center f_c_g1 btn_box"><a th:href="@{/competitions/{id}/applications(id=${competition.id})}" class="kors_btn2">개인경기</a></div>
+											<div class="text-center f_c_g1 btn_box mb-3"><a th:href="@{/competitions/{id}/applications(id=${competition.id})}" class="kors_btn2">개인경기</a></div>
 											<div class="text-center f_c_g1 btn_box"><a th:href="@{/competitions/{id}/applications/teams(id=${competition.id})}" class="kors_btn2">팀 경기</a></div>
 										</div>
 										<div class="text-center  btn_box"><a th:href="@{/competitions/{id}(id=${competition.id})}" class="kors_btn2">보기</a></div>
@@ -96,7 +95,7 @@
 						<div class="col">
 							<div class="list_paeging">
 								<ul class="d-flex justify-content-center">
-									<a type="button" th:if ="${!competitionPage.isFirst()}" th:href="@{competitions(page=0,size=${competitionPage.getPageable().getPageSize()})}">
+									<a type="button" th:if ="${!competitionPage.isFirst()}" th:href="@{/competitions(page=0,size=${competitionPage.getPageable().getPageSize()})}">
 										<button><<</button>
 									</a>
 
@@ -108,11 +107,11 @@
 										<button  th:class="${pageNum} == ${competitionPage.getPageable().getPageNumber() + 1} ? 'active' : ''" th:text="${pageNum}"></button>
 									</a>
 
-									<a th:if ="${next}" th:href="@{competitions(page=${((competitionPage.getPageable().getPageNumber() / basePage) + 1) * basePage},size=${competitionPage.getPageable().getPageSize()})}">
+									<a th:if ="${next}" th:href="@{/competitions(page=${((competitionPage.getPageable().getPageNumber() / basePage) + 1) * basePage},size=${competitionPage.getPageable().getPageSize()})}">
 										<button>></button>
 									</a>
 
-									<a th:if ="${!competitionPage.isLast()}" th:href="@{competitions(page=${competitionPage.getTotalPages() -1},size=${competitionPage.getPageable().getPageSize()})}">
+									<a th:if ="${!competitionPage.isLast()}" th:href="@{/competitions(page=${competitionPage.getTotalPages() -1},size=${competitionPage.getPageable().getPageSize()})}">
 										<button>>></button>
 									</a>
 								</ul>

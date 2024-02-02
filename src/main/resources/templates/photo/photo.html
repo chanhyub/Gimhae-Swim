@@ -56,7 +56,7 @@
 				<div class="container">
 					<div class="row">
 						<div class="col">
-							<p class="f_s2 f_c_g1 sub_paging">전체 <span class="f_c_active fw_b">1366건</span> | 페이지 <span class="fw_b">1/137</span></p>
+							<p class="f_s2 f_c_g1 sub_paging">전체 <span class="f_c_active fw_b" th:text="${photoPage.getTotalElements()} + '건'">1366건</span> | 페이지 <span class="fw_b" th:text="${photoPage.getNumber() + 1} + '/' + ${photoPage.getTotalPages()}">1/137</span></p>
 							<div class="kors_list_ui2">								
 								<ul class="center list_photo_box fw_pl">
 									<li th:each="field : ${photoPage}">
@@ -80,33 +80,25 @@
 						<div class="col">
 							<div class="list_paeging">
 								<ul class="d-flex justify-content-center">
-									<li class="prev2 img_btn">
-										<button>첫페이지</button>
-									</li>
-									<li class="prev1 img_btn">
-										<button>전페이지</button>
-									</li>
-									<li>
-										<button>1</button>
-									</li>
-									<li>
-										<button>2</button>
-									</li>
-									<li>
-										<button>3</button>
-									</li>
-									<li>
-										<button>4</button>
-									</li>
-									<li>
-										<button>5</button>
-									</li>
-									<li class="next1 img_btn">
-										<button>다음페이지</button>
-									</li>
-									<li class="next2 img_btn">
-										<button>끝페이지</button>
-									</li>
+									<a type="button" th:if ="${!photoPage.isFirst()}" th:href="@{/photos(page=0,size=${photoPage.getPageable().getPageSize()})}">
+										<button><<</button>
+									</a>
+
+									<a th:if ="${prev}" th:href="@{/photos(page=${((photoPage.getPageable().getPageNumber() / basePage) - 1) * basePage},size=${photoPage.getPageable().getPageSize()})}">
+										<button><</button>
+									</a>
+
+									<a th:each="pageNum : ${#numbers.sequence(startPage, endPage)}"  th:href="@{/photos(page=${pageNum}-1,size=${photoPage.getPageable().getPageSize()})}">
+										<button th:class="${pageNum} == ${photoPage.getPageable().getPageNumber() + 1} ? 'active' : ''" th:text="${pageNum}"></button>
+									</a>
+
+									<a th:if ="${next}" th:href="@{/photos(page=${((photoPage.getPageable().getPageNumber() / basePage) + 1) * basePage},size=${photoPage.getPageable().getPageSize()})}">
+										<button>></button>
+									</a>
+
+									<a th:if ="${!photoPage.isLast()}" th:href="@{/photos(page=${photoPage.getTotalPages() -1},size=${photoPage.getPageable().getPageSize()})}">
+										<button>>></button>
+									</a>
 								</ul>
 							</div>
 						</div>

@@ -1,7 +1,11 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head th:replace="~{common/adminLayout::ConfigFragment}"></head>
-
+<script>
+	$(function(){
+		$('.nav_list8 a').addClass('active');
+	})
+</script>
 
 <body class="admin_body">
 		<div id="admin_ui" class="d-flex">
@@ -43,16 +47,34 @@
 											<td><div><a href="#" th:onclick="|javascript:deleteReferee('${field.id}')|" class="kors_btn2 type2">삭제</a></div></td>
 										</tr>
 									</tbody>
-									<tfoot class="f_s1">
-										<tr>
-											<th colspan="5">
-												<span class="prev"></span>
-												<span>1</span>
-												<span class="next"></span>
-											</th>
-										</tr>
-									</tfoot>
 								</table>
+							</div>
+							<div class="row">
+								<div class="col">
+									<div class="list_paeging">
+										<ul class="d-flex justify-content-center">
+											<a type="button" th:if ="${!refereePage.isFirst()}" th:href="@{/admin/referees(page=0,size=${refereePage.getPageable().getPageSize()})}">
+												<button><<</button>
+											</a>
+
+											<a th:if ="${prev}" th:href="@{/admin/referees(page=${((refereePage.getPageable().getPageNumber() / basePage) - 1) * basePage},size=${refereePage.getPageable().getPageSize()})}">
+												<button><</button>
+											</a>
+
+											<a th:each="pageNum : ${#numbers.sequence(startPage, endPage)}"  th:href="@{/admin/referees(page=${pageNum}-1,size=${refereePage.getPageable().getPageSize()})}">
+												<button th:class="${pageNum} == ${refereePage.getPageable().getPageNumber() + 1} ? 'active' : ''" th:text="${pageNum}"></button>
+											</a>
+
+											<a th:if ="${next}" th:href="@{/admin/referees(page=${((refereePage.getPageable().getPageNumber() / basePage) + 1) * basePage},size=${refereePage.getPageable().getPageSize()})}">
+												<button>></button>
+											</a>
+
+											<a th:if ="${!refereePage.isLast()}" th:href="@{/admin/referees(page=${refereePage.getTotalPages() -1},size=${refereePage.getPageable().getPageSize()})}">
+												<button>>></button>
+											</a>
+										</ul>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>

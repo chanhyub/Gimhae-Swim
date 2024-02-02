@@ -244,8 +244,19 @@ body {font-size:13px;}
 .md_menu_close img {width:30%;}
 
 .md_menu_bottom {height: calc(100vh - 100px); overflow-y: auto;}
-.md_menu_bottom p {display:flex; align-items: center; justify-content: space-between;  text-decoration: none; outline: 0; color: #222222; padding: 25px 30px; font-weight: 600; background:url(../img/down-arrow.png) right 30px center no-repeat; background-size:15px; cursor: pointer;}
-.md_menu_bottom li.active p {background-image:url(../img/up-arrow.png);}
+.md_menu_bottom p {
+	display:flex;
+	align-items: center;
+	justify-content: space-between;
+	text-decoration: none;
+	outline: 0;
+	color: #222222;
+	padding: 25px 30px;
+	font-weight: 600;
+	/*background:url(../img/down-arrow.png) right 30px center no-repeat;*/
+	/*background-size:15px;*/
+	cursor: pointer;}
+/*.md_menu_bottom li.active p {background-image:url(../img/up-arrow.png);}*/
 
 .md_sub_list {display:none; background-color: #F4F4F4;}
 .md_sub_list a{display:block; padding: 17px 30px 17px 45px;}

@@ -6,10 +6,7 @@ import com.alijas.gimhaeswim.module.referee.dto.RefereeDTO;
 import com.alijas.gimhaeswim.module.referee.dto.RefereeListDTO;
 import com.alijas.gimhaeswim.module.user.entity.User;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.Comment;
 
 @Entity
@@ -18,6 +15,7 @@ import org.hibernate.annotations.Comment;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Referee extends BaseTime {
 
     @Id

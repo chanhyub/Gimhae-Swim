@@ -15,6 +15,9 @@
     <script src="/js/jquery.min.js"></script>
     <script src="/js/slick.min.js"></script>
     <script src="/js/kors_js.js"></script>
+    <script th:src="@{/js/summernote/summernote-lite.js}"></script>
+    <script th:src="@{/js/summernote/lang/summernote-ko-KR.js}"></script>
+    <link rel="stylesheet" th:href="@{/css/summernote/summernote-lite.css}">
 </head>
 
 
@@ -27,14 +30,14 @@
             </div>
         </div>
         <ul class="admin_nav_list">
-            <li><a href="/admin/users" class="active">경기인 관리</a></li>
-            <li><a href="/admin/users/apply">경기인 접수</a></li>
-            <li><a href="/admin/competitions">대회 관리</a></li>
-            <li><a href="/admin/apply-competitions">대회 신청관리</a></li>
-            <li><a href="/admin/notices">공지사항</a></li>
-            <li><a href="/admin/photos">포토갤러리</a></li>
-            <li><a href="/admin/histories">연혁</a></li>
-            <li><a href="/admin/referees">심판 관리</a></li>
+            <li class="nav_list1"><a href="/admin/users">경기인 관리</a></li>
+            <li class="nav_list2"><a href="/admin/users/apply">경기인 접수</a></li>
+            <li class="nav_list3"><a href="/admin/competitions">대회 관리</a></li>
+            <li class="nav_list4"><a href="/admin/apply-competitions">대회 신청관리</a></li>
+            <li class="nav_list5"><a href="/admin/notices">공지사항</a></li>
+            <li class="nav_list6"><a href="/admin/photos">포토갤러리</a></li>
+            <li class="nav_list7"><a href="/admin/histories">연혁</a></li>
+            <li class="nav_list8"><a href="/admin/referees">심판 관리</a></li>
         </ul>
     </div>
 </header>

@@ -5,6 +5,7 @@ import com.alijas.gimhaeswim.module.photo.dto.PhotoDTO;
 import com.alijas.gimhaeswim.module.photo.dto.PhotoListDTO;
 import com.alijas.gimhaeswim.module.photo.entity.Photo;
 import com.alijas.gimhaeswim.module.photo.service.PhotoService;
+import com.alijas.gimhaeswim.util.PageUtil;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -35,7 +36,7 @@ public class PhotoViewController {
     ) {
 
         Page<PhotoListDTO> photoPage =  photoService.findAll(pageable);
-
+        PageUtil.set(pageable, model, photoPage.getTotalPages());
         model.addAttribute("photoPage", photoPage);
 
         return "photo/photo";

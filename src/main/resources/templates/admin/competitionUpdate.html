@@ -1,7 +1,11 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head th:replace="~{common/adminLayout::ConfigFragment}"></head>
-
+<script>
+  $(function(){
+    $('.nav_list3 a').addClass('active');
+  })
+</script>
 <body class="admin_body">
 <script th:inline="javascript">
   function event_tbody_add(){

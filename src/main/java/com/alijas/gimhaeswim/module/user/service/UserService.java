@@ -1,5 +1,6 @@
 package com.alijas.gimhaeswim.module.user.service;
 
+import com.alijas.gimhaeswim.exception.CustomException;
 import com.alijas.gimhaeswim.module.common.enums.ApplyStatus;
 import com.alijas.gimhaeswim.module.competition.entity.Competition;
 import com.alijas.gimhaeswim.module.competition.repository.CompetitionEventRepository;
@@ -15,6 +16,7 @@ import com.alijas.gimhaeswim.module.user.request.UserSaveRequest;
 import com.alijas.gimhaeswim.module.user.request.UserUpdateRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,6 +47,10 @@ public class UserService {
 
     @Transactional
     public User saveUser(UserSaveRequest userSaveRequest) {
+        Optional<User> optionalUser = userRepository.findByUsername(userSaveRequest.username());
+        if (optionalUser.isPresent()) {
+            throw new CustomException("이미 사용중인 아이디 입니다.", HttpStatus.BAD_REQUEST);
+        }
         User user = userSaveRequest.toEntity();
 
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
@@ -57,6 +63,11 @@ public class UserService {
 
     @Transactional
     public void updateUser(User user, UserUpdateRequest userUpdateRequest) {
+        Optional<User> optionalUser = userRepository.findByUsername(userUpdateRequest.username());
+        if (optionalUser.isPresent()) {
+            throw new CustomException("이미 사용중인 아이디 입니다.", HttpStatus.BAD_REQUEST);
+        }
+
         user.updateUser(userUpdateRequest);
         userRepository.save(user);
     }

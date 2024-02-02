@@ -1,7 +1,11 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head th:replace="~{common/adminLayout::ConfigFragment}"></head>
-	
+<script>
+	$(function(){
+		$('.nav_list8 a').addClass('active');
+	})
+</script>
 	<body class="admin_body">	
 		<div id="admin_ui" class="d-flex">
 			<header th:replace="~{common/adminLayout::HeaderFragment}"></header>
@@ -18,17 +22,48 @@
 				<div class="container-fluid">
 					<div class="row">
 						<div class="col">
-							<div class="con_add_form">
-								<form name="frm" th:action="@{/admin/referee/add}" method="post" onSubmit="return Checkform()">
+							<div class="con_add_form w-50">
+								<form name="frm" th:action="@{/admin/referees/add}" method="post" onSubmit="return Checkform()">
 									<ul>
-										<li class="w_size1">
-											<div><label class="f_s5 fw_pb">이름</label></div>
-											<input id="name" type="text" class="kors_input1 w-100">
+										<li class="d-flex">
+											<div class="mr_10">
+												<label class="d-none">성별</label>
+												<input checked type="radio" name="gender" value="M" id="kors_man" class="d-none">
+												<label class="radio_style1" for="kors_man">남자</label>
+											</div>
+											<div>
+												<input type="radio" name="gender" value="F" id="kors_woman" class="d-none">
+												<label class="radio_style1" for="kors_woman">여자</label>
+											</div>
 										</li>
-
 										<li class="w_size1">
-											<div><label class="f_s5 fw_pb">패스워드</label></div>
-											<input id="password" type="text" class="kors_input1 w-100">
+											<label class="d-none">이름</label>
+											<input type="text" name="fullName" id="fullName" class="kors_input2 w-100" placeholder="성명">
+										</li>
+										<li class="w_size1">
+											<label class="d-none">아이디</label>
+											<input type="text" name="username" id="name" class="kors_input2 w-100" placeholder="아이디">
+										</li>
+										<li class="w_size1">
+											<label class="d-none">비밀번호</label>
+											<input type="password" name="password" id="pwd" class="kors_input2 w-100" placeholder="비밀번호">
+										</li>
+										<li class="w_size1">
+											<label class="d-none">비밀번호</label>
+											<input type="password" name="confirmPassword" id="pwdCheck" class="kors_input2 w-100" placeholder="비밀번호 확인">
+										</li>
+										<li class="w_size1">
+											<label class="d-none">주민등록번호 앞자리</label>
+											<input type="text" name="birthday" id="birthday" class="kors_input2 w-100" placeholder="주민등록번호 앞자리"
+												   oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" maxlength="6">
+										</li>
+										<li class="w_size1">
+											<label class="d-none">전화번호</label>
+											<input type="text" name="phoneNumber" id="phoneNum" class="kors_input2 w-100" placeholder="전화번호">
+										</li>
+										<li class="w_size1">
+											<label class="d-none">이메일</label>
+											<input type="text" name="email" id="email" class="kors_input2 w-100" placeholder="이메일">
 										</li>
 										<li class="w_size1">
 											<button type="submit" class="kors_btn1 w-100"> 심판 등록하기</button>
@@ -40,24 +75,6 @@
 					</div>
 				</div>
 			</section>
-			<script>
-				function Checkform() {
-
-					if (frm.name.value == "") {
-						frm.name.focus();
-						alert("이름을 입력해 주십시오.");
-						return false;
-
-					}else if (frm.password.value == "") {
-						frm.password.focus();
-						alert("패스워드를 입력해 주십시오.");
-						return false;
-
-					}
-					alert("심판 등록이 완료되었습니다.");
-				}
-
-			</script>
 		</div>
 	</body>
 </html>

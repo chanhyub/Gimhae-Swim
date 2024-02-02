@@ -50,11 +50,11 @@
                                 </div>
                                 -->
 								<div class="main_style2_2" style="width: 90%; margin: auto">
-									<ul th:if="${session.isEmpty()}" class="d-flex w-100 justify-content-between">
-										<li th:if="${session.isEmpty()}">
+									<ul class="d-flex w-100 justify-content-between">
+										<li>
 											<a th:href="@{/join}">
-												<div class="img_box"><img th:src="@{/img/m1_icon3.png}" alt="경기인 등록"></div>
-												<p>경기인 등록</p>
+												<div class="img_box"><img th:src="@{/img/m1_icon3.png}" alt="회원가입"></div>
+												<p>회원가입</p>
 											</a>
 										</li>
 										<li>
@@ -64,7 +64,7 @@
 											</a>
 										</li>
 										<li>
-											<a th:href="@{/templates/competitions/confirm}">
+											<a th:href="@{/users/my-page}">
 												<div class="img_box"><img th:src="@{/img/m1_icon5.png}" alt="대회신청확인"></div>
 												<p>대회신청확인</p>
 											</a>

@@ -1,7 +1,11 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head th:replace="~{common/adminLayout::ConfigFragment}"></head>
-	
+<script>
+	$(function(){
+		$('.nav_list6 a').addClass('active');
+	})
+</script>
 	<body class="admin_body">	
 		<div id="admin_ui" class="d-flex">
 			<header th:replace="~{common/adminLayout::HeaderFragment}"></header>
@@ -50,16 +54,34 @@
 										</tr>
 
 									</tbody>
-									<tfoot class="f_s1">
-										<tr>
-											<th colspan="5">
-												<span class="prev"></span>
-												<span>1</span>
-												<span class="next"></span>
-											</th>
-										</tr>
-									</tfoot>
 								</table>
+							</div>
+							<div class="row">
+								<div class="col">
+									<div class="list_paeging">
+										<ul class="d-flex justify-content-center">
+											<a type="button" th:if ="${!photoPage.isFirst()}" th:href="@{/admin/photos(page=0,size=${photoPage.getPageable().getPageSize()})}">
+												<button><<</button>
+											</a>
+
+											<a th:if ="${prev}" th:href="@{/admin/photos(page=${((photoPage.getPageable().getPageNumber() / basePage) - 1) * basePage},size=${photoPage.getPageable().getPageSize()})}">
+												<button><</button>
+											</a>
+
+											<a th:each="pageNum : ${#numbers.sequence(startPage, endPage)}"  th:href="@{/admin/photos(page=${pageNum}-1,size=${photoPage.getPageable().getPageSize()})}">
+												<button th:class="${pageNum} == ${photoPage.getPageable().getPageNumber() + 1} ? 'active' : ''" th:text="${pageNum}"></button>
+											</a>
+
+											<a th:if ="${next}" th:href="@{/admin/photos(page=${((photoPage.getPageable().getPageNumber() / basePage) + 1) * basePage},size=${photoPage.getPageable().getPageSize()})}">
+												<button>></button>
+											</a>
+
+											<a th:if ="${!photoPage.isLast()}" th:href="@{/admin/photos(page=${photoPage.getTotalPages() -1},size=${photoPage.getPageable().getPageSize()})}">
+												<button>>></button>
+											</a>
+										</ul>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>

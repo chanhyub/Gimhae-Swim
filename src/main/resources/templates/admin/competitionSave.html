@@ -2,7 +2,23 @@
 <html lang="ko">
 
 	<head th:replace="~{common/adminLayout::ConfigFragment}"></head>
+	<script>
+		$(function(){
+			$('.nav_list3 a').addClass('active');
+		})
 
+		$(document).ready(function() {
+			$('#summernote').summernote({
+				width: '100%',
+				height: 300,                 // 에디터 높이
+				minHeight: null,             // 최소 높이
+				maxHeight: null,             // 최대 높이
+				// focus: true,                  // 에디터 로딩후 포커스를 맞출지 여부
+				lang: "ko-KR",					// 한글 설정
+				placeholder: '최대 2048자까지 쓸 수 있습니다'	//placeholder 설정
+			});
+		});
+	</script>
 	
 	<body class="admin_body">
 	<script th:inline="javascript">
@@ -119,6 +135,7 @@
 			sessionStorage.setItem("num", event_num);
 			$('#event_tbody').attr('data', event_num_change);
 		}
+
 	</script>
 		<div id="admin_ui" class="d-flex">
 			<header th:replace="~{common/adminLayout::HeaderFragment}"></header>
@@ -259,7 +276,7 @@
 
 										<li class="w_size1">
 											<div><label class="f_s5 fw_pb">내용</label></div>
-											<textarea name="competitionContent" class="w-100"></textarea>
+											<textarea name="competitionContent" class="w-100" id="summernote" style="height:500px;"></textarea>
 										</li>
 
 										<li class="w_size1">
