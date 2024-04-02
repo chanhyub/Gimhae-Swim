@@ -1,7 +1,7 @@
-package com.alijas.gimhaeswim.module.section.entity;
+package com.alijas.gimhaeswim.module.point.entity;
 
-import com.alijas.gimhaeswim.module.common.jpa.BaseTime;
 import com.alijas.gimhaeswim.module.competition.entity.CompetitionEvent;
+import com.alijas.gimhaeswim.module.team.entity.Team;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,22 +10,26 @@ import lombok.Setter;
 import org.hibernate.annotations.Comment;
 
 @Entity
-@Table(name = "SECTIONS")
+@Table(name = "TEAM_POINTS")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Section extends BaseTime {
+public class TeamPoint {
 
     @Id
     @Comment("고유 번호")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Comment("조 차수")
-    private Integer sectionNumber;
-
     @Comment("대회 종목")
     @ManyToOne
     private CompetitionEvent competitionEvent;
+
+    @Comment("팀")
+    @ManyToOne
+    private Team team;
+
+    @Comment("점수")
+    private Integer point;
 }

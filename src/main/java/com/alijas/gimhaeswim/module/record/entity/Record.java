@@ -2,6 +2,7 @@ package com.alijas.gimhaeswim.module.record.entity;
 
 import com.alijas.gimhaeswim.module.common.jpa.BaseTime;
 import com.alijas.gimhaeswim.module.competition.entity.CompetitionEvent;
+import com.alijas.gimhaeswim.module.lane.entity.Lane;
 import com.alijas.gimhaeswim.module.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -23,13 +24,9 @@ public class Record extends BaseTime {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Comment("기록 대회 종목")
+    @Comment("대회 레인")
     @ManyToOne
-    private CompetitionEvent competitionEvent;
-
-    @Comment("기록 대회 참가자")
-    @ManyToOne
-    private User user;
+    private Lane lane;
 
     @Comment("기록")
     private String record;
