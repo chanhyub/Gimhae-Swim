@@ -1,6 +1,7 @@
 package com.alijas.gimhaeswim.module.section.service;
 
 import com.alijas.gimhaeswim.exception.CustomRestException;
+import com.alijas.gimhaeswim.module.common.enums.ApplyStatus;
 import com.alijas.gimhaeswim.module.competition.entity.CompetitionEvent;
 import com.alijas.gimhaeswim.module.competition.repository.CompetitionEventRepository;
 import com.alijas.gimhaeswim.module.lane.entity.Lane;
@@ -78,7 +79,7 @@ public class SectionService {
                             if (laneDTO.getRefereeId() == null) {
                                 throw new CustomRestException("심판을 선택해주세요", HttpStatus.BAD_REQUEST);
                             } else {
-                                Optional<Referee> optionalReferee = refereeRepository.findById(laneDTO.getRefereeId());
+                                Optional<Referee> optionalReferee = refereeRepository.findByIdAndStatus(laneDTO.getRefereeId(), ApplyStatus.APPROVED);
                                 if (optionalReferee.isEmpty()) {
                                     throw new CustomRestException("심판이 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
                                 }
@@ -96,7 +97,7 @@ public class SectionService {
                         if (laneDTO.getRefereeId() == null) {
                             throw new CustomRestException("심판을 선택해주세요", HttpStatus.BAD_REQUEST);
                         } else {
-                            Optional<Referee> optionalReferee = refereeRepository.findById(laneDTO.getRefereeId());
+                            Optional<Referee> optionalReferee = refereeRepository.findByIdAndStatus(laneDTO.getRefereeId(), ApplyStatus.APPROVED);
                             if (optionalReferee.isEmpty()) {
                                 throw new CustomRestException("심판이 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
                             }
@@ -134,7 +135,7 @@ public class SectionService {
                             if (laneDTO.getRefereeId() == null) {
                                 throw new CustomRestException("심판을 선택해주세요", HttpStatus.BAD_REQUEST);
                             } else {
-                                Optional<Referee> optionalReferee = refereeRepository.findById(laneDTO.getRefereeId());
+                                Optional<Referee> optionalReferee = refereeRepository.findByIdAndStatus(laneDTO.getRefereeId(), ApplyStatus.APPROVED);
                                 if (optionalReferee.isEmpty()) {
                                     throw new CustomRestException("심판이 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
                                 }
@@ -152,7 +153,7 @@ public class SectionService {
                         if(laneDTO.getRefereeId() == null) {
                             throw new CustomRestException("심판을 선택해주세요", HttpStatus.BAD_REQUEST);
                         } else {
-                            Optional<Referee> optionalReferee = refereeRepository.findById(laneDTO.getRefereeId());
+                            Optional<Referee> optionalReferee = refereeRepository.findByIdAndStatus(laneDTO.getRefereeId(), ApplyStatus.APPROVED);
                             if (optionalReferee.isEmpty()) {
                                 throw new CustomRestException("심판이 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
                             }

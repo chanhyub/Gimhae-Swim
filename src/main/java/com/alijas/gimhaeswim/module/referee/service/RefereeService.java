@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional(readOnly = true)
 public class RefereeService {
 
     private final RefereeRepository refereeRepository;
@@ -30,21 +31,27 @@ public class RefereeService {
     }
 
     public List<Referee> getRefereeList() {
-        return refereeRepository.findAll();
+        List<Referee> refereeList = refereeRepository.findAllByStatus(ApplyStatus.APPROVED);
+        if (refereeList.isEmpty()) return refereeList;
+        else return refereeList.stream().filter(referee -> referee.getUser().getStatus().equals(UserStatus.ACTIVE)).toList();
+
     }
 
     public Page<RefereeListDTO> getRefereePage(Pageable pageable) {
-        Page<Referee> refereePage = refereeRepository.findAll(pageable);
+        Page<Referee> refereePage = refereeRepository.findAllByStatus(pageable, ApplyStatus.APPROVED);
         return refereePage.map(Referee::toRefereeListDTO);
     }
 
     public Optional<Referee> getReferee(Long id) {
-        return refereeRepository.findById(id);
+        return refereeRepository.findByIdAndStatus(id, ApplyStatus.APPROVED);
     }
 
     @Transactional
-    public void delete(Referee referee) {
-        refereeRepository.delete(referee);
+    public void delete(Referee referee, User user) {
+        referee.setStatus(ApplyStatus.REJECTED);
+        user.setStatus(UserStatus.DELETED);
+        refereeRepository.save(referee);
+        userRepository.save(user);
     }
 
     public void addReferee(RefereeSaveRequest refereeSaveRequest){

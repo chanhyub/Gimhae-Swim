@@ -323,7 +323,10 @@ public class AdminController {
             throw new CustomRestException("존재하지 않는 심판입니다.", HttpStatus.BAD_REQUEST);
         }
 
-        refereeService.delete(optionalReferee.get());
+        Referee referee = optionalReferee.get();
+        User user = referee.getUser();
+
+        refereeService.delete(referee, user);
         return ResponseEntity.ok("심판이 삭제되었습니다.");
     }
 }
