@@ -5,20 +5,24 @@
 #spring.mail.properties.mail.smtp.auth=true
 #spring.mail.properties.mail.smtp.starttls.enable=true
 spring:
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true
   servlet:
     multipart:
       max-file-size: 10MB
   #  main:
 #    allow-bean-definition-overriding: true
   datasource:
-#    driver-class-name: com.mysql.cj.jdbc.Driver
-#    url: jdbc:mysql://ls-f958bf6b082618cafda9cacbdb7db33c6bc80b16.czp5do9b7kbe.ap-northeast-2.rds.amazonaws.com:3306/Gimhae?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul&zeroDateTimeBehavior=convertToNull&characterEncoding=UTF-8&useUnicode=true&mysqlEncoding=UTF-8
-#    username: dbmasteruser
-#    password: q0;2FqRz-NbdEhRB#[`xl{,$Umw*JcMW
-    driver-class-name: org.h2.Driver
-    url: jdbc:h2:mem:test;MODE=MySQL
-    username: sa
-    password:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://ls-f958bf6b082618cafda9cacbdb7db33c6bc80b16.czp5do9b7kbe.ap-northeast-2.rds.amazonaws.com:3306/Gimhae2?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul&zeroDateTimeBehavior=convertToNull&characterEncoding=UTF-8&useUnicode=true&mysqlEncoding=UTF-8
+    username: dbmasteruser
+    password: q0;2FqRz-NbdEhRB#[`xl{,$Umw*JcMW
+#    driver-class-name: org.h2.Driver
+#    url: jdbc:h2:mem:test;MODE=MySQL
+#    username: sa
+#    password:
     hikari:
       minimum-idle: 20
       maximum-pool-size: 50
@@ -30,14 +34,14 @@ spring:
     prefix: classpath:templates/
     suffix: .html
 
-  sql:
-    init:
-      data-locations:
-        - classpath:static/data.sql
+#  sql:
+#    init:
+#      data-locations:
+#        - classpath:static/data.sql
   jpa:
 #    database: mysql
     hibernate:
-      ddl-auto: create #create update none
+      ddl-auto: none #create update none
     show-sql: true
     properties:
       hibernate:

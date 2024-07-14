@@ -144,7 +144,7 @@
 									</div>
 									<div class="text_box">
 										<p class="f_s4 fw_pb" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 50%" th:text="${noticePage.content.get(0).title}"></p>
-										<p class="f_s2 f_c_g2" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 50%" th:text="${noticePage.content.get(0).content}"></p>
+<!--										<p class="f_s2 f_c_g2" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 50%" th:text="${noticePage.content.get(0).content}"></p>-->
 									</div>
 								</div>
 								<ul class="m-list1 f_s2" th:each="field, index : ${noticePage}" th:if="${index.index} > 0 and ${index.index} <= 3">

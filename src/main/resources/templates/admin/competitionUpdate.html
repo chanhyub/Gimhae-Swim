@@ -95,13 +95,9 @@
 								<td>
 									<input type="number" id="competitionEventListSixthPoint" name="competitionEventListSixthScore" style="width: 80px" class="kors_input1">점
 								</td>
-								<td>
-									<input type="number" id="competitionEventListSeventhPoint" name="competitionEventListSeventhScore" style="width: 80px" class="kors_input1">점
-								</td>
-								<td>
-									<input type="number" id="competitionEventListEighthPoint" name="competitionEventListEighthScore" style="width: 80px" class="kors_input1">점
-									<input type="hidden" id="competitionEventListId" name="competitionEventListId" style="width: 80px" class="kors_input1">
-								</td>
+								<input type="hidden" value="0" id="competitionEventListSeventhPoint" name="competitionEventListSeventhScore" style="width: 80px" class="kors_input1">
+								<input type="hidden" value="0" id="competitionEventListEighthPoint" name="competitionEventListEighthScore" style="width: 80px" class="kors_input1">
+								<input type="hidden" id="competitionEventListId" name="competitionEventListId" style="width: 80px" class="kors_input1">
 								<td>
 									<button type="button" class="delete_btn" onsubmit="return false" onclick="event_tbody_del(`+tr_num+`)"><img src="/img/xclose.svg"></button>
 								</td>
@@ -182,8 +178,6 @@
                           <th>4등</th>
                           <th>5등</th>
                           <th>6등</th>
-                          <th>7등</th>
-                          <th>8등</th>
                           <th></th>
                       </tr>
                       </thead>
@@ -444,12 +438,8 @@
 								<td>
 									<input type="number" value="`+ competitionEventList[i].sixthScore +`" id="competitionEventListSixthPoint" name="competitionEventListSixthScore" style="width: 80px" class="kors_input1">점
 								</td>
-								<td>
-									<input type="number" value="`+ competitionEventList[i].seventhScore +`" id="competitionEventListSeventhPoint" name="competitionEventListSeventhScore" style="width: 80px" class="kors_input1">점
-								</td>
-								<td>
-									<input type="number" value="`+ competitionEventList[i].eighthScore +`" id="competitionEventListEighthPoint" name="competitionEventListEighthScore" style="width: 80px" class="kors_input1">점
-								</td>
+								<input type="hidden" value="`+ competitionEventList[i].seventhScore +`" id="competitionEventListSeventhPoint" name="competitionEventListSeventhScore" style="width: 80px" class="kors_input1">
+								<input type="hidden" value="`+ competitionEventList[i].eighthScore +`" id="competitionEventListEighthPoint" name="competitionEventListEighthScore" style="width: 80px" class="kors_input1">
 								<td>
 									<button type="button" class="delete_btn" onsubmit="return false" onclick="event_tbody_del2(`+i+`, `+competitionEventList[i].id+`)"><img src="/img/xclose.svg"></button>
 								</td>

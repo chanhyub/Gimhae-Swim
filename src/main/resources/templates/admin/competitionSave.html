@@ -112,12 +112,8 @@
 								<td>
 									<input type="number" id="competitionEventListSixthPoint" name="competitionEventListSixthScore" style="width: 80px" class="kors_input1">점
 								</td>
-								<td>
-									<input type="number" id="competitionEventListSeventhPoint" name="competitionEventListSeventhScore" style="width: 80px" class="kors_input1">점
-								</td>
-								<td>
-									<input type="number" id="competitionEventListEighthPoint" name="competitionEventListEighthScore" style="width: 80px" class="kors_input1">점
-								</td>
+								<input type="hidden" value="0" id="competitionEventListSeventhPoint" name="competitionEventListSeventhScore" style="width: 80px" class="kors_input1">
+								<input type="hidden" value="0" id="competitionEventListEighthPoint" name="competitionEventListEighthScore" style="width: 80px" class="kors_input1">
 								<td>
 									<button type="button" class="delete_btn" onsubmit="return false" onclick="event_tbody_del(`+tr_num+`)"><img src="/img/xclose.svg"></button>
 								</td>
@@ -188,8 +184,6 @@
 															<th>4등</th>
 															<th>5등</th>
 															<th>6등</th>
-															<th>7등</th>
-															<th>8등</th>
 															<th></th>
 														</tr>
 													</thead>
@@ -246,12 +240,8 @@
 															<td>
 																<input name="competitionEventListSixthScore" type="number" style="width: 80px" class="kors_input1">점
 															</td>
-															<td>
-																<input name="competitionEventListSeventhScore" type="number" style="width: 80px" class="kors_input1">점
-															</td>
-															<td>
-																<input name="competitionEventListEighthScore" type="number" style="width: 80px" class="kors_input1">점
-															</td>
+															<input name="competitionEventListSeventhScore" type="hidden" value="0" style="width: 80px" class="kors_input1">
+															<input name="competitionEventListEighthScore" type="hidden" value="0" style="width: 80px" class="kors_input1">
 															<td>
 																<button class="delete_btn" type="button" onclick="event_tbody_del(1)"><img src="/img/xclose.svg"></button>
 															</td>
