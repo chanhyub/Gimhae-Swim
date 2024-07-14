@@ -2,10 +2,6 @@ package com.alijas.gimhaeswim.module.user.service;
 
 import com.alijas.gimhaeswim.exception.CustomException;
 import com.alijas.gimhaeswim.module.common.enums.ApplyStatus;
-import com.alijas.gimhaeswim.module.competition.entity.Competition;
-import com.alijas.gimhaeswim.module.competition.repository.CompetitionEventRepository;
-import com.alijas.gimhaeswim.module.competition.repository.CompetitionRepository;
-import com.alijas.gimhaeswim.module.competition.request.CompetitionSaveRequest;
 import com.alijas.gimhaeswim.module.team.entity.TeamMember;
 import com.alijas.gimhaeswim.module.team.repository.TeamMemberRepository;
 import com.alijas.gimhaeswim.module.user.dto.UserAdminDTO;
@@ -21,8 +17,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -39,16 +33,16 @@ public class UserService {
     }
 
     public Optional<User> getUser(Long userId) {
-        return userRepository.findById(userId);
+        return userRepository.findByIdAndStatus(userId, UserStatus.ACTIVE);
     }
 
     public Optional<User> getUser(String username) {
-        return userRepository.findByUsername(username);
+        return userRepository.findByUsernameAndStatus(username, UserStatus.ACTIVE);
     }
 
     @Transactional
     public User saveUser(UserSaveRequest userSaveRequest) {
-        Optional<User> optionalUser = userRepository.findByUsername(userSaveRequest.username());
+        Optional<User> optionalUser = userRepository.findByUsernameAndStatus(userSaveRequest.username(), UserStatus.ACTIVE);
         if (optionalUser.isPresent()) {
             throw new CustomException("이미 사용중인 아이디 입니다.", HttpStatus.BAD_REQUEST);
         }
@@ -64,7 +58,7 @@ public class UserService {
 
     @Transactional
     public void updateUser(User user, UserUpdateRequest userUpdateRequest) {
-        Optional<User> optionalUser = userRepository.findByUsername(userUpdateRequest.username());
+        Optional<User> optionalUser = userRepository.findByUsernameAndStatus(userUpdateRequest.username(), UserStatus.ACTIVE);
         if (optionalUser.isPresent()) {
             throw new CustomException("이미 사용중인 아이디 입니다.", HttpStatus.BAD_REQUEST);
         }
@@ -86,7 +80,7 @@ public class UserService {
         Page<UserAdminDTO> map = page.map(User::toUserAdminDTO);
 
         map.forEach(user -> {
-            Optional<User> byId = userRepository.findById(user.getId());
+            Optional<User> byId = userRepository.findByIdAndStatus(user.getId(), UserStatus.ACTIVE);
             Optional<TeamMember> byUser = teamMemberRepository.findByUser(byId.get());
             if (byUser.isPresent()) {
                 user.setTeamName(byUser.get().getTeam().getTeamName());

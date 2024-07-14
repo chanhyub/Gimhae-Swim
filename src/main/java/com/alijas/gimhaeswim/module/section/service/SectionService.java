@@ -14,6 +14,7 @@ import com.alijas.gimhaeswim.module.section.request.SectionSaveRequest;
 import com.alijas.gimhaeswim.module.team.entity.TeamMember;
 import com.alijas.gimhaeswim.module.team.repository.TeamMemberRepository;
 import com.alijas.gimhaeswim.module.user.entity.User;
+import com.alijas.gimhaeswim.module.user.enums.UserStatus;
 import com.alijas.gimhaeswim.module.user.repository.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -88,7 +89,7 @@ public class SectionService {
                         }
                     } else {
                         /* 신규 저장 - 개인 경기 */
-                        Optional<User> optionalUser = userRepository.findById(laneDTO.getUserId());
+                        Optional<User> optionalUser = userRepository.findByIdAndStatus(laneDTO.getUserId(), UserStatus.ACTIVE);
                         if (optionalUser.isEmpty()) {
                             throw new CustomRestException("개인이 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
                         }
@@ -144,7 +145,7 @@ public class SectionService {
                         }
                     } else {
                         /* 수정 - 개인 경기 */
-                        Optional<User> optionalUser = userRepository.findById(laneDTO.getUserId());
+                        Optional<User> optionalUser = userRepository.findByIdAndStatus(laneDTO.getUserId(), UserStatus.ACTIVE);
                         if (optionalUser.isEmpty()) {
                             throw new CustomRestException("개인이 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
                         }

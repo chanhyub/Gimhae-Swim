@@ -7,6 +7,7 @@ import com.alijas.gimhaeswim.module.referee.entity.Referee;
 import com.alijas.gimhaeswim.module.referee.repository.RefereeRepository;
 import com.alijas.gimhaeswim.module.referee.request.RefereeSaveRequest;
 import com.alijas.gimhaeswim.module.user.entity.User;
+import com.alijas.gimhaeswim.module.user.enums.UserStatus;
 import com.alijas.gimhaeswim.module.user.repository.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -47,7 +48,7 @@ public class RefereeService {
     }
 
     public void addReferee(RefereeSaveRequest refereeSaveRequest){
-        Optional<User> optionalUser = userRepository.findByUsername(refereeSaveRequest.username());
+        Optional<User> optionalUser = userRepository.findByUsernameAndStatus(refereeSaveRequest.username(), UserStatus.ACTIVE);
         if(optionalUser.isPresent()){
             throw new CustomException("이미 사용중인 아이디입니다.", HttpStatus.BAD_REQUEST);
         }
