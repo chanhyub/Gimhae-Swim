@@ -89,12 +89,16 @@
 			</section>
 			<script type="text/javascript">
 				function deleteUser(userSeq) {
+					let data = {
+						userId: userSeq
+					};
 					if (confirm("삭제 하시겠습니까?"))
 						$.ajax({
-							type: "POST",
-							url: "/admin/user/delete/" + userSeq,
+							type: "DELETE",
+							url: "/admin/users/delete",
 							// async: false,
-							data: userSeq,
+							contentType: "application/json; charset=utf-8",
+							data: JSON.stringify(data),
 							error : function(request,status,error) {
 								console.log("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
 							},

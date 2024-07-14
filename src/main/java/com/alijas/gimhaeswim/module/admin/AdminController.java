@@ -95,9 +95,9 @@ public class AdminController {
 
     @DeleteMapping("/users/delete")
     public ResponseEntity<String> deleteUser(
-            @RequestBody String userId
+            @RequestBody Map<String, Long> userId
     ) {
-        Optional<User> optionalUser = userService.getUser(Long.parseLong(userId));
+        Optional<User> optionalUser = userService.getUser(userId.get("userId"));
         if (optionalUser.isEmpty()) {
             throw new CustomRestException("존재하지 않는 회원입니다.", HttpStatus.BAD_REQUEST);
         }

@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional(readOnly = true)
 public class UserService {
 
     private final UserRepository userRepository;
@@ -99,6 +100,7 @@ public class UserService {
 
     @Transactional
     public void deleteUser(User user) {
-        userRepository.delete(user);
+        user.setStatus(UserStatus.DELETED);
+        userRepository.save(user);
     }
 }
