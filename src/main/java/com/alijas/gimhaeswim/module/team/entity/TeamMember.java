@@ -1,8 +1,10 @@
 package com.alijas.gimhaeswim.module.team.entity;
 
+import com.alijas.gimhaeswim.module.common.enums.ApplyStatus;
 import com.alijas.gimhaeswim.module.common.jpa.BaseTime;
 import com.alijas.gimhaeswim.module.team.dto.TeamMemberDTO;
 import com.alijas.gimhaeswim.module.team.enums.TeamMemberPosition;
+import com.alijas.gimhaeswim.module.team.enums.TeamMemberStatus;
 import com.alijas.gimhaeswim.module.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -35,6 +37,10 @@ public class TeamMember extends BaseTime {
     @Comment("팀 선수의 포지션")
     @Enumerated(EnumType.STRING)
     private TeamMemberPosition position;
+
+    @Comment("팀 선수 상태")
+    @Enumerated(EnumType.STRING)
+    private TeamMemberStatus status;
 
     public TeamMemberDTO toDTO() {
         return new TeamMemberDTO(

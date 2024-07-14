@@ -3,6 +3,7 @@ package com.alijas.gimhaeswim.module.user.service;
 import com.alijas.gimhaeswim.exception.CustomException;
 import com.alijas.gimhaeswim.module.common.enums.ApplyStatus;
 import com.alijas.gimhaeswim.module.team.entity.TeamMember;
+import com.alijas.gimhaeswim.module.team.enums.TeamMemberStatus;
 import com.alijas.gimhaeswim.module.team.repository.TeamMemberRepository;
 import com.alijas.gimhaeswim.module.user.dto.UserAdminDTO;
 import com.alijas.gimhaeswim.module.user.entity.User;
@@ -81,7 +82,7 @@ public class UserService {
 
         map.forEach(user -> {
             Optional<User> byId = userRepository.findByIdAndStatus(user.getId(), UserStatus.ACTIVE);
-            Optional<TeamMember> byUser = teamMemberRepository.findByUser(byId.get());
+            Optional<TeamMember> byUser = teamMemberRepository.findByUserAndStatus(byId.get(), TeamMemberStatus.ACTIVE);
             if (byUser.isPresent()) {
                 user.setTeamName(byUser.get().getTeam().getTeamName());
             } else {

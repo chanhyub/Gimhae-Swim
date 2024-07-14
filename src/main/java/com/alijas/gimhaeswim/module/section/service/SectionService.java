@@ -13,6 +13,7 @@ import com.alijas.gimhaeswim.module.section.entity.Section;
 import com.alijas.gimhaeswim.module.section.repository.SectionRepository;
 import com.alijas.gimhaeswim.module.section.request.SectionSaveRequest;
 import com.alijas.gimhaeswim.module.team.entity.TeamMember;
+import com.alijas.gimhaeswim.module.team.enums.TeamMemberStatus;
 import com.alijas.gimhaeswim.module.team.repository.TeamMemberRepository;
 import com.alijas.gimhaeswim.module.user.entity.User;
 import com.alijas.gimhaeswim.module.user.enums.UserStatus;
@@ -72,7 +73,7 @@ public class SectionService {
                         if (laneDTO.getTeamMemberId() == null) {
                             laneRepository.save(new Lane(null, laneDTO.getLaneNumber(), null, null, null, saveSection));
                         } else {
-                            Optional<TeamMember> optionalTeamMember = teamMemberRepository.findById(laneDTO.getTeamMemberId());
+                            Optional<TeamMember> optionalTeamMember = teamMemberRepository.findByIdAndStatus(laneDTO.getTeamMemberId(), TeamMemberStatus.ACTIVE);
                             if (optionalTeamMember.isEmpty()) {
                                 throw new CustomRestException("팀원이 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
                             }
@@ -128,7 +129,7 @@ public class SectionService {
                             lane.setReferee(null);
                             laneRepository.save(lane);
                         } else {
-                            Optional<TeamMember> optionalTeamMember = teamMemberRepository.findById(laneDTO.getTeamMemberId());
+                            Optional<TeamMember> optionalTeamMember = teamMemberRepository.findByIdAndStatus(laneDTO.getTeamMemberId(), TeamMemberStatus.ACTIVE);
                             if (optionalTeamMember.isEmpty()) {
                                 throw new CustomRestException("팀원이 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
                             }

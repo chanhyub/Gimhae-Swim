@@ -9,16 +9,15 @@ import com.alijas.gimhaeswim.module.applycompetition.repository.ApplyCompetition
 import com.alijas.gimhaeswim.module.applycompetition.repository.ApplyCompetitionRepository;
 import com.alijas.gimhaeswim.module.common.enums.ApplyStatus;
 import com.alijas.gimhaeswim.module.competition.entity.Competition;
-import com.alijas.gimhaeswim.module.competition.entity.CompetitionEvent;
 import com.alijas.gimhaeswim.module.team.entity.Team;
 import com.alijas.gimhaeswim.module.team.entity.TeamMember;
 import com.alijas.gimhaeswim.module.team.enums.TeamMemberPosition;
+import com.alijas.gimhaeswim.module.team.enums.TeamMemberStatus;
 import com.alijas.gimhaeswim.module.team.repository.TeamMemberRepository;
 import com.alijas.gimhaeswim.module.user.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -137,7 +136,7 @@ public class ApplyCompetitionService {
 
         applyCompetitionPage.forEach(
                 applyCompetition -> {
-                    TeamMember teamMember = teamMemberRepository.findByTeamAndPosition(applyCompetition.getTeam(), TeamMemberPosition.LEADER);
+                    TeamMember teamMember = teamMemberRepository.findByTeamAndPositionAndStatus(applyCompetition.getTeam(), TeamMemberPosition.LEADER, TeamMemberStatus.ACTIVE);
 
                     ApplyCompetitionManagementOrganizationDTO applyCompetitionManagementOrganizationDTO = applyCompetition.toApplyCompetitionManagementOrganizationDTO(teamMember);
                     List<ApplyCompetitionEvent> applyCompetitionEventList = applyCompetitionEventRepository.findByApplyCompetition(applyCompetition);
