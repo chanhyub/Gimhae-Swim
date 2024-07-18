@@ -39,7 +39,7 @@
 									</thead>
 									<tbody>
 										<tr th:each="user, index : ${userPage}">
-											<td th:text="${index.count}"></td>
+											<td th:text="${index.count + (userPage.getPageable().getPageNumber() * 15)}"></td>
 											<td th:text="${user.username}"></td>
 											<td th:text="${user.birthday}"></td>
 											<td th:text="${user.phoneNumber}"></td>

@@ -6,6 +6,23 @@
     $('.nav_list3 a').addClass('active');
   })
 </script>
+<script>
+  $(function(){
+    $('.nav_list3 a').addClass('active');
+  })
+
+  $(document).ready(function() {
+    $('#summernote').summernote({
+      width: '100%',
+      height: 300,                 // 에디터 높이
+      minHeight: null,             // 최소 높이
+      maxHeight: null,             // 최대 높이
+      // focus: true,                  // 에디터 로딩후 포커스를 맞출지 여부
+      lang: "ko-KR",					// 한글 설정
+      placeholder: '최대 2048자까지 쓸 수 있습니다'	//placeholder 설정
+    });
+  });
+</script>
 <body class="admin_body">
 <script th:inline="javascript">
   function event_tbody_add(){
@@ -201,7 +218,8 @@
 
                 <li class="w_size1">
                   <div><label class="f_s5 fw_pb">내용</label></div>
-                  <textarea id="detail" name="competitionContent" th:text="${competition.competitionContent}" class="w-100"></textarea>
+                  <textarea name="competitionContent" class="w-100" th:text="${competition.competitionContent}" id="summernote" style="height:500px;"></textarea>
+<!--                  <textarea id="detail" name="competitionContent" th:text="${competition.competitionContent}" class="w-100"></textarea>-->
                 </li>
 
                 <li class="w_size1">
@@ -222,7 +240,7 @@
                 <li class="w_size1">
                   <input type="hidden" id="deleteCompetitionEventIds" name="deleteCompetitionEventIds">
                   <input type="hidden" name="competitionId" th:value="${competition.id}">
-                  <button th:type="button" th:onclick="checkForm()" class="kors_btn1 w-100"> 대회 등록하기</button>
+                  <button th:type="button" th:onclick="checkForm()" class="kors_btn1 w-100"> 대회 수정하기</button>
                 </li>
               </ul>
             </form>

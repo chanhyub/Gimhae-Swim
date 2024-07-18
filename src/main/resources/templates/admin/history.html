@@ -41,7 +41,7 @@
 									</thead>
 									<tbody>
 										<tr th:each="field, index : ${historyPage}">
-											<td th:text="${index.count}"></td>
+											<td th:text="${index.count + (historyPage.getPageable().getPageNumber() * 15)}"></td>
 											<td th:text="${field.historyYear}"></td>
 											<td th:text="${field.historyMonth}"></td>
 											<td th:text="${field.content}"></td>

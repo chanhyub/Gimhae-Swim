@@ -34,6 +34,7 @@
 										<tr>
 											<th>No</th>
 											<th>이름</th>
+											<th>아이디</th>
 											<th>생년월일</th>
 											<th>전화번호</th>
 											<th>이메일</th>
@@ -43,15 +44,16 @@
 										</tr>
 									</thead>
 									<tbody>
-										<tr th:each="user : ${userPage}">
-											<td>3</td>
+										<tr th:each="user, index : ${userPage}">
+											<td th:text="${index.count + (userPage.getPageable().getPageNumber() * 15)}"></td>
+											<td th:text="${user.fullName}"></td>
 											<td th:text="${user.username}"></td>
 											<td th:text="${user.birthday}"></td>
 											<td th:text="${user.phoneNumber}"></td>
 											<td th:text="${user.email}"></td>
 											<td th:text="${user.teamName}"></td>
 											<td th:text="${user.gender}"></td>
-											<td><div><a href="#" th:onclick="|javascript:deleteUser('${user.id}')|" class="kors_btn2 type2">삭제</a></div></td>
+											<td><div><a href="#" th:if="${user.username} != 'admin'" th:onclick="|javascript:deleteUser('${user.id}')|" class="kors_btn2 type2">삭제</a></div></td>
 										</tr>
 									</tbody>
 								</table>

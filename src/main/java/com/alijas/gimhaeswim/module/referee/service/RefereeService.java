@@ -54,6 +54,7 @@ public class RefereeService {
         userRepository.save(user);
     }
 
+    @Transactional
     public void addReferee(RefereeSaveRequest refereeSaveRequest){
         Optional<User> optionalUser = userRepository.findByUsernameAndStatus(refereeSaveRequest.username(), UserStatus.ACTIVE);
         if(optionalUser.isPresent()){

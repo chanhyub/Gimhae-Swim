@@ -14,6 +14,7 @@ public class UserAdminDTO {
     private Long id;
 
     private String username;
+    private String fullName;
 
     private String birthday;
 

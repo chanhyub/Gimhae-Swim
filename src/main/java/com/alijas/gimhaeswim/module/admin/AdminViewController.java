@@ -17,6 +17,7 @@ import com.alijas.gimhaeswim.module.notice.dto.NoticeDTO;
 import com.alijas.gimhaeswim.module.notice.entity.Notice;
 import com.alijas.gimhaeswim.module.notice.service.NoticeService;
 import com.alijas.gimhaeswim.module.photo.dto.PhotoListDTO;
+import com.alijas.gimhaeswim.module.photo.entity.Photo;
 import com.alijas.gimhaeswim.module.photo.service.PhotoService;
 import com.alijas.gimhaeswim.module.referee.dto.RefereeListDTO;
 import com.alijas.gimhaeswim.module.referee.entity.Referee;
@@ -40,6 +41,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
@@ -286,6 +288,22 @@ public class AdminViewController {
     public String save() {
         return "admin/photoSave";
     }
+
+//    @GetMapping("/photos/{id}/update")
+//    public String getPhotoUpdate(
+//            Model model,
+//            @PathVariable Long id
+//    ) {
+//
+//        Optional<Photo> optionalPhoto = photoService.getPhoto(id);
+//        if (optionalPhoto.isEmpty()) {
+//            throw new CustomException("존재하지 않는 게시글입니다.", HttpStatus.BAD_REQUEST);
+//        }
+//
+//        model.addAttribute("photo", optionalPhoto.get().toDTO());
+//
+//        return "admin/historyUpdate";
+//    }
 
     @GetMapping("/competitions/{id}/lanes")
     public String getLanes(

@@ -41,7 +41,7 @@
 									</thead>
 									<tbody>
 										<tr th:each="field, index : ${noticePage}">
-											<td th:text="${index.count}"></td>
+											<td th:text="${index.count + (noticePage.getPageable().getPageNumber() * 15)}"></td>
 											<td th:text="${field.title}"></td>
 											<td th:text="${field.createdDate}"></td>
 											<td th:text="${field.writer}"></td>

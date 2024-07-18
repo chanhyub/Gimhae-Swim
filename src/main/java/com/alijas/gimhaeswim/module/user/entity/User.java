@@ -84,6 +84,7 @@ public class User extends BaseTime {
         return new UserAdminDTO(
                 id,
                 username,
+                fullName,
                 birthday,
                 phoneNumber,
                 email,
