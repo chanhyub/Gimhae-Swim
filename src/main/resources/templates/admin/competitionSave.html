@@ -34,7 +34,7 @@
 
 			departmentList.forEach(function (item, index, array) {
 				departmentHtml += `<option value="` + item.id + `" name="">` + item.departmentAge + '세 '
-						+ (item.moreOrLess = 'LESS' ? '이하' : '이상')
+						+ (item.moreOrLess === 'MORE' ? '이상' : '이하')
 						+ (item.departmentInfo != null ? '(' + item.departmentInfo + ')' : '') + `</option>`
 				// console.log(departmentHtml);
 			});

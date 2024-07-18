@@ -80,7 +80,7 @@ public class AdminController {
 
     @PutMapping("/users/accept")
     public ResponseEntity<String> updateUser(
-            @PathVariable String userId
+            @RequestBody String userId
     ) {
         Optional<User> optionalUser = userService.getUser(Long.parseLong(userId));
         if (optionalUser.isEmpty()) {
