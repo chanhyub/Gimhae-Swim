@@ -90,23 +90,23 @@
 						<div class="col">
 							<div class="list_paeging">
 								<ul class="d-flex justify-content-center">
-									<a type="button" th:if ="${!competitionPage.isFirst()}" th:href="@{/competitions(page=0,size=${competitionPage.getPageable().getPageSize()})}">
+									<a type="button" th:if ="${!competitionPage.isFirst()}" th:href="@{/competitions(page=0,size=${competitionPage.getPageable().getPageSize()}, year=${year}, competitionName=${competitionName})}">
 										<button><<</button>
 									</a>
 
-									<a th:if ="${prev}" th:href="@{/competitions(page=${((competitionPage.getPageable().getPageNumber() / basePage) - 1) * basePage},size=${competitionPage.getPageable().getPageSize()})}">
+									<a th:if ="${prev}" th:href="@{/competitions(page=${((competitionPage.getPageable().getPageNumber() / basePage) - 1) * basePage},size=${competitionPage.getPageable().getPageSize()}, year=${year}, competitionName=${competitionName})}">
 										<button><</button>
 									</a>
 
-									<a th:each="pageNum : ${#numbers.sequence(startPage, endPage)}"  th:href="@{/competitions(page=${pageNum}-1,size=${competitionPage.getPageable().getPageSize()})}">
+									<a th:each="pageNum : ${#numbers.sequence(startPage, endPage)}"  th:href="@{/competitions(page=${pageNum}-1,size=${competitionPage.getPageable().getPageSize()}, year=${year}, competitionName=${competitionName})}">
 										<button  th:class="${pageNum} == ${competitionPage.getPageable().getPageNumber() + 1} ? 'active' : ''" th:text="${pageNum}"></button>
 									</a>
 
-									<a th:if ="${next}" th:href="@{/competitions(page=${((competitionPage.getPageable().getPageNumber() / basePage) + 1) * basePage},size=${competitionPage.getPageable().getPageSize()})}">
+									<a th:if ="${next}" th:href="@{/competitions(page=${((competitionPage.getPageable().getPageNumber() / basePage) + 1) * basePage},size=${competitionPage.getPageable().getPageSize()}, year=${year}, competitionName=${competitionName})}">
 										<button>></button>
 									</a>
 
-									<a th:if ="${!competitionPage.isLast()}" th:href="@{/competitions(page=${competitionPage.getTotalPages() -1},size=${competitionPage.getPageable().getPageSize()})}">
+									<a th:if ="${!competitionPage.isLast()}" th:href="@{/competitions(page=${competitionPage.getTotalPages() -1},size=${competitionPage.getPageable().getPageSize()}, year=${year}, competitionName=${competitionName})}">
 										<button>>></button>
 									</a>
 								</ul>

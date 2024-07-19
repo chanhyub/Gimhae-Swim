@@ -15,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Optional;
 
@@ -30,9 +31,34 @@ public class NoticeViewController {
 
     @GetMapping({"", "/"})
     public String getNoticeList(
-            @PageableDefault(sort = "id" ,direction = Sort.Direction.DESC, size = 5) Pageable pageable, Model model
+            @PageableDefault(sort = "id" ,direction = Sort.Direction.DESC, size = 5) Pageable pageable, Model model,
+            @RequestParam(value = "searchType", required = false, defaultValue = "") String searchType,
+            @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword
     ) {
-        Page<NoticeListDTO> noticePage = noticeService.findAll(pageable);
+        Page<NoticeListDTO> noticePage;
+        if (!searchType.isEmpty() && !keyword.isEmpty()) {
+            if (searchType.equals("0")) {
+                // 제목
+                noticePage = noticeService.findAllBySearchToTitle(pageable, keyword);
+            } else if (searchType.equals("1")) {
+                // 내용
+                noticePage = noticeService.findAllBySearchToContent(pageable, keyword);
+            } else if (searchType.equals("2")) {
+                // 제목 + 내용
+                noticePage = noticeService.findAllBySearchToTitleAndContent(pageable, keyword);
+            } else {
+                throw new CustomException("잘못된 검색 조건입니다.", HttpStatus.BAD_REQUEST);
+            }
+//            Page<NoticeListDTO> noticePage = noticeService.findAllBySearch(pageable, searchType, keyword);
+            PageUtil.set(pageable, model, noticePage.getTotalPages());
+            model.addAttribute("noticePage", noticePage);
+            model.addAttribute("searchType", searchType);
+            model.addAttribute("keyword", keyword);
+
+            return "notice/noticeList";
+        }
+
+        noticePage = noticeService.findAll(pageable);
         PageUtil.set(pageable, model, noticePage.getTotalPages());
         model.addAttribute("noticePage", noticePage);
 

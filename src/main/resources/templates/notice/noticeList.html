@@ -36,18 +36,19 @@
 					<div class="row">
 						<div class="col">
 							<div class="sub_search_box">
-								<div class="d-flex justify-content-end">
-									<select class="kors_selet1 mr_15">
-										<option>제목</option>
-										<option>내용</option>
-										<option>제목+내용</option>
-										<option>작성자</option>
-									</select>
+								<form th:action="@{/notices}">
+									<div class="d-flex justify-content-end">
+										<select class="kors_selet1 mr_15" th:name="searchType" th:value="${searchType}">
+											<option th:selected="${searchType} == 0" th:value="0">제목</option>
+											<option th:selected="${searchType} == 1" th:value="1">내용</option>
+											<option th:selected="${searchType} == 2" th:value="2">제목+내용</option>
+										</select>
 
-									<input class="kors_input1" type="text" placeholder="검색어를 입력해주세요.">
+										<input class="kors_input1" type="text" th:name="keyword" th:value="${keyword}" placeholder="검색어를 입력해주세요.">
 
-									<button class="kors_btn1">검색</button>
-								</div>
+										<button class="kors_btn1" type="submit">검색</button>
+									</div>
+								</form>
 							</div>
 						</div>
 					</div>
@@ -90,23 +91,23 @@
 						<div class="col">
 							<div class="list_paeging">
 								<ul class="d-flex justify-content-center">
-									<a type="button" th:if ="${!noticePage.isFirst()}" th:href="@{/notices(page=0,size=${noticePage.getPageable().getPageSize()})}">
+									<a type="button" th:if ="${!noticePage.isFirst()}" th:href="@{/notices(page=0,size=${noticePage.getPageable().getPageSize()}, searchType=${searchType}, keyword=${keyword})}">
 										<button><<</button>
 									</a>
 
-									<a th:if ="${prev}" th:href="@{/notices(page=${((noticePage.getPageable().getPageNumber() / basePage) - 1) * basePage},size=${noticePage.getPageable().getPageSize()})}">
+									<a th:if ="${prev}" th:href="@{/notices(page=${((noticePage.getPageable().getPageNumber() / basePage) - 1) * basePage},size=${noticePage.getPageable().getPageSize()}, searchType=${searchType}, keyword=${keyword})}">
 										<button><</button>
 									</a>
 
-									<a th:each="pageNum : ${#numbers.sequence(startPage, endPage)}"  th:href="@{/notices(page=${pageNum}-1,size=${noticePage.getPageable().getPageSize()})}">
+									<a th:each="pageNum : ${#numbers.sequence(startPage, endPage)}"  th:href="@{/notices(page=${pageNum}-1,size=${noticePage.getPageable().getPageSize()}, searchType=${searchType}, keyword=${keyword})}">
 										<button  th:class="${pageNum} == ${noticePage.getPageable().getPageNumber() + 1} ? 'active' : ''" th:text="${pageNum}"></button>
 									</a>
 
-									<a th:if ="${next}" th:href="@{notices(page=${((noticePage.getPageable().getPageNumber() / basePage) + 1) * basePage},size=${noticePage.getPageable().getPageSize()})}">
+									<a th:if ="${next}" th:href="@{notices(page=${((noticePage.getPageable().getPageNumber() / basePage) + 1) * basePage},size=${noticePage.getPageable().getPageSize()}, searchType=${searchType}, keyword=${keyword})}">
 										<button>></button>
 									</a>
 
-									<a th:if ="${!noticePage.isLast()}" th:href="@{notices(page=${noticePage.getTotalPages() -1},size=${noticePage.getPageable().getPageSize()})}">
+									<a th:if ="${!noticePage.isLast()}" th:href="@{notices(page=${noticePage.getTotalPages() -1},size=${noticePage.getPageable().getPageSize()}, searchType=${searchType}, keyword=${keyword})}">
 										<button>>></button>
 									</a>
 								</ul>

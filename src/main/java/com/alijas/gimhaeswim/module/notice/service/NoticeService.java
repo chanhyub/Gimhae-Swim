@@ -56,4 +56,19 @@ public class NoticeService {
     public void delete(Notice notice) {
         noticeRepository.delete(notice);
     }
+
+    public Page<NoticeListDTO> findAllBySearchToTitle(Pageable pageable, String keyword) {
+        Page<Notice> page = noticeRepository.findAllByStatusAndTitleContaining(pageable, NoticeStatus.ACTIVE, keyword);
+        return page.map(Notice::toListDTO);
+    }
+
+    public Page<NoticeListDTO> findAllBySearchToContent(Pageable pageable, String keyword) {
+        Page<Notice> page = noticeRepository.findAllByStatusAndContentContaining(pageable, NoticeStatus.ACTIVE, keyword);
+        return page.map(Notice::toListDTO);
+    }
+
+    public Page<NoticeListDTO> findAllBySearchToTitleAndContent(Pageable pageable, String keyword) {
+        Page<Notice> page = noticeRepository.findAllByStatusAndTitleContainingOrContentContaining(pageable, NoticeStatus.ACTIVE, keyword, keyword);
+        return page.map(Notice::toListDTO);
+    }
 }
