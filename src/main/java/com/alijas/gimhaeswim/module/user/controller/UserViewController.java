@@ -1,6 +1,7 @@
 package com.alijas.gimhaeswim.module.user.controller;
 
 import com.alijas.gimhaeswim.config.security.CustomUserDetails;
+import com.alijas.gimhaeswim.exception.CustomAuthenticationException;
 import com.alijas.gimhaeswim.exception.CustomException;
 import com.alijas.gimhaeswim.module.applycompetition.dto.ApplyCompetitionListDTO;
 import com.alijas.gimhaeswim.module.applycompetition.entity.ApplyCompetition;
@@ -47,7 +48,7 @@ public class UserViewController {
             Model model) {
 
         if (customUserDetails == null) {
-            throw new CustomException("로그인이 필요합니다.", HttpStatus.BAD_REQUEST);
+            throw new CustomAuthenticationException("로그인이 필요합니다.", HttpStatus.BAD_REQUEST);
         }
 
         User user = customUserDetails.getUser();

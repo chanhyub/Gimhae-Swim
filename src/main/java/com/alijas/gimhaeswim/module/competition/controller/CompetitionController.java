@@ -1,6 +1,7 @@
 package com.alijas.gimhaeswim.module.competition.controller;
 
 import com.alijas.gimhaeswim.config.security.CustomUserDetails;
+import com.alijas.gimhaeswim.exception.CustomAuthenticationException;
 import com.alijas.gimhaeswim.exception.CustomException;
 import com.alijas.gimhaeswim.exception.CustomRestException;
 import com.alijas.gimhaeswim.module.applycompetition.entity.ApplyCompetition;
@@ -62,7 +63,7 @@ public class CompetitionController {
             @AuthenticationPrincipal CustomUserDetails customUserDetails
     ) {
         if (customUserDetails == null) {
-            throw new CustomException("로그인이 필요합니다.", HttpStatus.BAD_REQUEST);
+            throw new CustomAuthenticationException("로그인이 필요합니다.", HttpStatus.BAD_REQUEST);
         }
 
         Optional<User> user = userService.getUser(customUserDetails.getUser().getId());
@@ -109,7 +110,7 @@ public class CompetitionController {
             @AuthenticationPrincipal CustomUserDetails customUserDetails
     ) {
         if (customUserDetails == null) {
-            throw new CustomException("로그인이 필요합니다.", HttpStatus.BAD_REQUEST);
+            throw new CustomAuthenticationException("로그인이 필요합니다.", HttpStatus.BAD_REQUEST);
         }
 
         Optional<User> user = userService.getUser(customUserDetails.getUser().getId());

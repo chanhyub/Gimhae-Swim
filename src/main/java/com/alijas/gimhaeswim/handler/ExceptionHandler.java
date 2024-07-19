@@ -1,5 +1,6 @@
 package com.alijas.gimhaeswim.handler;
 
+import com.alijas.gimhaeswim.exception.CustomAuthenticationException;
 import com.alijas.gimhaeswim.exception.CustomException;
 import com.alijas.gimhaeswim.exception.CustomRestException;
 import com.alijas.gimhaeswim.util.Script;
@@ -11,6 +12,11 @@ public class ExceptionHandler {
     @org.springframework.web.bind.annotation.ExceptionHandler(CustomException.class)
     public ResponseEntity<?> customException(CustomException e) {
         return new ResponseEntity<>(Script.back(e.getMessage()), e.getStatus());
+    }
+
+    @org.springframework.web.bind.annotation.ExceptionHandler(CustomAuthenticationException.class)
+    public ResponseEntity<?> customAuthenticationException(CustomAuthenticationException e) {
+        return new ResponseEntity<>(Script.redirectTo(e.getMessage(), "/login"), e.getStatus());
     }
 
     @org.springframework.web.bind.annotation.ExceptionHandler(CustomRestException.class)
