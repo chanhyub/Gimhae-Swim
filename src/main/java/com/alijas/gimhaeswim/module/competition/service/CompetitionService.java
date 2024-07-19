@@ -14,11 +14,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional(readOnly = true)
 public class CompetitionService {
 
     private final CompetitionRepository competitionRepository;
@@ -128,5 +131,20 @@ public class CompetitionService {
     public void deleteCompetition(Competition competition) {
         competition.setStatus(CompetitionStatus.DELETED);
         competitionRepository.save(competition);
+    }
+
+    public Page<CompetitionListDTO> findAllByYearAndName(Pageable pageable, LocalDateTime startDate, LocalDateTime endDate, String name) {
+        Page<Competition> page = competitionRepository.findAllByStatusAndYearAndCompetitionName(pageable, CompetitionStatus.ACTIVE, startDate, endDate, name);
+        return page.map(Competition::toCompetitionListDTO);
+    }
+
+    public Page<CompetitionListDTO> findAllByYear(Pageable pageable, LocalDateTime startDate, LocalDateTime endDate) {
+        Page<Competition> page = competitionRepository.findAllByStatusAndYear(pageable, CompetitionStatus.ACTIVE, startDate, endDate);
+        return page.map(Competition::toCompetitionListDTO);
+    }
+
+    public Page<CompetitionListDTO> findAllAndName(Pageable pageable, String name) {
+        Page<Competition> page = competitionRepository.findAllByStatusAndCompetitionNameContaining(pageable, CompetitionStatus.ACTIVE, name);
+        return page.map(Competition::toCompetitionListDTO);
     }
 }

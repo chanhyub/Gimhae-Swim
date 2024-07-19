@@ -34,7 +34,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -74,12 +76,32 @@ public class CompetitionViewController {
 
     @GetMapping({"/", ""})
     public String getCompetitionList(
-            @PageableDefault(sort = "id" ,direction = Sort.Direction.DESC, size = 5) Pageable pageable, Model model
+            @PageableDefault(sort = "id" ,direction = Sort.Direction.DESC, size = 5) Pageable pageable, Model model,
+            @RequestParam(required = false, defaultValue = "") Integer year,
+            @RequestParam(required = false, defaultValue = "") String name
     ) {
-        Page<CompetitionListDTO> competitionPage = competitionService.findAll(pageable);
+        Page<CompetitionListDTO> competitionPage;
+        if (year != null) {
+            LocalDateTime startDate = LocalDateTime.of(year, 1, 1, 0, 0);
+            LocalDateTime endDate = LocalDateTime.of(year, 12, 31, 23, 59);
+            if (!name.isEmpty()) {
+                competitionPage = competitionService.findAllByYearAndName(pageable, startDate, endDate, name);
+            } else {
+                competitionPage = competitionService.findAllByYear(pageable, startDate, endDate);
+            }
+        } else {
+            if (!name.isEmpty()) {
+                competitionPage = competitionService.findAllAndName(pageable, name);
+            } else {
+                competitionPage = competitionService.findAll(pageable);
+            }
+        }
+
         PageUtil.set(pageable, model, competitionPage.getTotalPages());
 
         model.addAttribute("competitionPage", competitionPage);
+        model.addAttribute("competitionName", name);
+        model.addAttribute("year", year);
         return "competitions/competitionList";
     }
 

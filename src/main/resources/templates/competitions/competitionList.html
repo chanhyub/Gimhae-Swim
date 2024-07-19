@@ -37,20 +37,15 @@
 					<div class="row">
 						<div class="col">
 							<div class="sub_search_box">
-								<div class="d-flex justify-content-end">
-									<select class="kors_selet1 mr_15">
-										<option>전체연도</option>
-										<option>2023</option>
-										<option>2022</option>
-										<option>2021</option>
-										<option>2020</option>
-										<option>2019</option>
-									</select>
+								<form th:action="@{/competitions}">
+									<div class="d-flex justify-content-end">
+										<input class="kors_input1 mr_15" type="number" th:value="${year}" th:name="year" placeholder="연도 검색">
 
-									<input class="kors_input1" type="text" placeholder="대회 검색">
+										<input class="kors_input1" th:name="name" th:value="${competitionName}" type="text" placeholder="대회 검색">
 
-									<button type="submit" class="kors_btn1">검색</button>
-								</div>
+										<button type="submit" class="kors_btn1">검색</button>
+									</div>
+								</form>
 							</div>
 						</div>
 					</div>
