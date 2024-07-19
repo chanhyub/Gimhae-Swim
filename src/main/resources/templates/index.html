@@ -216,7 +216,7 @@
 
 							<div id="main_slide2_box">
 								<div class="slide_box" th:each="field : ${photoPage}">
-									<a th:href="@{/photos/(photoSeq=${field.id})}" onfocus="blur();">
+									<a th:href="@{/photos/{photoSeq}(photoSeq=${field.id})}" onfocus="blur();">
 										<div class="img_box" th:style="'background:url(' + ${field.fileUrl} + ')  no-repeat center / cover;'"></div>
 										<div class="text_box">
 											<p class="f_s4 mb_20 w-100 text-over-h" th:text="${field.title}"></p>
