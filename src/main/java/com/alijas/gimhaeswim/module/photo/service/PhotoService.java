@@ -112,4 +112,50 @@ public class PhotoService {
     public void delete(Photo photo) {
         photoRepository.delete(photo);
     }
+
+    public Page<PhotoListDTO> findAllBySearchToTitle(Pageable pageable, String keyword) {
+        Page<Photo> page = photoRepository.findAllByTitleContaining(pageable, keyword);
+
+        return page.map(photo -> {
+            PhotoListDTO photoListDTO = photo.toPhotoListDTO();
+            List<File> fileList = fileRepository.findByFileInfo(photo.getFileInfo());
+            if (fileList.isEmpty()) {
+                photoListDTO.setFileUrl("");
+            } else {
+                photoListDTO.setFileUrl(fileList.get(0).getFileUrl());
+            }
+            return photoListDTO;
+        });
+    }
+
+
+    public Page<PhotoListDTO> findAllBySearchToContent(Pageable pageable, String keyword) {
+        Page<Photo> page = photoRepository.findAllByContentContaining(pageable, keyword);
+
+        return page.map(photo -> {
+            PhotoListDTO photoListDTO = photo.toPhotoListDTO();
+            List<File> fileList = fileRepository.findByFileInfo(photo.getFileInfo());
+            if (fileList.isEmpty()) {
+                photoListDTO.setFileUrl("");
+            } else {
+                photoListDTO.setFileUrl(fileList.get(0).getFileUrl());
+            }
+            return photoListDTO;
+        });
+    }
+
+    public Page<PhotoListDTO> findAllBySearchToTitleAndContent(Pageable pageable, String keyword) {
+        Page<Photo> page = photoRepository.findAllByTitleContainingOrContentContaining(pageable, keyword, keyword);
+
+        return page.map(photo -> {
+            PhotoListDTO photoListDTO = photo.toPhotoListDTO();
+            List<File> fileList = fileRepository.findByFileInfo(photo.getFileInfo());
+            if (fileList.isEmpty()) {
+                photoListDTO.setFileUrl("");
+            } else {
+                photoListDTO.setFileUrl(fileList.get(0).getFileUrl());
+            }
+            return photoListDTO;
+        });
+    }
 }
