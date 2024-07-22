@@ -102,6 +102,7 @@ public class CompetitionViewController {
         model.addAttribute("competitionPage", competitionPage);
         model.addAttribute("competitionName", name);
         model.addAttribute("year", year);
+        model.addAttribute("now", LocalDate.now());
         return "competitions/competitionList";
     }
 

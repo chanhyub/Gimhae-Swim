@@ -6,7 +6,7 @@ public record CompetitionListDTO(
     String competitionDate,
     String competitionPlace,
     String competitionApplyStartDate,
-    String competitionApplyEndDate
-
+    String competitionApplyEndDate,
+    Boolean isApply
 ) {
 }

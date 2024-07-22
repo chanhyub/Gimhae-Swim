@@ -68,7 +68,8 @@ public class Competition extends BaseTime {
                 DateTimeConverter.LocalDateTimeToStringYYYYMMDD(this.competitionDate),
                 this.competitionPlace,
                 DateTimeConverter.LocalDateTimeToStringYYYYMMDD(this.competitionApplyStartDate),
-                DateTimeConverter.LocalDateTimeToStringYYYYMMDD(this.competitionApplyEndDate)
+                DateTimeConverter.LocalDateTimeToStringYYYYMMDD(this.competitionApplyEndDate),
+                LocalDateTime.now().isAfter(this.competitionApplyEndDate)
         );
     }
 
