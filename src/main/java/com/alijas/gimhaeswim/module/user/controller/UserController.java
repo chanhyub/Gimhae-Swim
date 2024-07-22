@@ -1,5 +1,6 @@
 package com.alijas.gimhaeswim.module.user.controller;
 
+import com.alijas.gimhaeswim.config.security.CustomUserDetails;
 import com.alijas.gimhaeswim.exception.CustomRestException;
 import com.alijas.gimhaeswim.module.team.entity.Team;
 import com.alijas.gimhaeswim.module.team.entity.TeamMember;
@@ -12,6 +13,7 @@ import com.alijas.gimhaeswim.module.user.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
@@ -69,13 +71,16 @@ public class UserController {
     @PutMapping("/update")
     public ResponseEntity<String> updateUser(
             @RequestBody @Valid UserUpdateRequest userUpdateRequest,
+            @AuthenticationPrincipal CustomUserDetails customUserDetails,
             Errors errors
     ) {
         if (errors.hasErrors()) {
             throw new CustomRestException(errors.getAllErrors().get(0).getDefaultMessage(), HttpStatus.BAD_REQUEST);
         }
 
-        User user = userService.getUser(userUpdateRequest.username()).orElseThrow(() -> new CustomRestException("존재하지 않는 아이디입니다.", HttpStatus.BAD_REQUEST));
+        User originUser = customUserDetails.getUser();
+
+        User user = userService.getUser(originUser.getUsername()).orElseThrow(() -> new CustomRestException("존재하지 않는 아이디입니다.", HttpStatus.BAD_REQUEST));
 
         userService.updateUser(user, userUpdateRequest);
 

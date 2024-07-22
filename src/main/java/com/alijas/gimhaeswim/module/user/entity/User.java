@@ -96,9 +96,11 @@ public class User extends BaseTime {
     public void updateUser(UserUpdateRequest userUpdateRequest) {
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
+        this.username = userUpdateRequest.username();
         this.fullName = userUpdateRequest.fullName();
         this.password = bCryptPasswordEncoder.encode(userUpdateRequest.password());
         this.phoneNumber = userUpdateRequest.phoneNumber();
         this.email = userUpdateRequest.email();
+        this.birthday = userUpdateRequest.birthday();
     }
 }

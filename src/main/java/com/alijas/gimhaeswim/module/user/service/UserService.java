@@ -1,6 +1,7 @@
 package com.alijas.gimhaeswim.module.user.service;
 
 import com.alijas.gimhaeswim.exception.CustomException;
+import com.alijas.gimhaeswim.exception.CustomRestException;
 import com.alijas.gimhaeswim.module.common.enums.ApplyStatus;
 import com.alijas.gimhaeswim.module.team.entity.TeamMember;
 import com.alijas.gimhaeswim.module.team.enums.TeamMemberStatus;
@@ -61,7 +62,7 @@ public class UserService {
     public void updateUser(User user, UserUpdateRequest userUpdateRequest) {
         Optional<User> optionalUser = userRepository.findByUsernameAndStatus(userUpdateRequest.username(), UserStatus.ACTIVE);
         if (optionalUser.isPresent()) {
-            throw new CustomException("이미 사용중인 아이디 입니다.", HttpStatus.BAD_REQUEST);
+            throw new CustomRestException("이미 사용중인 아이디 입니다.", HttpStatus.BAD_REQUEST);
         }
 
         user.updateUser(userUpdateRequest);

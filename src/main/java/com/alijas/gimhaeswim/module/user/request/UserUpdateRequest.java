@@ -7,6 +7,7 @@ import com.alijas.gimhaeswim.module.common.enums.RoleType;
 import com.alijas.gimhaeswim.module.user.entity.User;
 import com.alijas.gimhaeswim.module.user.enums.UserStatus;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public record UserUpdateRequest(
     @NotBlank(message = "아이디를 입력해주세요.")
@@ -18,7 +19,9 @@ public record UserUpdateRequest(
     @NotBlank(message = "전화번호을 입력해주세요.")
     String phoneNumber,
     @NotBlank(message = "이메일을 입력해주세요.")
-    String email
+    String email,
+    @NotBlank(message = "주민번호 앞자리를 입력해주세요.")
+    String birthday
 ) {
 
 }

@@ -50,6 +50,8 @@
                                 <input type="text" required class="kors_input3 w-75" th:value="${user.phoneNumber}" name="phoneNumber" id="phoneNumber" placeholder="휴대폰 번호" readonly>
                                 <p class="mt-3">이메일</p>
                                 <input type="text" required class="kors_input3 w-75" th:value="${user.email}" name="email" id="email" placeholder="이메일" readonly>
+                                <p class="mt-3">생년월일</p>
+                                <input type="text" required class="kors_input3 w-75" th:value="${user.birthday}" name="birthday" id="birthday" placeholder="주민번호 앞자리" readonly>
                                 <div class="d-flex justify-content-center mt-3 mr_150" id="updateBtnBox" style="display: none">
                                     <button type="button" class="kors_btn1" id="updateBtn" style="display: none" onclick="update()">완료</button>
                                 </div>
@@ -247,14 +249,14 @@
                 success: function (data) {
                     alert("수정이 완료되었습니다.");
                     console.log("success");
-                    location.href = "/users/my-page";
+                    location.href = "/logout";
                 },
                 error: function (request, status, error) {
                     $('.kors_input3').attr("readonly", true);
                     $('#editBtn').css("display", "inline-block");
                     $('#updateBtn').css("display", "none");
                     $('#updateBtnBox').css("display", "none");
-                    alert("수정에 실패하였습니다.");
+                    alert(request.responseText);
                     console.log("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
                     return false;
                 }
