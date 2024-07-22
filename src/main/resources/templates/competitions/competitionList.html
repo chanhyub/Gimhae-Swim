@@ -72,7 +72,7 @@
 								<ul class="center list_box type1 fw_pl">
 									<li class="text-center" th:each="competition : ${competitionPage}">
 										<div class="text-center" th:text="${#strings.substring(competition.competitionDate, 0, 4)}"></div>
-										<div><a class="f_s5 text-over-h list_title fw_pb" th:href="@{/competitions/{id}(id=${competition.id})}" th:text="${competition.competitionName}"></a></div>
+										<div><p style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><a class="f_s5 text-over-h list_title fw_pb" th:href="@{/competitions/{id}(id=${competition.id})}" th:text="${competition.competitionName}"></a></p></div>
 										<div class="text-center f_c_g1" th:text="${competition.competitionApplyStartDate}"></div>
 										<div class="text-center f_c_g1" th:text="${competition.competitionApplyEndDate}"></div>
 										<div class="text-center" th:text="${competition.competitionPlace}"></div>
